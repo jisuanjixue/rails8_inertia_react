@@ -3,6 +3,8 @@
 
 // import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
     NavigationMenu,
@@ -15,10 +17,12 @@ import {
     NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 import { Link } from "@inertiajs/react"
+import useChangePassword from './use-change-password'
 
 
 export default function HomeIndex({ currentUser, session }: { currentUser: any, session: any }) {
     console.log(currentUser, session)
+    const renderForm = useChangePassword()
     // const [count, setCount] = useState(0)
 
     return (
@@ -66,10 +70,34 @@ export default function HomeIndex({ currentUser, session }: { currentUser: any, 
                                                 个人信息
                                                 <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                Billing
-                                                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                                            </DropdownMenuItem>
+                                            <Dialog>
+                                                <DialogTrigger>
+                                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                                        修改密码
+                                                    </DropdownMenuItem>
+                                                </DialogTrigger>
+                                                <DialogContent className="sm:max-w-[425px]">
+                                                    <DialogHeader>
+                                                        <DialogTitle>修改密码</DialogTitle>
+                                                        <DialogDescription>
+                                                            请输入新密码
+                                                        </DialogDescription>
+                                                    </DialogHeader>
+                                                    {renderForm.render()}
+                                                    <DialogFooter>
+                                                        <DialogTrigger asChild>
+                                                            <Button variant="outline">
+                                                                取消
+                                                            </Button>
+                                                        </DialogTrigger>
+                                                        {/* <DialogTrigger asChild>
+                                                            <Button variant="destructive">
+                                                                确定
+                                                            </Button>
+                                                        </DialogTrigger> */}
+                                                    </DialogFooter>
+                                                </DialogContent>
+                                            </Dialog>
                                             <DropdownMenuItem>
                                                 Settings
                                                 <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
@@ -96,14 +124,6 @@ export default function HomeIndex({ currentUser, session }: { currentUser: any, 
                                         </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem
-                                        // onClick={async () => {
-                                        //     try {
-                                        //        const res =  await fetch('/sign_out', { method: 'DELETE' });
-                                        //        console.log(res);
-                                        //     } catch (error) {
-                                        //         console.error('Logout failed:', error);
-                                        //     }
-                                        // }}
                                         >
                                             <Link
                                                 href={`/sign_out/${session.id}`}

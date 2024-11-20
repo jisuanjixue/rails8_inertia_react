@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   delete "sign_out/:id", to: "sessions#destroy"
   get  "sign_up", to: "registrations#new"
   post "sign_up", to: "registrations#create"
+  patch "change_password", to: "home#change_password"
   resources :sessions, only: [ :index, :show, :destroy ]
-  resource  :password, only: [ :edit, :update ]
   namespace :identity do
     resource :email,              only: [ :edit, :update ]
     resource :email_verification, only: [ :show, :create ]
@@ -14,7 +14,6 @@ Rails.application.routes.draw do
 
   resources :posts
 
-  get "inertia-example", to: "inertia_example#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
