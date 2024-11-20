@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
+  delete "sign_out/:id", to: "sessions#destroy"
   get  "sign_up", to: "registrations#new"
   post "sign_up", to: "registrations#create"
   resources :sessions, only: [ :index, :show, :destroy ]
@@ -10,8 +11,9 @@ Rails.application.routes.draw do
     resource :email_verification, only: [ :show, :create ]
     resource :password_reset,     only: [ :new, :edit, :create, :update ]
   end
-  root "home#index"
+
   resources :posts
+
   get "inertia-example", to: "inertia_example#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -25,4 +27,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+    root "home#index"
 end
