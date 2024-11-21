@@ -1,43 +1,46 @@
-<p style="color: red"><%= alert %></p>
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+    <p class="text-red-500"><%= alert %></p>
 
-<% if Current.user.verified? %>
-  <h1>Change your email</h1>
-<% else %>
-  <h1>Verify your email</h1>
-  <p>We sent a verification email to the address below. Check that email and follow those instructions to confirm it's your email address.</p>
-  <p><%= button_to "Re-send verification email", identity_email_verification_path %></p>
-<% end %>
+    <% if Current.user.verified? %>
+      <h1 class="mb-4 text-2xl font-bold">Change your email</h1>
+    <% else %>
+      <h1 class="mb-4 text-2xl font-bold">Verify your email</h1>
+      <p class="mb-4">We sent a verification email to the address below. Check that email and follow those instructions to confirm it's your email address.</p>
+      <p class="mb-4"><%= button_to "Re-send verification email", identity_email_verification_path, class: "bg-blue-500 text-white px-4 py-2 rounded" %></p>
+    <% end %>
 
-<%= form_with(url: identity_email_path, method: :patch) do |form| %>
-  <% if @user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+    <%= form_with(url: identity_email_path, method: :patch, class: "space-y-4") do |form| %>
+      <% if @user.errors.any? %>
+        <div class="text-red-500">
+          <h2 class="text-lg font-semibold"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+          <ul class="list-disc list-inside">
+            <% @user.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-      <ul>
-        <% @user.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+      <div>
+        <%= form.label :email, "New email", class: "block text-sm font-medium text-gray-700" %>
+        <%= form.email_field :email, required: true, autofocus: true, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :password_challenge, class: "block text-sm font-medium text-gray-700" %>
+        <%= form.password_field :password_challenge, required: true, autocomplete: "current-password", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.submit "Save changes", class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      </div>
+    <% end %>
+
+    <br>
+
+    <div>
+      <%= link_to "Back", root_path, class: "text-blue-600 hover:underline" %>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :email, "New email", style: "display: block" %>
-    <%= form.email_field :email, required: true, autofocus: true %>
   </div>
-
-  <div>
-    <%= form.label :password_challenge, style: "display: block" %>
-    <%= form.password_field :password_challenge, required: true, autocomplete: "current-password" %>
-  </div>
-
-  <div>
-    <%= form.submit "Save changes" %>
-  </div>
-<% end %>
-
-<br>
-
-<div>
-  <%= link_to "Back", root_path %>
 </div>
