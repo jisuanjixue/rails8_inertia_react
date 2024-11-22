@@ -16,7 +16,7 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-
+     <script defer src="/_debugbar/assets/script"></script> 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= vite_stylesheet_tag "application" %>
@@ -38,6 +38,10 @@
   </head>
 
   <body>
+    <div id="__debugbar" data-turbo-permanent></div> 
+    <script type="text/javascript" data-turbo-permanent>
+      window._debugbarConfigOptions = {height: 300}
+    </script>
     <%= yield %>
   </body>
 </html>

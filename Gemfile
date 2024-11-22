@@ -75,6 +75,7 @@ group :development do
   gem "standardrb", "~> 1.0", require: false
   gem "erb_lint", require: false
   gem "authentication-zero", require: false
+  gem "debugbar", "~> 0.3.3"
 end
 
 gem "inertia_rails-contrib", "~> 0.3.0"
@@ -86,3 +87,10 @@ gem "cancancan", "~> 3.6"
 gem "typelizer", "~> 0.1.5"
 
 gem "alba", "~> 3.3"
+
+# Use OmniAuth to support multi-provider authentication [https://github.com/omniauth/omniauth]
+gem "omniauth"
+gem "omniauth-github"
+
+# Provides a mitigation against CVE-2015-9284 [https://github.com/cookpad/omniauth-rails_csrf_protection]
+gem "omniauth-rails_csrf_protection"

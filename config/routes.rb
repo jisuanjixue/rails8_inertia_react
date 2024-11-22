@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  if defined? Debugbar
+    mount Debugbar::Engine => Debugbar.config.prefix
+  end
+   # authentication
+  get "/auth/failure", to: "sessions/omniauth#failure"
+  get "/auth/:provider/callback", to: "sessions/omniauth#create"
+  post "/auth/:provider/callback", to: "sessions/omniauth#create"
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
   delete "sign_out/:id", to: "sessions#destroy"

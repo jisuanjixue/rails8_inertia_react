@@ -19,7 +19,7 @@ export default function Header() {
     const {
         auth: { currentUser, session },
     } = usePage().props as any;
-    console.log(currentUser)
+    console.log(currentUser, session)
     const renderPasswordForm = useChangePassword({ user: currentUser })
 
     return (
