@@ -42,25 +42,11 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 group :development, :test do
-      # 更新 RuboCop 版本以解决编码问题
-  gem "rubocop", "~> 1.25.0"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
-
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-  gem "rubocop-rails-omakase", require: false
-
-    # Code style checking for RSpec files (https://github.com/rubocop/rubocop-rspec)
-    gem 'rubocop-rspec', require: false
-
-    # Automatic performance checking tool for Ruby code. (https://github.com/rubocop/rubocop-performance)
-    gem 'rubocop-performance', require: false
-  
-    # Automatic Rails code style checking tool. (https://github.com/rubocop/rubocop-rails)
-    gem 'rubocop-rails', require: false
         # Autoload dotenv in Rails. (https://github.com/bkeepers/dotenv)
   gem 'dotenv-rails'
 end
