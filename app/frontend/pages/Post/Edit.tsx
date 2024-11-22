@@ -1,13 +1,14 @@
 import { Link, Head } from '@inertiajs/react'
 import Form from './Form'
+import PostType from '../../types/serializers/Post'
 
-export default function Edit({ post }) {
+export default function Edit({ post }: { post: PostType }) {
   return (
     <>
       <Head title="Editing post" />
 
-      <div className="mx-auto md:w-2/3 w-full px-8 pt-8">
-        <h1 className="font-bold text-4xl">Editing post</h1>
+      <div className="w-full px-8 pt-8 mx-auto md:w-2/3">
+        <h1 className="text-4xl font-bold">Editing post</h1>
 
         <Form
           post={post}
@@ -20,13 +21,13 @@ export default function Edit({ post }) {
 
         <Link
           href={`/posts/${post.id}`}
-          className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
+          className="inline-block px-5 py-3 ml-2 font-medium bg-gray-100 rounded-lg"
         >
           Show this post
         </Link>
         <Link
           href="/posts"
-          className="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium"
+          className="inline-block px-5 py-3 ml-2 font-medium bg-gray-100 rounded-lg"
         >
           Back to posts
         </Link>

@@ -72,6 +72,8 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    alba (3.3.3)
+      ostruct (~> 0.6)
     annotaterb (4.13.0)
     ast (2.4.2)
     authentication-zero (4.0.3)
@@ -367,6 +369,8 @@ GEM
     thruster (0.1.9-x86_64-darwin)
     thruster (0.1.9-x86_64-linux)
     timeout (0.4.2)
+    typelizer (0.1.5)
+      railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.6.0)
@@ -408,6 +412,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  alba (~> 3.3)
   annotaterb
   authentication-zero
   bcrypt (~> 3.1.7)
@@ -436,6 +441,7 @@ DEPENDENCIES
   stackprof
   standardrb (~> 1.0)
   thruster
+  typelizer (~> 0.1.5)
   tzinfo-data
   vite_rails (~> 3.0)
   web-console

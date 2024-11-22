@@ -1,7 +1,8 @@
 import { useForm } from '@inertiajs/react'
 import { ReactTrixRTEInput } from "react-trix-rte";
+import PostType from '../../types/serializers/Post'
 
-export default function Form({ post, onSubmit, submitText }) {
+export default function Form({ post, onSubmit, submitText }: { post: PostType, onSubmit: (form: any) => void, submitText: string }) {
   const form = useForm({
     title: post.title || '',
     body: post.body || '',

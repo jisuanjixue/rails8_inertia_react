@@ -4,8 +4,9 @@ import Post from './Post'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import DefaultLayout from '../DefaultLayout'
+import PostType from '../../types/serializers/Post'
 
-const PostIndex = ({ posts, flash }: { posts: any, flash: any }) => {
+const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
   return (
     <>
       <Head title="Posts" />
