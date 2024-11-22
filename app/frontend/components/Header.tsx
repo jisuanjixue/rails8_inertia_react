@@ -17,8 +17,9 @@ import useChangePassword from '../pages/RightDropdown/use-change-password'
 
 export default function Header() {
     const {
-        auth: { currentUser },
+        auth: { currentUser, session },
     } = usePage().props as any;
+    console.log(currentUser)
     const renderPasswordForm = useChangePassword({ user: currentUser })
 
     return (

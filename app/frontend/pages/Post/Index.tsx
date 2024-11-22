@@ -3,8 +3,9 @@ import { Fragment } from 'react'
 import Post from './Post'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import DefaultLayout from '../DefaultLayout'
 
-export default function Index({ posts, flash }) {
+const PostIndex = ({ posts, flash }: { posts: any, flash: any }) => {
   return (
     <>
       <Head title="Posts" />
@@ -47,3 +48,6 @@ export default function Index({ posts, flash }) {
     </>
   )
 }
+
+PostIndex.layout = (page: any) => <DefaultLayout children={page} />
+export default PostIndex

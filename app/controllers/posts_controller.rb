@@ -1,11 +1,12 @@
 class PostsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_post, only: %i[show edit update destroy]
 
   inertia_share flash: -> { flash.to_hash }
 
   # GET /posts
   def index
-    @posts = Post.all
+    @posts = Post.accessible_by(current_ability)
     render inertia: "Post/Index", props: {
       posts: @posts.map do |post|
         serialize_post(post)

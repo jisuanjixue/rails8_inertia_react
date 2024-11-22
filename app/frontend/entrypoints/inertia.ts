@@ -21,6 +21,19 @@ createInertiaApp({
     return page
   },
 
+  title: title => (title ? `${title} - blog` : "blog"),
+  progress: {
+    // The delay after which the progress bar will appear, in milliseconds...
+    delay: 50,
+
+    // Whether to include the default NProgress styles...
+    includeCSS: true,
+
+    // Whether the NProgress spinner will be shown...
+    showSpinner: true,
+  },
+
+
   setup({ el, App, props }) {
     const root = createRoot(el)
 

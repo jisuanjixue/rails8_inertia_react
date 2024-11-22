@@ -1,11 +1,9 @@
 
-import Header from "@/components/Header"
 import DefaultLayout from "./DefaultLayout"
 
-const HomeIndex = ({  currentUser, session }: {  currentUser: any, session: any }) => {
+const HomeIndex = () => {
    return (
     <>
-     <Header currentUser={currentUser} session={session} />
         <h1>Welcome</h1>
         </>
     )
