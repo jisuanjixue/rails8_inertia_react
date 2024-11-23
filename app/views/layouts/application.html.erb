@@ -16,7 +16,7 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-      <script defer src="/_debugbar/assets/script"></script> 
+    <%# <script defer src="/_debugbar/assets/script"></script> %>
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= vite_stylesheet_tag "application" %>
@@ -31,15 +31,15 @@
 
       If using a .jsx or .tsx entrypoint, add the extension:
         vite_javascript_tag 'application.jsx'
-
+       <%= debugbar_body cable: {url: "ws://localhost:3000"} %>
       Visit the guide for more information: https://vite-ruby.netlify.app/guide/rails
     -->
 
   </head>
 
   <body>
-      <div id="__debugbar" data-turbo-permanent></div> 
-    <%= debugbar_body if defined? Debugbar %> 
+    <%# <div id="__debugbar" data-turbo-permanent></div> %>
+   
     <%= yield %>
   </body>
 </html>
