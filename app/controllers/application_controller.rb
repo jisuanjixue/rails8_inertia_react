@@ -1,8 +1,5 @@
 class ApplicationController < ActionController::Base
   include Auth
-  before_action do
-    Debugbar.msg("before_action", {params: params.permit!.to_h, callee: __callee__})
-  end
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 

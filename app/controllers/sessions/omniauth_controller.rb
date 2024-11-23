@@ -1,6 +1,6 @@
 class Sessions::OmniauthController < ApplicationController
   skip_before_action :verify_authenticity_token
-  skip_before_action :authenticate_user!
+  skip_before_action :authenticate
 
   def create
     connected_account = ConnectedAccount.find_or_initialize_by(provider: omniauth.provider, uid: omniauth.uid)
@@ -35,6 +35,14 @@ class Sessions::OmniauthController < ApplicationController
   end
 
   private
+
+  def authenticate
+    if session_record = Session.find_by_id(cookies.signed[:session_token])
+      Current.session = session_record
+    else
+      redirect_to sign_in_path
+    end
+  end
 
   def github_email
     @github_email ||= omniauth.info.email || fetch_github_email(token)

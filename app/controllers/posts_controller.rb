@@ -1,4 +1,7 @@
 class PostsController < ApplicationController
+  before_action do
+    Debugbar.msg("before_action", {params: params.permit!.to_h, callee: __callee__})
+  end
   load_and_authorize_resource
   before_action :set_post, only: %i[show edit update destroy]
 
@@ -6,7 +9,7 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.accessible_by(current_ability)
+    @posts = Post.accessible_by(current_ability).includes([:rich_text_content])
     render inertia: "Post/Index", props: {
       posts: @posts.map do |post|
         serialize_post(post)

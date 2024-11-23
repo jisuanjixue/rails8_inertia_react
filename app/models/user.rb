@@ -4,6 +4,7 @@
 #
 #  id              :integer          not null, primary key
 #  email           :string           not null
+#  name            :string
 #  password_digest :string           not null
 #  verified        :boolean          default(FALSE), not null
 #  created_at      :datetime         not null
@@ -26,6 +27,8 @@ class User < ApplicationRecord
 
 
   has_many :sessions, dependent: :destroy
+
+  has_many :connected_accounts, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 12 }

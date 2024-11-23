@@ -1,9 +1,9 @@
 Debugbar.configure do |config|
   config.enabled = true
   config.buffer_adapter = :memory  # Use a memory buffer
-  # config.min_log_level = ::Logger::Severity::WARN
-  # config.active_record = true
-  # config.cache = true
+  config.min_log_level = ::Logger::Severity::WARN
+  config.active_record = true
+  config.cache = true
   # Ignore all requests starting with /admin
   # config.ignored_request = -> (env) { env['PATH_INFO'].start_with? '/admin' }
 
