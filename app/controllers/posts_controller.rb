@@ -9,7 +9,7 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.accessible_by(current_ability).includes([:rich_text_content])
+    @posts = Current.user.posts.accessible_by(current_ability).includes([:rich_text_content])
     render inertia: "Post/Index", props: {
       posts: @posts.map do |post|
         serialize_post(post)
@@ -26,7 +26,7 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Post.new
+    @post = Current.user.posts.new()
     render inertia: "Post/New", props: {
       post: serialize_post(@post)
     }
@@ -41,7 +41,7 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
-    @post = Post.new(post_params)
+    @post = Current.user.posts.new(post_params)
 
     if @post.save
       redirect_to @post, notice: "Post was successfully created."
@@ -69,7 +69,7 @@ class PostsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_post
-    @post = Post.find(params[:id])
+    @post = Current.user.posts.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.

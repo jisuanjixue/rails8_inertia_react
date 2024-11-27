@@ -1,18 +1,25 @@
 import { useForm } from '@inertiajs/react'
 import { ReactTrixRTEInput } from "react-trix-rte";
 import PostType from '../../types/serializers/Post'
+import { useCreation } from 'ahooks';
 
-export default function Form({ post, onSubmit, submitText }: { post: PostType, onSubmit: (form: any) => void, submitText: string }) {
+export default function Form({ post, onSubmit, submitText }: { post: PostType, onSubmit: (form: any, content: string) => void, submitText: string }) {
+  const factory = useCreation(
+    () => ({
+      content: '',
+    }),
+    [],
+  );
   const form = useForm({
     title: post.title || '',
-    body: post.body || '',
-    content: post.content || '',
+    body: post.body || ''
   })
+
   const { data, setData, errors, processing } = form
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(form)
+    onSubmit(form, factory.content)
   }
 
   return (
@@ -52,13 +59,15 @@ export default function Form({ post, onSubmit, submitText }: { post: PostType, o
       </div>
 
       <div className="my-5">
-      <label htmlFor="body">正文</label>
+        <label htmlFor="body">正文</label>
         <ReactTrixRTEInput
           name="content"
           id="content"
-          defaultValue={data.content.body}
+          defaultValue={post?.content?.body}
           isRailsDirectUpload={true}
-          onChange={(event, newValue: string) => { setData('content', newValue) }}
+          onChange={(_, newValue: string) => {
+            factory.content = newValue
+          }}
         />
       </div>
 

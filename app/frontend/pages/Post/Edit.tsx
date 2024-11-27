@@ -12,8 +12,8 @@ export default function Edit({ post }: { post: PostType }) {
 
         <Form
           post={post}
-          onSubmit={(form) => {
-            form.transform((data) => ({ post: data }))
+          onSubmit={(form, content) => {
+            form.transform((data) => ({ post: {...data, content }}))
             form.patch(`/posts/${post.id}`)
           }}
           submitText="Update post"

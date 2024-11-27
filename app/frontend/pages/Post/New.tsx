@@ -12,10 +12,12 @@ export default function New({ post }) {
         <Form
           post={post}
           onSubmit={(form) => {
-            form.transform((data) => ({ post: data }))
+            form.transform((data) => {
+              return ({ post: data })
+            })
             form.post('/posts')
           }}
-          submitText="Create post"
+          submitText="新建"
         />
 
         <Link

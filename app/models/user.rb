@@ -29,6 +29,7 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
 
   has_many :connected_accounts, dependent: :destroy
+  has_many :posts, dependent: :destroy
 
 
   encrypts :email, deterministic: true
