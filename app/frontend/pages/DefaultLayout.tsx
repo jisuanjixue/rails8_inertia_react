@@ -3,6 +3,8 @@ import Footer from "@/components/Footer";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { usePage } from "@inertiajs/react";
 import { AlertCircle } from "lucide-react";
+import { ShootingStars } from "@/components/ui/shooting-stars";
+import { StarsBackground } from "@/components/ui/stars-background";
 
 type Flash = {
     alert: string | undefined
@@ -12,7 +14,7 @@ type Flash = {
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
     const { flash } = usePage().props as unknown as { flash: Flash }
     return (
-        <main>
+        <main className="bg-neutral-700">
             <Header />
             <article>
                 {flash.alert &&
@@ -35,6 +37,8 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
                 <main>{children}</main>
             </article>
             <Footer />
+            <ShootingStars />
+            <StarsBackground />
         </main>
     )
 }
