@@ -944,6 +944,18 @@
   resolved "https://registry.npmmirror.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
 
+"@tabler/icons-react@^3.22.0":
+  version "3.22.0"
+  resolved "https://registry.npmmirror.com/@tabler/icons-react/-/icons-react-3.22.0.tgz#4fd044eaf5ae32baeed91af7bec6d9cb71443f06"
+  integrity sha512-pOnn+IqZpnkYsEKRvbXXLXwXhYwg4cy1fEVr5SRrgAYJXkobpDjFTdVHlab0HEBXY5AE1NjsMlVeK6H/8Vv2uQ==
+  dependencies:
+    "@tabler/icons" "3.22.0"
+
+"@tabler/icons@3.22.0":
+  version "3.22.0"
+  resolved "https://registry.npmmirror.com/@tabler/icons/-/icons-3.22.0.tgz#f937ec65d98710b891da6368559ea15cbcd87f91"
+  integrity sha512-IfgGzhFph5OBr2wTieWL/hyAs0FThnq9O155a6kfGYxqx7h5LQw91wnRswhEaGhXCcfmR7ZVDUr9H+x4b9Pb8g==
+
 "@tailwindcss/container-queries@^0.1.1":
   version "0.1.1"
   resolved "https://registry.npmmirror.com/@tailwindcss/container-queries/-/container-queries-0.1.1.tgz#9a759ce2cb8736a4c6a0cb93aeb740573a731974"
@@ -1480,7 +1492,7 @@ debug@^3.2.7:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.1.0, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4, debug@^4.3.6:
+debug@^4.1.0, debug@^4.3, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4, debug@^4.3.6:
   version "4.3.7"
   resolved "https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz#87945b4151a011d76d95a198d7111c865c360a52"
   integrity sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==
@@ -3261,6 +3273,11 @@ rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
+rollup-plugin-gzip@^3.1.0:
+  version "3.1.2"
+  resolved "https://registry.npmmirror.com/rollup-plugin-gzip/-/rollup-plugin-gzip-3.1.2.tgz#248267c09b23a7a48291625cf668d5511c517c36"
+  integrity sha512-9xemMyvCjkklgNpu6jCYqQAbvCLJzA2nilkiOGzFuXTUX3cXEFMwIhsIBRF7kTKD/SnZ1tNPcxFm4m4zJ3VfNQ==
+
 rollup@^4.20.0:
   version "4.27.3"
   resolved "https://registry.npmmirror.com/rollup/-/rollup-4.27.3.tgz#078ecb20830c1de1f5486607f3e2f490269fb98a"
@@ -3419,6 +3436,11 @@ standard@^17.1.0:
     eslint-plugin-react "^7.36.1"
     standard-engine "^15.1.0"
     version-guard "^1.1.1"
+
+stimulus-vite-helpers@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.npmmirror.com/stimulus-vite-helpers/-/stimulus-vite-helpers-3.1.0.tgz#9216d703ac8d74befece4499ea738c18de408842"
+  integrity sha512-qy9vnNnu6e/1PArEndp456BuSKLQkBgc+vX2pedOHT0N4GSLQY0l5fuQ4ft56xZ8xSWqrfuYSR+GXXIPtoESww==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
   name string-width-cjs
@@ -3758,6 +3780,24 @@ version-guard@^1.1.1:
   resolved "https://registry.npmmirror.com/version-guard/-/version-guard-1.1.3.tgz#5a39b9d195f94cb10d469553aa9951e1917da5d2"
   integrity sha512-JwPr6erhX53EWH/HCSzfy1tTFrtPXUe927wdM1jqBBeYp1OM+qPHjWbsvv6pIBduqdgxxS+ScfG7S28pzyr2DQ==
 
+vite-plugin-environment@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.npmmirror.com/vite-plugin-environment/-/vite-plugin-environment-1.1.3.tgz#d01a04abb2f69730a4866c9c9db51d3dab74645b"
+  integrity sha512-9LBhB0lx+2lXVBEWxFZC+WO7PKEyE/ykJ7EPWCq95NEcCpblxamTbs5Dm3DLBGzwODpJMEnzQywJU8fw6XGGGA==
+
+vite-plugin-full-reload@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.npmmirror.com/vite-plugin-full-reload/-/vite-plugin-full-reload-1.2.0.tgz#bc4bfdc842abb4d24309ca802be8b955fce1c0c6"
+  integrity sha512-kz18NW79x0IHbxRSHm0jttP4zoO9P9gXh+n6UTwlNKnviTTEpOlum6oS9SmecrTtSr+muHEn5TUuC75UovQzcA==
+  dependencies:
+    picocolors "^1.0.0"
+    picomatch "^2.3.1"
+
+vite-plugin-manifest-sri@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmmirror.com/vite-plugin-manifest-sri/-/vite-plugin-manifest-sri-0.2.0.tgz#cb1cfd11692ee81f5d1194926cbea6d3a38b8599"
+  integrity sha512-Zt5jt19xTIJ91LOuQTCtNG7rTFc5OziAjBz2H5NdCGqaOD1nxrWExLhcKW+W4/q8/jOPCg/n5ncYEQmqCxiGQQ==
+
 vite-plugin-mkcert@^1.17.6:
   version "1.17.6"
   resolved "https://registry.npmmirror.com/vite-plugin-mkcert/-/vite-plugin-mkcert-1.17.6.tgz#c514d3d72ba201997e29cc537538bf8ff126c5c2"
@@ -3768,13 +3808,33 @@ vite-plugin-mkcert@^1.17.6:
     debug "^4.3.6"
     picocolors "^1.0.1"
 
-vite-plugin-ruby@^5.1.1:
+vite-plugin-rails@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npmmirror.com/vite-plugin-rails/-/vite-plugin-rails-0.5.0.tgz#fe29827b6f42abbc6e6537748963bb93871f468c"
+  integrity sha512-PR3zTHW96X8c7dRsuL2Mu1EAXXeO8fQjQ2KanwIC7EWgBST+D8AKjJyEUAr13IakrIYvd1cM3LcQUcrKmCMePg==
+  dependencies:
+    rollup-plugin-gzip "^3.1.0"
+    vite-plugin-environment "^1.1.3"
+    vite-plugin-full-reload "^1.1.0"
+    vite-plugin-manifest-sri "^0.2.0"
+    vite-plugin-ruby "^5.0.0"
+    vite-plugin-stimulus-hmr "^3.0.0"
+
+vite-plugin-ruby@^5.0.0, vite-plugin-ruby@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmmirror.com/vite-plugin-ruby/-/vite-plugin-ruby-5.1.1.tgz#ecd72591ddb90a23613051005bd70a6410945129"
   integrity sha512-I1dXJq2ywdvTD2Cz5LYNcYLujqQ3eUxPoCjruRdfm2QBtHBY15NEeb6x5HuPM3T5S+y8S3p9fwRsieQQCjk0gg==
   dependencies:
     debug "^4.3.4"
     fast-glob "^3.3.2"
+
+vite-plugin-stimulus-hmr@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmmirror.com/vite-plugin-stimulus-hmr/-/vite-plugin-stimulus-hmr-3.0.0.tgz#60410a69486e86a8c1a769fe4b10039ac5f8d910"
+  integrity sha512-KElOiZOlaG4XilQQHrzK8M1u5UfK4EFfADJKQYbnmsUMifDOnPR6anVYgHAN95QyWJ67Q/rYWe5BB9M5OxocfQ==
+  dependencies:
+    debug "^4.3"
+    stimulus-vite-helpers "^3.0.0"
 
 vite@^5.4.11:
   version "5.4.11"

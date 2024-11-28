@@ -18,7 +18,7 @@ const HomeIndex = () => {
       text: "with",
     },
     {
-      text: "Aceternity.",
+      text: "free.",
       className: "text-blue-500 dark:text-blue-500",
     },
   ];
