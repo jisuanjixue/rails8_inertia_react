@@ -26,7 +26,7 @@ const HomeIndex = () => {
     <>
       <div className="flex flex-col items-center justify-center h-[30rem]  ">
         <p className="text-xs text-neutral-100 dark:text-neutral-200 sm:text-base ">
-          The road to freedom starts from here
+          The road to freedom starts from here11
         </p>
         <TypewriterEffectSmooth words={words} />
         <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:space-y-0 md:space-x-4">

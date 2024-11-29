@@ -19,7 +19,10 @@ Rails.application.routes.draw do
     resource :password_reset,     only: [ :new, :edit, :create, :update ]
   end
 
+  #post
   resources :posts
+
+  get 'all_posts', to: 'posts#all_posts'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

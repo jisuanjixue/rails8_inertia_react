@@ -2,10 +2,19 @@ class PostsController < ApplicationController
   before_action do
     Debugbar.msg("before_action", {params: params.permit!.to_h, callee: __callee__})
   end
-  load_and_authorize_resource
+  load_and_authorize_resource except: :all_posts # 保留其他方法的权限检查
   before_action :set_post, only: %i[show edit update destroy]
 
   inertia_share flash: -> { flash.to_hash }
+
+  def all_posts
+    @posts = Post.all.includes([:rich_text_content])
+    render inertia: "Post/List", props: {
+      posts: @posts.map do |post|
+        serialize_post(post)
+      end
+    }
+  end
 
   # GET /posts
   def index

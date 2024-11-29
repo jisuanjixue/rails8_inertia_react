@@ -5,7 +5,7 @@ module Auth
 
   included do
     before_action :set_current_request_details
-    before_action :authenticate
+    before_action :authenticate, only: ![:all_posts]
   end
 
   private

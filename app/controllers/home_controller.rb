@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
     # Let CanCanCan load and authorize the instance variables
-  # load_and_authorize_resource
-  before_action :set_user
+
+  before_action :set_user, only: [:change_password]
   def index
     render inertia: "HomeIndex", props: {}
   end

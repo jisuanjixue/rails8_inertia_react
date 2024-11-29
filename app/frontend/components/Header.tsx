@@ -12,6 +12,13 @@ import {
     NavigationMenuTrigger,
     // NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
+import {
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalTrigger,
+} from "@/components/ui/animated-modal";
 import { Link, usePage } from "@inertiajs/react"
 import useChangePassword from '../pages/RightDropdown/use-change-password'
 
@@ -19,7 +26,6 @@ export default function Header() {
     const {
         auth: { currentUser, session },
     } = usePage().props as any;
-    console.log(currentUser)
     const renderPasswordForm = useChangePassword({ user: currentUser })
 
     return (
@@ -52,7 +58,7 @@ export default function Header() {
                                         </NavigationMenuContent>
                                     </NavigationMenuItem>
                                     <NavigationMenuItem>
-                                        <Link href={`/posts`}>
+                                        <Link href={`/all_posts`}>
                                             文章
                                         </Link>
                                     </NavigationMenuItem>
@@ -71,10 +77,17 @@ export default function Header() {
                                         <DropdownMenuLabel>我的账户</DropdownMenuLabel>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuGroup>
+                                            {/* <Modal>
+                                                <ModalTrigger className="flex justify-center text-white bg-black dark:bg-white dark:text-black group/modal-btn"> */}
                                             <DropdownMenuItem>
-                                                个人信息
-                                                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                                                <Link
+                                                    href={`/posts`}
+                                                >
+                                                    我的文章
+                                                </Link>
                                             </DropdownMenuItem>
+                                            {/* </ModalTrigger>
+                                            </Modal> */}
                                             <Dialog>
                                                 <DialogTrigger>
                                                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>

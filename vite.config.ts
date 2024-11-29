@@ -10,7 +10,6 @@ export default defineConfig({
       fullReload: {
         additionalPaths: [
           'config/routes.rb',
-          'app/frontend/pages/**/*',
           'app/controllers/**/*',
           'app/models/**/*'
         ],
@@ -29,4 +28,15 @@ export default defineConfig({
       protocol: 'wss',
     },
   },
+  build: {
+    rollupOptions: {
+        output:{
+            manualChunks(id) {
+                if (id.includes('node_modules')) {
+                    return id.toString().split('node_modules/')[1].split('/')[0].toString();
+                }
+            }
+        }
+    }
+}
 })

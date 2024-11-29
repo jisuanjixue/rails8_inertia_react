@@ -1,4 +1,4 @@
-import { Link, Head } from '@inertiajs/react'
+import { Link, Head, router } from '@inertiajs/react'
 // import { Fragment } from 'react'
 // import Post from './Post'
 import { Card } from '@/components/ui/card'
@@ -73,7 +73,7 @@ const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
     );
   };
   return (
-    <div className='mt-8'>
+    <div className='relative flex flex-col items-start justify-start min-h-screen mt-8'>
       <Head title="Posts" />
       <div className="w-full px-8 pt-8 mx-auto md:w-2/3">
         {flash.notice && (
@@ -97,6 +97,7 @@ const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
         {/* <HoverEffect  /> */}
           <BentoGrid>
             {posts.map((item, i) => (
+              <div onClick={() => router.get(`/posts/${item.id}`)}>
               <BentoGridItem
                 key={i}
                 title={item.title}
@@ -107,6 +108,7 @@ const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
                 className={cn("[&>p:text-lg]", 'md:col-span-1')}
                 icon={<IconBoxAlignRightFilled className="w-4 h-4 text-neutral-500" />}
               />
+              </div>
             ))}
           </BentoGrid>
           {/* {posts.map((post) => (
