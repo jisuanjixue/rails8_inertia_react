@@ -11,6 +11,7 @@ import DefaultLayout from '../DefaultLayout'
 import PostType from '../../types/serializers/Post'
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { motion } from "framer-motion";
+import Demo from './demo'
 
 
 const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
@@ -94,6 +95,7 @@ const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
         </div>
 
         <div className="min-w-full">
+        <Demo />
         {/* <HoverEffect  /> */}
           <BentoGrid>
             {posts.map((item, i) => (

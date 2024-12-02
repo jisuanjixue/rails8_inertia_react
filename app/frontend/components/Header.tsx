@@ -121,10 +121,27 @@ export default function Header() {
                                                 </Link>
                                                 <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                Settings
-                                                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                                            </DropdownMenuItem>
+                                            <Modal>
+                                                <ModalTrigger className="flex justify-center text-white bg-black dark:bg-white dark:text-black group/modal-btn">
+                                                    <DropdownMenuItem>
+                                                        <div>修改邮箱</div>
+                                                    </DropdownMenuItem>
+                                                </ModalTrigger>
+                                                <ModalBody>
+                                                    <ModalContent>
+                                                        <div>ascdfsvfaf</div>
+                                                    </ModalContent>
+                                                    <ModalFooter className="gap-4">
+                                                        <button className="px-2 py-1 text-sm text-black bg-gray-200 border border-gray-300 rounded-md dark:bg-black dark:border-black dark:text-white w-28">
+                                                            Cancel
+                                                        </button>
+                                                        <button className="px-2 py-1 text-sm text-white bg-black border border-black rounded-md dark:bg-white dark:text-black w-28">
+                                                            Book Now
+                                                        </button>
+                                                    </ModalFooter>
+                                                </ModalBody>
+                                            </Modal>
+
                                         </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuGroup>

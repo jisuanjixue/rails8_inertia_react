@@ -18,7 +18,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
              <ShootingStars />
              <StarsBackground />
             <Header />
-            <main className="overflow-y-auto">
+            <main className="flex-grow overflow-y-auto">
                 {flash.alert &&
                     <>
                         <Alert variant="destructive">
