@@ -3,6 +3,9 @@ class RegistrationsController < ApplicationController
 
   def new
     @user = User.new
+    render inertia: "Registrations/New", props: {
+      user: @user
+    }
   end
 
   def create

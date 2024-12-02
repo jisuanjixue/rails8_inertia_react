@@ -8,6 +8,9 @@ class SessionsController < ApplicationController
   end
 
   def new
+    render inertia: "Sessions/New", props: {
+      is_developer: Rails.env.development?
+    }
   end
 
   def create
@@ -17,7 +20,7 @@ class SessionsController < ApplicationController
 
       redirect_to root_path, notice: "Signed in successfully"
     else
-      redirect_to sign_in_path(email_hint: params[:email]), alert: "That email or password is incorrect"
+      redirect_to sign_in_path(email_hint: params[:email]), inertia: { errors: @post.errors }, alert: "That email or password is incorrect"
     end
   end
 

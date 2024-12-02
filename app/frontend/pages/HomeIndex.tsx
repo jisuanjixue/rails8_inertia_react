@@ -24,9 +24,9 @@ const HomeIndex = () => {
   ];
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-[30rem]  ">
+      <div className=" flex flex-col items-center justify-center h-[20rem] mt-10">
         <p className="text-xs text-neutral-100 dark:text-neutral-200 sm:text-base ">
-          The road to freedom starts from here11
+          The road to freedom starts from here224
         </p>
         <TypewriterEffectSmooth words={words} />
         <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:space-y-0 md:space-x-4">
@@ -39,7 +39,7 @@ const HomeIndex = () => {
         </div>
       </div>
 
-      <div className="grid w-full grid-cols-1 gap-4 mx-auto lg:grid-cols-3 max-w-7xl">
+      <div className="grid w-full grid-cols-1 gap-4 mx-auto mb-10 lg:grid-cols-3 max-w-7xl">
         <WobbleCard
           containerClassName="col-span-1 lg:col-span-2 h-full bg-pink-800 min-h-[500px] lg:min-h-[300px]"
         >
