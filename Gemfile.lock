@@ -72,7 +72,7 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    alba (3.3.3)
+    alba (3.4.0)
       ostruct (~> 0.6)
     annotaterb (4.13.0)
     ast (2.4.2)
@@ -461,7 +461,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  alba (~> 3.3)
+  alba (~> 3.4)
   annotaterb
   authentication-zero
   bcrypt (~> 3.1.7)
