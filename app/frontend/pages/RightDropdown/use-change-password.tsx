@@ -1,8 +1,10 @@
 import { useForm } from '@inertiajs/react'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { DialogTrigger } from '@/components/ui/dialog'
+import { Label } from "@/components/ui/motion-label";
+import { Input } from "@/components/ui/motion-input";
+import LabelInputContainer from "@/components/ui/label-input-container";
+import BottomGradient from "@/components/ui/bottom-gradient";
 
 const useChangePassword = ({user}) => {
   const form = useForm({
@@ -24,21 +26,24 @@ const useChangePassword = ({user}) => {
       <form onSubmit={handleSubmit} className="contents">
         <div className="grid gap-4 py-4">
           <div className="grid items-center grid-cols-4 gap-4">
+          <LabelInputContainer className="mb-4">
             <Label htmlFor="password_challenge" className="text-right">
               旧密码
             </Label>
-            <Input id="password_challenge" onChange={(e) => setData('password_challenge', e.target.value)} value={data.password_challenge} className="col-span-3" />
+            <Input id="password_challenge" onChange={(e) => setData('password_challenge', e.target.value)} value={data.password_challenge} />
             {errors.password_challenge && (
               <div className="px-3 py-2 font-medium text-red-500">
                 {errors.password_challenge.join(', ')}
               </div>
             )}
+            </LabelInputContainer>
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
+          <LabelInputContainer className="mb-4">
             <Label htmlFor="password" className="text-right">
               新密码
             </Label>
-            <Input id="password" onChange={(e) => setData('password', e.target.value)} value={data.password} className="col-span-3" />
+            <Input id="password" onChange={(e) => setData('password', e.target.value)} value={data.password} />
             <div className="px-3 py-2 font-medium text-red-500">
               {errors.password && (
                 <div className="px-3 py-2 font-medium text-red-500">
@@ -46,6 +51,7 @@ const useChangePassword = ({user}) => {
                 </div>
               )}
             </div>
+            </LabelInputContainer>
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="password_confirmation" className="text-right">
@@ -64,6 +70,7 @@ const useChangePassword = ({user}) => {
             variant="secondary"
             type="submit"
             disabled={processing}>确认</Button>
+            <BottomGradient />
         </DialogTrigger>
       </form>
     )

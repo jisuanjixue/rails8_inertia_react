@@ -101,5 +101,5 @@ export default HomeIndex
 </div>
 
 <br>
-
+ <%= link_to "Forgot your password?", new_identity_password_reset_path %>
 <%= button_to "Log out", Current.session, method: :delete %></br> */}

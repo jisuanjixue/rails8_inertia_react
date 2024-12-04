@@ -2,7 +2,8 @@
 import React from "react";
 import { Label } from "@/components/ui/motion-label";
 import { Input } from "@/components/ui/motion-input";
-import { cn } from "@/lib/utils";
+import LabelInputContainer from "@/components/ui/label-input-container";
+import BottomGradient from "@/components/ui/bottom-gradient";
 import {
     IconBrandGithub,
 } from "@tabler/icons-react";
@@ -98,28 +99,5 @@ const LoginForm = ({ is_developer }: { is_developer: boolean }) => {
         </div>
     );
 }
-
-const BottomGradient = () => {
-    return (
-        <>
-            <span className="absolute inset-x-0 block w-full h-px transition duration-500 opacity-0 group-hover/btn:opacity-100 -bottom-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-            <span className="absolute block w-1/2 h-px mx-auto transition duration-500 opacity-0 group-hover/btn:opacity-100 blur-sm -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-        </>
-    );
-};
-
-const LabelInputContainer = ({
-    children,
-    className,
-}: {
-    children: React.ReactNode;
-    className?: string;
-}) => {
-    return (
-        <div className={cn("flex flex-col space-y-2 w-full", className)}>
-            {children}
-        </div>
-    );
-};
 
 export default LoginForm

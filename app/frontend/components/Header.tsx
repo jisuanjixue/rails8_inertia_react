@@ -1,32 +1,40 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
     NavigationMenu,
     NavigationMenuContent,
-    // NavigationMenuIndicator,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-    // NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
-import {
-    Modal,
-    ModalBody,
-    ModalContent,
-    ModalFooter,
-    ModalTrigger,
-} from "@/components/ui/animated-modal";
-import { Link, usePage } from "@inertiajs/react"
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { Link, router, usePage } from "@inertiajs/react"
 import useChangePassword from '../pages/RightDropdown/use-change-password'
+
 
 export default function Header() {
     const {
         auth: { currentUser, session },
     } = usePage().props as any;
     const renderPasswordForm = useChangePassword({ user: currentUser })
+    const placeholders = [
+        "输入文章标题关键字查询",
+        "输入文章标题关键字查询",
+        "Where is Andrew Laeddis Hiding?",
+        "Write a Javascript method to reverse a string",
+        "How to assemble your own PC?",
+    ];
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value);
+    };
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log("submitted");
+    };
 
     return (
         <>
@@ -46,9 +54,6 @@ export default function Header() {
                                 </Link>
 
                             </div>
-                        </div>
-
-                        <div className="md:flex md:items-center md:gap-12">
                             <NavigationMenu>
                                 <NavigationMenuList>
                                     <NavigationMenuItem>
@@ -64,7 +69,15 @@ export default function Header() {
                                     </NavigationMenuItem>
                                 </NavigationMenuList>
                             </NavigationMenu>
+                        </div>
 
+                        <div className="md:flex md:items-center md:gap-16">
+
+                            <PlaceholdersAndVanishInput
+                                placeholders={placeholders}
+                                onChange={handleChange}
+                                onSubmit={onSubmit}
+                            />
                             <div className="hidden md:relative md:block">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -74,11 +87,7 @@ export default function Header() {
                                         </Avatar>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className="w-56">
-                                        <DropdownMenuLabel>我的账户</DropdownMenuLabel>
-                                        <DropdownMenuSeparator />
                                         <DropdownMenuGroup>
-                                            {/* <Modal>
-                                                <ModalTrigger className="flex justify-center text-white bg-black dark:bg-white dark:text-black group/modal-btn"> */}
                                             <DropdownMenuItem>
                                                 <Link
                                                     href={`/posts`}
@@ -86,8 +95,7 @@ export default function Header() {
                                                     我的文章
                                                 </Link>
                                             </DropdownMenuItem>
-                                            {/* </ModalTrigger>
-                                            </Modal> */}
+                                            <DropdownMenuSeparator />
                                             <Dialog>
                                                 <DialogTrigger>
                                                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
@@ -111,7 +119,9 @@ export default function Header() {
                                                     </DialogFooter>
                                                 </DialogContent>
                                             </Dialog>
-                                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuLabel onClick={() => router.get(`/user_setting`)}>个人设置</DropdownMenuLabel>
+                                            {/* <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                                 <Link
                                                     href={`/identity/email/edit`}
                                                     as="button"
@@ -120,8 +130,8 @@ export default function Header() {
                                                     修改邮箱
                                                 </Link>
                                                 <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                                            </DropdownMenuItem>
-                                            <Modal>
+                                            </DropdownMenuItem> */}
+                                            {/* <Modal>
                                                 <ModalTrigger className="flex justify-center text-white bg-black dark:bg-white dark:text-black group/modal-btn">
                                                     <DropdownMenuItem>
                                                         <div>修改邮箱</div>
@@ -140,27 +150,7 @@ export default function Header() {
                                                         </button>
                                                     </ModalFooter>
                                                 </ModalBody>
-                                            </Modal>
-
-                                        </DropdownMenuGroup>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuGroup>
-                                            <DropdownMenuItem>Team</DropdownMenuItem>
-                                            <DropdownMenuSub>
-                                                <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-                                                <DropdownMenuPortal>
-                                                    <DropdownMenuSubContent>
-                                                        <DropdownMenuItem>Email</DropdownMenuItem>
-                                                        <DropdownMenuItem>Message</DropdownMenuItem>
-                                                        <DropdownMenuSeparator />
-                                                        <DropdownMenuItem>More...</DropdownMenuItem>
-                                                    </DropdownMenuSubContent>
-                                                </DropdownMenuPortal>
-                                            </DropdownMenuSub>
-                                            <DropdownMenuItem>
-                                                New Team
-                                                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                                            </DropdownMenuItem>
+                                            </Modal> */}
                                         </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem

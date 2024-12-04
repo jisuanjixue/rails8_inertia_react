@@ -1,6 +1,10 @@
 import { useForm } from '@inertiajs/react'
 import { ReactTrixRTEInput } from "react-trix-rte";
-import PostType from '../../types/serializers/Post'
+import PostType from '../../types/serializers/Post';
+import { Input } from "@/components/ui/motion-input";
+import { Label } from "@/components/ui/motion-label";
+import LabelInputContainer from "@/components/ui/label-input-container";
+import BottomGradient from "@/components/ui/bottom-gradient";
 import { useCreation } from 'ahooks';
 
 export default function Form({ post, onSubmit, submitText }: { post: PostType, onSubmit: (form: any, content: string) => void, submitText: string }) {
@@ -24,14 +28,13 @@ export default function Form({ post, onSubmit, submitText }: { post: PostType, o
 
   return (
     <form onSubmit={handleSubmit} className="contents">
-      <div className="my-5">
-        <label htmlFor="title">标题</label>
-        <input
+      <LabelInputContainer className="mb-4">
+        <Label htmlFor="title">标题</Label>
+        <Input
           type="text"
           name="title"
           id="title"
           value={data.title}
-          className="block w-full px-3 py-2 mt-2 border border-gray-400 rounded-md shadow outline-none"
           onChange={(e) => setData('title', e.target.value)}
         />
         {errors.title && (
@@ -39,7 +42,7 @@ export default function Form({ post, onSubmit, submitText }: { post: PostType, o
             {errors.title.join(', ')}
           </div>
         )}
-      </div>
+      </LabelInputContainer>
 
       <div className="my-5">
         <label htmlFor="body">概述</label>
@@ -78,6 +81,7 @@ export default function Form({ post, onSubmit, submitText }: { post: PostType, o
           className="inline-block px-5 py-3 font-medium text-white bg-blue-600 rounded-lg cursor-pointer"
         >
           {submitText}
+          <BottomGradient />
         </button>
       </div>
     </form>

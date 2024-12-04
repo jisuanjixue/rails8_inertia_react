@@ -1,17 +1,51 @@
 import PostType from '../../types/serializers/Post'
 import DefaultLayout from '../DefaultLayout'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useClickAway, useSafeState } from 'ahooks'
+import { useClickAway, useDeepCompareEffect, useSafeState } from 'ahooks'
 import { useEffect, useId, useRef } from 'react'
-import { Link } from '@inertiajs/react'
+import { Link, router } from '@inertiajs/react'
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import { convertToQueryParams } from '@/lib/utils'
 
 
-const List = ({ posts, flash }: { posts: PostType[], flash: any }) => {
-console.log("🚀 ~ List ~ posts:", posts)
-
+const List = ({ posts, total,meta, flash }: { posts: PostType[], total: number, meta:any, flash: any }) => {
+    const [initQuery, setInitQuery] = useSafeState(true)
+    console.log("🚀 ~ List ~ posts:", total, meta)
+    const pageCount = Math.ceil(total / meta.limit);
+    const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
     const [active, setActive] = useSafeState<(typeof cards)[number] | boolean | null>(
         null
     );
+    const [queryParams, setQueryParams] = useSafeState({ page: 1, pageSize: meta.limit, filters: undefined, sorts: undefined });
+    const refresh = () => {
+        router.get(
+            '/all_posts',
+            {
+                page: queryParams.page,
+                items: queryParams.pageSize,
+                q: { ...convertToQueryParams(queryParams.filters), sorts: queryParams.sorts },
+            },
+            {
+                replace: false,
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    setInitQuery(false);
+                },
+                onFinish: () => {
+                    // Additional cleanup or actions can be added here
+                },
+            }
+        );
+    };
+
+    useDeepCompareEffect(() => {
+        if (!initQuery) {
+            refresh();
+        } else {
+            setInitQuery(false);
+        }
+    }, [queryParams, initQuery]);
 
     useEffect(() => {
         function onKeyDown(event: KeyboardEvent) {
@@ -74,123 +108,7 @@ console.log("🚀 ~ List ~ posts:", posts)
         );
     };
     // posts.map(v => ({id:v.id, description: v.body, title: v.title,  src: "https://assets.aceternity.com/demos/lana-del-rey.jpeg",  ctaText: "查看更多", content: v.content }))
-    const cards = (posts || [])?.map(v => ({ id: v.id, description: v.body, title: v.title, src: "https://assets.aceternity.com/demos/lana-del-rey.jpeg", ctaLink: `/posts/${v.id}`, ctaText: "查看更多", content: () => { return (<p>{v?.content?.body}</p>)  } }))
-    console.log("🚀 ~ List ~ cards:", cards)
-    
-    // const cards = [
-    //     {
-    //         description: posts[1].body,
-    //         title: posts[1].title,
-    //         src: "https://assets.aceternity.com/demos/lana-del-rey.jpeg",
-    //         ctaText: "Play",
-    //         ctaLink: "https://ui.aceternity.com/templates",
-    //         content: () => {
-    //             return (
-    //                 <p>
-    //                     Lana Del Rey, an iconic American singer-songwriter, is celebrated for
-    //                     her melancholic and cinematic music style. Born Elizabeth Woolridge
-    //                     Grant in New York City, she has captivated audiences worldwide with
-    //                     her haunting voice and introspective lyrics. <br /> <br /> Her songs
-    //                     often explore themes of tragic romance, glamour, and melancholia,
-    //                     drawing inspiration from both contemporary and vintage pop culture.
-    //                     With a career that has seen numerous critically acclaimed albums, Lana
-    //                     Del Rey has established herself as a unique and influential figure in
-    //                     the music industry, earning a dedicated fan base and numerous
-    //                     accolades.
-    //                 </p>
-    //             );
-    //         },
-    //     },
-    //     {
-    //         description: "Babbu Maan",
-    //         title: "Mitran Di Chhatri",
-    //         src: "https://assets.aceternity.com/demos/babbu-maan.jpeg",
-    //         ctaText: "Play",
-    //         ctaLink: "https://ui.aceternity.com/templates",
-    //         content: () => {
-    //             return (
-    //                 <p>
-    //                     Babu Maan, a legendary Punjabi singer, is renowned for his soulful
-    //                     voice and profound lyrics that resonate deeply with his audience. Born
-    //                     in the village of Khant Maanpur in Punjab, India, he has become a
-    //                     cultural icon in the Punjabi music industry. <br /> <br /> His songs
-    //                     often reflect the struggles and triumphs of everyday life, capturing
-    //                     the essence of Punjabi culture and traditions. With a career spanning
-    //                     over two decades, Babu Maan has released numerous hit albums and
-    //                     singles that have garnered him a massive fan following both in India
-    //                     and abroad.
-    //                 </p>
-    //             );
-    //         },
-    //     },
-
-    //     {
-    //         description: "Metallica",
-    //         title: "For Whom The Bell Tolls",
-    //         src: "https://assets.aceternity.com/demos/metallica.jpeg",
-    //         ctaText: "Play",
-    //         ctaLink: "https://ui.aceternity.com/templates",
-    //         content: () => {
-    //             return (
-    //                 <p>
-    //                     Metallica, an iconic American heavy metal band, is renowned for their
-    //                     powerful sound and intense performances that resonate deeply with
-    //                     their audience. Formed in Los Angeles, California, they have become a
-    //                     cultural icon in the heavy metal music industry. <br /> <br /> Their
-    //                     songs often reflect themes of aggression, social issues, and personal
-    //                     struggles, capturing the essence of the heavy metal genre. With a
-    //                     career spanning over four decades, Metallica has released numerous hit
-    //                     albums and singles that have garnered them a massive fan following
-    //                     both in the United States and abroad.
-    //                 </p>
-    //             );
-    //         },
-    //     },
-    //     {
-    //         description: "Led Zeppelin",
-    //         title: "Stairway To Heaven",
-    //         src: "https://assets.aceternity.com/demos/led-zeppelin.jpeg",
-    //         ctaText: "Play",
-    //         ctaLink: "https://ui.aceternity.com/templates",
-    //         content: () => {
-    //             return (
-    //                 <p>
-    //                     Led Zeppelin, a legendary British rock band, is renowned for their
-    //                     innovative sound and profound impact on the music industry. Formed in
-    //                     London in 1968, they have become a cultural icon in the rock music
-    //                     world. <br /> <br /> Their songs often reflect a blend of blues, hard
-    //                     rock, and folk music, capturing the essence of the 1970s rock era.
-    //                     With a career spanning over a decade, Led Zeppelin has released
-    //                     numerous hit albums and singles that have garnered them a massive fan
-    //                     following both in the United Kingdom and abroad.
-    //                 </p>
-    //             );
-    //         },
-    //     },
-    //     {
-    //         description: "Mustafa Zahid",
-    //         title: "Toh Phir Aao",
-    //         src: "https://assets.aceternity.com/demos/toh-phir-aao.jpeg",
-    //         ctaText: "Play",
-    //         ctaLink: "https://ui.aceternity.com/templates",
-    //         content: () => {
-    //             return (
-    //                 <p>
-    //                     &quot;Aawarapan&quot;, a Bollywood movie starring Emraan Hashmi, is
-    //                     renowned for its intense storyline and powerful performances. Directed
-    //                     by Mohit Suri, the film has become a significant work in the Indian
-    //                     film industry. <br /> <br /> The movie explores themes of love,
-    //                     redemption, and sacrifice, capturing the essence of human emotions and
-    //                     relationships. With a gripping narrative and memorable music,
-    //                     &quot;Aawarapan&quot; has garnered a massive fan following both in
-    //                     India and abroad, solidifying Emraan Hashmi&apos;s status as a
-    //                     versatile actor.
-    //                 </p>
-    //             );
-    //         },
-    //     },
-    // ];
-
+    const cards = (posts || [])?.map(v => ({ id: v.id, description: v.body, title: v.title, src: "https://assets.aceternity.com/demos/lana-del-rey.jpeg", ctaLink: `/posts/${v.id}`, ctaText: "查看更多", content: () => { return (<p>{v?.content?.body}</p>) } }))
     return (
         <>
             <AnimatePresence>
@@ -288,8 +206,8 @@ console.log("🚀 ~ List ~ posts:", posts)
                     </div>
                 ) : null}
             </AnimatePresence>
-            <div ref={ref}>
-                <ul className="relative h-full max-w-4xl min-h-screen gap-4 mx-auto mt-10 translate-y-10">
+            <div ref={ref} className='min-h-screen'>
+                <ul className="max-w-4xl gap-4 mx-auto mt-10 translate-y-10 ">
                     {cards.map((card, index) => (
                         <motion.div
                             layoutId={`card-${card.title}-${card.id}`}
@@ -332,6 +250,28 @@ console.log("🚀 ~ List ~ posts:", posts)
                         </motion.div>
                     ))}
                 </ul>
+                <Pagination className='relative mt-10'>
+                <PaginationContent>
+                    <PaginationItem onClick={() => setQueryParams({ ...queryParams, page: 1 })}>
+                        <PaginationPrevious />
+                    </PaginationItem>
+                    {pages.map(page => (
+                        <PaginationItem key={page} onClick={() => setQueryParams({ ...queryParams, page })} >
+                            <PaginationLink isActive={page === meta.page}>
+                                {page}
+                            </PaginationLink>
+                        </PaginationItem>
+                    ))}
+                    {pages.length > 10 && (
+                        <PaginationItem>
+                            <PaginationEllipsis />
+                        </PaginationItem>
+                    )}
+                    <PaginationItem onClick={() => setQueryParams({ ...queryParams, page: meta.page + 1 })}>
+                        <PaginationNext />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
             </div>
         </>
     )

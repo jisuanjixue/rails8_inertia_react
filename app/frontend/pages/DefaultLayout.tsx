@@ -18,7 +18,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
              <ShootingStars />
              <StarsBackground />
             <Header />
-            <main className="flex-grow overflow-y-auto">
+            <main className="flex-grow overflow-y-auto ">
                 {flash.alert &&
                     <>
                         <Alert variant="destructive">
@@ -37,7 +37,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
                     </AlertDescription>
                 </>}
                 <article>
-                    <main>{children}</main>
+                    <main className="relative">{children}</main>
                 </article>
             </main>
             <Footer  />

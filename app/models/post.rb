@@ -15,6 +15,10 @@
 #  index_posts_on_user_id  (user_id)
 #
 class Post < ApplicationRecord
+  include Ransackable
+
+  RANSACK_ATTRIBUTES = %w[body content title created_at updated_at].freeze
+
   has_rich_text :content
   belongs_to :user
 end
