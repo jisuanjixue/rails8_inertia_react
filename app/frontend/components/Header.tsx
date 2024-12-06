@@ -1,6 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
     NavigationMenu,
@@ -12,14 +10,12 @@ import {
 } from "@/components/ui/navigation-menu"
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { Link, router, usePage } from "@inertiajs/react"
-import useChangePassword from '../pages/RightDropdown/use-change-password'
 
 
 export default function Header() {
     const {
-        auth: { currentUser, session },
+        auth: {session },
     } = usePage().props as any;
-    const renderPasswordForm = useChangePassword({ user: currentUser })
     const placeholders = [
         "输入文章标题关键字查询",
         "输入文章标题关键字查询",
@@ -96,7 +92,7 @@ export default function Header() {
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
-                                            <Dialog>
+                                            {/* <Dialog>
                                                 <DialogTrigger>
                                                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                                         修改密码
@@ -118,8 +114,7 @@ export default function Header() {
                                                         </DialogTrigger>
                                                     </DialogFooter>
                                                 </DialogContent>
-                                            </Dialog>
-                                            <DropdownMenuSeparator />
+                                            </Dialog> */}
                                             <DropdownMenuLabel onClick={() => router.get(`/user_setting`)}>个人设置</DropdownMenuLabel>
                                             {/* <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                                 <Link

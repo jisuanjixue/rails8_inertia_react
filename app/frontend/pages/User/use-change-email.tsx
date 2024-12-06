@@ -1,10 +1,11 @@
 import { useForm } from '@inertiajs/react'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Label } from "@/components/ui/motion-label";
+import { Input } from "@/components/ui/motion-input";
+import LabelInputContainer from "@/components/ui/label-input-container";
 import { Button } from "@/components/ui/button"
-import { DialogTrigger } from '@/components/ui/dialog'
+import BottomGradient from "@/components/ui/bottom-gradient";
 
-const useChangeEmail = ({user}) => {
+const useChangeEmail = ({ user }) => {
   const form = useForm({
     password_challenge: '',
     email: ''
@@ -21,9 +22,8 @@ const useChangeEmail = ({user}) => {
 
     return (
       <form onSubmit={handleSubmit} className="contents">
-        <div className="grid gap-4 py-4">
-          <div className="grid items-center grid-cols-4 gap-4">
-            <Label htmlFor="password_challenge" className="text-right">
+           <LabelInputContainer className="mb-4">
+            <Label htmlFor="password_challenge" className="text-left">
               密码
             </Label>
             <Input id="password_challenge" onChange={(e) => setData('password_challenge', e.target.value)} value={data.password_challenge} className="col-span-3" />
@@ -32,12 +32,12 @@ const useChangeEmail = ({user}) => {
                 {errors.password_challenge.join(', ')}
               </div>
             )}
-          </div>
-          <div className="grid items-center grid-cols-4 gap-4">
-            <Label htmlFor="email" className="text-right">
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="email" className="text-left">
               新邮箱
             </Label>
-            <Input id="password" onChange={(e) => setData('email', e.target.value)} value={data.email} className="col-span-3" />
+            <Input id="email" onChange={(e) => setData('email', e.target.value)} value={data.email} className="col-span-2" />
             <div className="px-3 py-2 font-medium text-red-500">
               {errors.email && (
                 <div className="px-3 py-2 font-medium text-red-500">
@@ -45,14 +45,12 @@ const useChangeEmail = ({user}) => {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-        <DialogTrigger asChild>
-          <Button
-            variant="secondary"
-            type="submit"
-            disabled={processing}>确认</Button>
-        </DialogTrigger>
+          </LabelInputContainer>
+        <Button
+          variant="secondary"
+          type="submit"
+          disabled={processing}>修改邮箱</Button>
+            <BottomGradient />
       </form>
     )
   }

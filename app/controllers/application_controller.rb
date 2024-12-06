@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordInvalid do |exception|
     raise exception unless request.inertia?
+
     session[:errors] = exception.record.errors
     redirect_back(fallback_location: root_path)
   end
@@ -23,7 +24,9 @@ class ApplicationController < ActionController::Base
     redirect_back(fallback_location: root_path)
   end
 
-  inertia_share auth: -> {{ currentUser: Current.user, session: Current.session } }
+  inertia_share auth: lambda {
+    { currentUser: Current.user, session: Current.session }
+  }
 
   private
 

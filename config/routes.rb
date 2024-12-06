@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount Debugbar::Engine => Debugbar.config.prefix if defined? Debugbar
+  # mount Debugbar::Engine => Debugbar.config.prefix if defined? Debugbar
   # authentication
   get '/auth/failure', to: 'sessions/omniauth#failure'
   get '/auth/:provider/callback', to: 'sessions/omniauth#create'
@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
   # user setting
   get 'user_setting', to: 'users/setting#index'
+  patch 'user_setting/update_profile', to: 'users/setting#update_profile'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

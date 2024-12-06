@@ -17,6 +17,9 @@
 class User < ApplicationRecord
   has_secure_password
 
+  has_one_attached :avatar
+  # after_save :attach_avatar, if: :avatar_attached?
+
   generates_token_for :email_verification, expires_in: 2.days do
     email
   end
@@ -25,12 +28,10 @@ class User < ApplicationRecord
     password_salt.last(10)
   end
 
-
   has_many :sessions, dependent: :destroy
 
   has_many :connected_accounts, dependent: :destroy
   has_many :posts, dependent: :destroy
-
 
   encrypts :email, deterministic: true
   encrypts :name
@@ -47,4 +48,14 @@ class User < ApplicationRecord
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
   end
+
+  # private
+
+  # def avatar_attached?
+  #   avatar.attached?
+  # end
+
+  # def attach_avatar
+  #   avatar.attach(avatar)
+  # end
 end

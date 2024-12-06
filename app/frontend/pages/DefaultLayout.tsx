@@ -14,7 +14,7 @@ type Flash = {
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
     const { flash } = usePage().props as unknown as { flash: Flash }
     return (
-        <div className="inset-0 z-auto flex flex-col w-full h-full min-h-screen bg-neutral-800">
+        <div className="inset-0 z-auto flex flex-col w-full h-full min-h-screen overflow-hidden bg-black">
              <ShootingStars />
              <StarsBackground />
             <Header />
