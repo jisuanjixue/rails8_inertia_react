@@ -20,7 +20,9 @@ class Users::SettingController < ApplicationController
   end
 
   def user_params
-    params.permit(:email, :name, :avatar, :password_challenge).with_defaults(password_challenge: '')
+    params.permit(:email, :name, :avatar).tap do |p|
+      p.delete(:avatar) if p[:avatar].blank?
+    end
   end
 
   def redirect_to_root

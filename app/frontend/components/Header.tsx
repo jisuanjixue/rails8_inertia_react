@@ -14,7 +14,7 @@ import { Link, router, usePage } from "@inertiajs/react"
 
 export default function Header() {
     const {
-        auth: {session },
+        auth: {session, avatar },
     } = usePage().props as any;
     const placeholders = [
         "输入文章标题关键字查询",
@@ -78,7 +78,7 @@ export default function Header() {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Avatar onClick={() => { console.log("avatar clicked") }}>
-                                            <AvatarImage src="https://github.com/shadcn.png" />
+                                            <AvatarImage src={avatar} />
                                             <AvatarFallback>CN</AvatarFallback>
                                         </Avatar>
                                     </DropdownMenuTrigger>

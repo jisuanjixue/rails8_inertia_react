@@ -21,6 +21,7 @@ export default defineConfig({
     }),
     basicSsl(),
     reactRefresh({
+      parserPlugins: ['classProperties', 'classPrivateProperties'],
       // Exclude storybook stories and node_modules
       exclude: [/\.stories\.(t|j)sx?$/, /node_modules/],
       // Only .tsx files
@@ -33,14 +34,13 @@ export default defineConfig({
     cors: {
       origin: '*',
     },
-    https: true,
     watch: {
       usePolling: true
     },
     hmr: {
       host: "localhost",
       overlay: true,
-      clientPort: 443,
+      clientPort: 3100,
     },
   },
   build: {

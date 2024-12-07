@@ -1,19 +1,16 @@
 
 import { Tabs } from "@/components/ui/tabs";
 import DefaultLayout from "../DefaultLayout";
-import useChangePassword from './use-change-password'
+import ChangePassword from './change-password'
 // import useChangeEmail from './use-change-email'
-import useEditInfo from './use-edit-info'
+import EditInfo from './edit-info'
 import { usePage } from "@inertiajs/react";
 
 const UserSetting = () => {
     const {
-        auth: { currentUser },
+        auth: { currentUser, avatar },
     } = usePage().props as any;
-    
-    const renderPasswordForm = useChangePassword({ user: currentUser })
-    // const renderEmailForm = useChangeEmail({ user: currentUser })
-    const renderEditInfo = useEditInfo({ user: currentUser })
+    console.log(currentUser, avatar);
 
     const tabs = [
         {
@@ -22,7 +19,7 @@ const UserSetting = () => {
             content: (
                 <div className="relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]">
                     <p>注意！更新密码以后需要重新登录。</p>
-                    {renderPasswordForm.render()}
+                    {<ChangePassword user={currentUser} />}
                 </div>
             ),
         },
@@ -31,7 +28,7 @@ const UserSetting = () => {
             value: "user_info",
             content: (
                 <div className="relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]">
-                    {renderEditInfo.render()}
+                    {<EditInfo user={currentUser} avatar={avatar} />}
                 </div>
             ),
         },
