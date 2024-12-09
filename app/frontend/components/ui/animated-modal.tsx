@@ -155,9 +155,10 @@ export const ModalFooter = ({
   children,
   className,
 }: {
-  children: ReactNode;
+  children: (setOpen: (open: boolean) => void) => ReactNode;
   className?: string;
 }) => {
+  const { setOpen } = useModal();
   return (
     <div
       className={cn(
@@ -165,7 +166,7 @@ export const ModalFooter = ({
         className
       )}
     >
-      {children}
+      {children(setOpen)}
     </div>
   );
 };

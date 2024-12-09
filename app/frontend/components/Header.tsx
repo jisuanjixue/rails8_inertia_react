@@ -92,6 +92,13 @@ export default function Header() {
                                                 </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
+                                            <DropdownMenuItem>
+                                                <Link
+                                                    href={`/categories`}
+                                                >
+                                                    文章分类
+                                                </Link>
+                                            </DropdownMenuItem>
                                             {/* <Dialog>
                                                 <DialogTrigger>
                                                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>

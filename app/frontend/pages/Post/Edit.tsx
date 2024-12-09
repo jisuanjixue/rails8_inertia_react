@@ -2,7 +2,7 @@ import { Link, Head } from '@inertiajs/react'
 import Form from './Form'
 import PostType from '../../types/serializers/Post'
 
-export default function Edit({ post }: { post: PostType }) {
+export default function Edit({ post}: { post: PostType}) {
   return (
     <>
       <Head title="Editing post" />
@@ -12,7 +12,7 @@ export default function Edit({ post }: { post: PostType }) {
 
         <Form
           post={post}
-          onSubmit={(form, content) => {
+          onSubmit={(form,  content: string) => {
             form.transform((data) => ({ post: {...data, content }}))
             form.patch(`/posts/${post.id}`)
           }}

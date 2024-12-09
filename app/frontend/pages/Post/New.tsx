@@ -1,7 +1,9 @@
 import { Link, Head } from '@inertiajs/react'
 import Form from './Form'
+import CategoryType from '../../types/serializers/Category'
+import PostType from '../../types/serializers/Post'
 
-export default function New({ post }) {
+export default function New({ post, categories  }: { post: PostType,  categories: CategoryType[]}) {
   return (
     <>
       <Head title="新建文章" />
@@ -11,10 +13,9 @@ export default function New({ post }) {
 
         <Form
           post={post}
-          onSubmit={(form) => {
-            form.transform((data) => {
-              return ({ post: data })
-            })
+          categories={ categories}
+          onSubmit={(form,categoryId ) => {
+            form.transform((data) => ({ post: {...data, category_id: categoryId } }))
             form.post('/posts')
           }}
           submitText="新建"

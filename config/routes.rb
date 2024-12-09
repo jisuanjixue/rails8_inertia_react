@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   # post
   resources :posts
+  resources :categories
   get 'all_posts', to: 'posts#all_posts'
 
   # user setting

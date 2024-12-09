@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
-  before_action do
-    Debugbar.msg('before_action', { params: params.permit!.to_h, callee: __callee__ })
-  end
+  # before_action do
+  #   Debugbar.msg('before_action', { params: params.permit!.to_h, callee: __callee__ })
+  # end
   load_and_authorize_resource except: :all_posts # 保留其他方法的权限检查
   before_action :set_post, only: %i[show edit update destroy]
 
@@ -20,7 +20,7 @@ class PostsController < ApplicationController
 
     render inertia: 'Post/List', props: {
       posts: paged_posts.map do |post|
-        serialize_post(post)
+        serialize_post(post).merge(category_name: post.category.name)
       end,
       meta: pagy_metadata(pagy),
       total: @search_posts.count
@@ -29,10 +29,10 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Current.user.posts.accessible_by(current_ability).includes([:rich_text_content])
+    @posts = Current.user.posts.accessible_by(current_ability).includes(%i[rich_text_content category])
     render inertia: 'Post/Index', props: {
       posts: @posts.map do |post|
-        serialize_post(post)
+        serialize_post(post).merge(category_name: post.category.name)
       end
     }
   end
@@ -47,8 +47,10 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @post = Current.user.posts.new
+    @categories = Category.all
     render inertia: 'Post/New', props: {
-      post: serialize_post(@post)
+      post: serialize_post(@post),
+      categories: @categories
     }
   end
 
@@ -62,11 +64,12 @@ class PostsController < ApplicationController
   # POST /posts
   def create
     @post = Current.user.posts.new(post_params)
+    @post.category = Category.find_by(id: post_params[:category_id])
 
     if @post.save
       redirect_to @post, notice: 'Post was successfully created.'
     else
-      redirect_to new_post_url, inertia: { errors: @post.errors }
+      redirect_to new_post_url, inertia: { errors: @post.errors, categories: Category.all }
     end
   end
 
@@ -94,12 +97,12 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.require(:post).permit(:title, :body, :content)
+    params.require(:post).permit(:title, :body, :content, :category_id)
   end
 
   def serialize_post(post)
     post.as_json(only: %i[
-                   id title body content
+                   id title body content created_at updated_at category_id
                  ])
   end
 end

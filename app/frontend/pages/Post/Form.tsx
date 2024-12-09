@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/motion-input";
 import { Label } from "@/components/ui/motion-label";
 import LabelInputContainer from "@/components/ui/label-input-container";
 import BottomGradient from "@/components/ui/bottom-gradient";
-import { useCreation } from 'ahooks';
+import { useCreation, useSafeState } from 'ahooks';
+import { AutoComplete, type Option } from "@/components/ui/autocomplete";
+import CategoryType from '../../types/serializers/Category'
 
-export default function Form({ post, onSubmit, submitText }: { post: PostType, onSubmit: (form: any, content: string) => void, submitText: string }) {
+export default function Form({ post, categories, onSubmit, submitText }: { post: PostType, categories?: CategoryType[], onSubmit: (form: any, categoryId: string | undefined, content?: string) => void, submitText: string }) {
   const factory = useCreation(
     () => ({
       content: '',
@@ -19,30 +21,47 @@ export default function Form({ post, onSubmit, submitText }: { post: PostType, o
     body: post.body || ''
   })
 
+  const [item, setItem] = useSafeState<Option | undefined>()
+
   const { data, setData, errors, processing } = form
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(form, factory.content)
+    onSubmit(form, item?.value, factory.content)
   }
 
   return (
     <form onSubmit={handleSubmit} className="contents">
-      <LabelInputContainer className="mb-4">
-        <Label htmlFor="title">标题</Label>
-        <Input
-          type="text"
-          name="title"
-          id="title"
-          value={data.title}
-          onChange={(e) => setData('title', e.target.value)}
-        />
-        {errors.title && (
-          <div className="px-3 py-2 font-medium text-red-500">
-            {errors.title.join(', ')}
+      <div className="flex items-center justify-start w-full mb-4">
+        <div className="w-1/3">
+          <div className="flex flex-col gap-4 not-prose">
+            <AutoComplete
+              options={categories?.map(v => ({ label: v.name, value: v.id })) || []}
+              emptyMessage="没有结果."
+              placeholder="选择话题或输入关键字查询"
+              onValueChange={setItem}
+              value={item}
+            />
           </div>
-        )}
-      </LabelInputContainer>
+        </div>
+        <div className="w-2/3 ml-4">
+          <LabelInputContainer>
+            <Input
+              type="text"
+              name="title"
+              id="title"
+              placeholder='在这里输入标题'
+              value={data.title}
+              onChange={(e) => setData('title', e.target.value)}
+            />
+            {errors.title && (
+              <div className="px-3 py-2 font-medium text-red-500">
+                {errors.title.join(', ')}
+              </div>
+            )}
+          </LabelInputContainer>
+        </div>
+      </div>
 
       <div className="my-5">
         <label htmlFor="body">概述</label>
