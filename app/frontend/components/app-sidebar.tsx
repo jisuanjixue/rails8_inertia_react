@@ -50,14 +50,14 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "仪表盘",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "1111",
-          url: "#",
+          title: "用户分析",
+          url: "/admin/dashboard",
         },
         {
           title: "Starred",
