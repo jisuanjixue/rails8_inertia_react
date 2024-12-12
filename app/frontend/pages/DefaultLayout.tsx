@@ -31,7 +31,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
                     </>
                 }
                 {flash.notice && <>
-                    <AlertTitle></AlertTitle>
+                    <AlertTitle>警告消息</AlertTitle>
                     <AlertDescription>
                         {flash.notice}
                     </AlertDescription>

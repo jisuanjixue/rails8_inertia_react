@@ -21,6 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -29,16 +30,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { router, usePage } from "@inertiajs/react"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export function NavUser() {
+  const {
+    auth: { session, avatar, currentUser },
+  } = usePage().props as any;
+  console.log(currentUser)
   const { isMobile } = useSidebar()
 
   return (
@@ -50,13 +48,13 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
+              <Avatar className="w-8 h-8 rounded-lg">
+                <AvatarImage src={avatar} alt={currentUser.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+              <div className="grid flex-1 text-sm leading-tight text-left">
+                <span className="font-semibold truncate">{currentUser.name}</span>
+                <span className="text-xs truncate">{currentUser.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -69,13 +67,13 @@ export function NavUser({
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                <Avatar className="w-8 h-8 rounded-lg">
+                  <AvatarImage src={avatar} alt={currentUser.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                <div className="grid flex-1 text-sm leading-tight text-left">
+                  <span className="font-semibold truncate">{currentUser.name}</span>
+                  <span className="text-xs truncate">{currentUser.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -102,10 +100,34 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => {
+              e.preventDefault();
+              if (session) {
+                router.delete(`/sign_out/${session.id}`, {
+                  preserveScroll: true,
+                  preserveState: true,
+                  onSuccess: () => {
+                    router.reload();
+                  },
+                });
+              } else {
+                router.get(`/sign_in`);
+              }
+            }}>
+              {session ? (
+                <>
+                  <LogOut />
+                  <div>登出</div>
+                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                </>
+              ) : (
+                <div>登录</div>
+              )}
+            </DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <LogOut />
               Log out
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
