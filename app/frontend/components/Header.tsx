@@ -14,8 +14,9 @@ import { Link, router, usePage } from "@inertiajs/react"
 
 export default function Header() {
     const {
-        auth: {session, avatar },
+        auth: { session, avatar, currentUser },
     } = usePage().props as any;
+    console.log(currentUser)
     const placeholders = [
         "输入文章标题关键字查询",
         "输入文章标题关键字查询",
@@ -23,7 +24,6 @@ export default function Header() {
         "Write a Javascript method to reverse a string",
         "How to assemble your own PC?",
     ];
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.value);
     };
@@ -84,87 +84,43 @@ export default function Header() {
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className="w-56">
                                         <DropdownMenuGroup>
-                                            <DropdownMenuItem>
-                                                <Link
-                                                    href={`/posts`}
-                                                >
-                                                    我的文章
-                                                </Link>
+                                            <DropdownMenuItem onSelect={() => router.visit(`/posts`)}>
+                                                我的文章
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => router.visit(`/user_setting`)}>
+                                                个人设置
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem>
-                                                <Link
-                                                    href={`/categories`}
-                                                >
-                                                    文章分类
-                                                </Link>
-                                            </DropdownMenuItem>
-                                            {/* <Dialog>
-                                                <DialogTrigger>
-                                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                                        修改密码
-                                                    </DropdownMenuItem>
-                                                </DialogTrigger>
-                                                <DialogContent className="sm:max-w-[425px]">
-                                                    <DialogHeader>
-                                                        <DialogTitle>修改密码</DialogTitle>
-                                                        <DialogDescription>
-                                                            请输入新密码
-                                                        </DialogDescription>
-                                                    </DialogHeader>
-                                                    {renderPasswordForm.render()}
-                                                    <DialogFooter>
-                                                        <DialogTrigger asChild>
-                                                            <Button variant="outline">
-                                                                取消
-                                                            </Button>
-                                                        </DialogTrigger>
-                                                    </DialogFooter>
-                                                </DialogContent>
-                                            </Dialog> */}
-                                            <DropdownMenuLabel onClick={() => router.get(`/user_setting`)}>个人设置</DropdownMenuLabel>
-                                            {/* <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                                <Link
-                                                    href={`/identity/email/edit`}
-                                                    as="button"
-                                                    method="get"
-                                                >
-                                                    修改邮箱
-                                                </Link>
-                                                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                                            {/* <DropdownMenuItem onSelect={() => router.visit(`/categories`)}>
+                                                文章分类
                                             </DropdownMenuItem> */}
-                                            {/* <Modal>
-                                                <ModalTrigger className="flex justify-center text-white bg-black dark:bg-white dark:text-black group/modal-btn">
-                                                    <DropdownMenuItem>
-                                                        <div>修改邮箱</div>
-                                                    </DropdownMenuItem>
-                                                </ModalTrigger>
-                                                <ModalBody>
-                                                    <ModalContent>
-                                                        <div>ascdfsvfaf</div>
-                                                    </ModalContent>
-                                                    <ModalFooter className="gap-4">
-                                                        <button className="px-2 py-1 text-sm text-black bg-gray-200 border border-gray-300 rounded-md dark:bg-black dark:border-black dark:text-white w-28">
-                                                            Cancel
-                                                        </button>
-                                                        <button className="px-2 py-1 text-sm text-white bg-black border border-black rounded-md dark:bg-white dark:text-black w-28">
-                                                            Book Now
-                                                        </button>
-                                                    </ModalFooter>
-                                                </ModalBody>
-                                            </Modal> */}
+                                           {currentUser.admin && <DropdownMenuItem onSelect={() => router.visit(`/admin/dashboard`)}>
+                                                后台管理
+                                            </DropdownMenuItem>}
                                         </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem
-                                        >
-                                            <Link
-                                                href={`/sign_out/${session.id}`}
-                                                as="button"
-                                                method="delete"
-                                            >
-                                                登出
-                                            </Link>
-                                            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                                        <DropdownMenuItem onSelect={(e) => {
+                                            e.preventDefault();
+                                            if (session) {
+                                                router.delete(`/sign_out/${session.id}`, {
+                                                    preserveScroll: true,
+                                                    preserveState: true,
+                                                    onSuccess: () => {
+                                                        router.reload();
+                                                    },
+                                                });
+                                            } else {
+                                                router.get(`/sign_in`);
+                                            }
+                                        }}>
+                                            {session ? (
+                                                <>
+                                                    <div>登出</div>
+                                                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                                                </>
+                                            ) : (
+                                                <div>登录</div>
+                                            )}
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>

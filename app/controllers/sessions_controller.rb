@@ -26,8 +26,11 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    @session.destroy
-    redirect_to(sessions_path, notice: '退出成功')
+    if @session.destroy!
+      redirect_to root_path, notice: '退出成功'
+    else
+      redirect_to root_path, inertia: { errors: @session.errors }
+    end
   end
 
   private

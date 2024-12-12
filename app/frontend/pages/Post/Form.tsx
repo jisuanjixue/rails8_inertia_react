@@ -3,6 +3,7 @@ import { ReactTrixRTEInput } from "react-trix-rte";
 import PostType from '../../types/serializers/Post';
 import { Input } from "@/components/ui/motion-input";
 import { Label } from "@/components/ui/motion-label";
+import { TextareaInput } from "@/components/ui/textarea-with-characters-left";
 import LabelInputContainer from "@/components/ui/label-input-container";
 import BottomGradient from "@/components/ui/bottom-gradient";
 import { useCreation, useSafeState } from 'ahooks';
@@ -64,12 +65,13 @@ export default function Form({ post, categories, onSubmit, submitText }: { post:
       </div>
 
       <div className="my-5">
-        <label htmlFor="body">概述</label>
-        <textarea
+        <Label htmlFor="body">概述</Label>
+        <TextareaInput
           name="body"
           id="body"
           value={data.body}
-          rows="4"
+          rows={1}
+          maxLength={180}
           className="block w-full px-3 py-2 mt-2 border border-gray-400 rounded-md shadow outline-none"
           onChange={(e) => setData('body', e.target.value)}
         />

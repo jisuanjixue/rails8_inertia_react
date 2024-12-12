@@ -482,6 +482,7 @@ DEPENDENCIES
   jbuilder
   kamal
   listen (~> 3.5)
+  mini_magick (~> 4.11)
   omniauth
   omniauth-github
   omniauth-rails_csrf_protection

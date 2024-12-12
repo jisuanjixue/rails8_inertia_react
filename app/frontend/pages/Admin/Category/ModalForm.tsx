@@ -21,7 +21,7 @@ const ModalForm = ({ category, children }) => {
   }
   const handleSubmit = (form: any) => {
     if (category.id) {
-      form.patch(`/categories/${category.id}`, {
+      form.patch(`/admin/categories/${category.id}`, {
         onSuccess: () => {
           reload()
         },
@@ -30,7 +30,7 @@ const ModalForm = ({ category, children }) => {
         },
       })
     } else {
-      form.post('/categories', {
+      form.post('/admin/categories', {
         onSuccess: () => {
           reload()
         },

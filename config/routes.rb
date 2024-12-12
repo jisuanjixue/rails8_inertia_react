@@ -18,9 +18,13 @@ Rails.application.routes.draw do
     resource :change_password,    only: %i[update]
   end
 
+  namespace :admin do
+    get 'dashboard', to: 'dashboard#index'
+    resources :categories
+  end
+
   # post
   resources :posts
-  resources :categories
   get 'all_posts', to: 'posts#all_posts'
 
   # user setting
