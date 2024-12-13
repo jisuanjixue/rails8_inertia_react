@@ -97,12 +97,12 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.require(:post).permit(:title, :body, :content, :category_id)
+    params.require(:post).permit(:title, :body, :content, :cover, :category_id, :sub_title)
   end
 
   def serialize_post(post)
     post.as_json(only: %i[
-                   id title body content created_at updated_at category_id
+                   id title body content sub_title cover created_at updated_at category_id
                  ])
   end
 end

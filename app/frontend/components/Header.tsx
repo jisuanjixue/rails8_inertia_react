@@ -16,7 +16,7 @@ export default function Header() {
     const {
         auth: { session, avatar, currentUser },
     } = usePage().props as any;
-    console.log(currentUser)
+    console.log(currentUser, avatar)
     const placeholders = [
         "输入文章标题关键字查询",
         "输入文章标题关键字查询",

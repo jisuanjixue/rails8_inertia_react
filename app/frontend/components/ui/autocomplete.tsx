@@ -22,6 +22,7 @@ type AutoCompleteProps = {
   isLoading?: boolean
   disabled?: boolean
   placeholder?: string
+  className?: string
 }
 
 export const AutoComplete = ({
@@ -32,6 +33,7 @@ export const AutoComplete = ({
   onValueChange,
   disabled,
   isLoading = false,
+  className
 }: AutoCompleteProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -101,7 +103,7 @@ export const AutoComplete = ({
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
           disabled={disabled}
-          className="text-base"
+          className={cn("text-base", className)}
         />
       </div>
       <div className="relative mt-1">
@@ -115,7 +117,7 @@ export const AutoComplete = ({
             {isLoading ? (
               <CommandPrimitive.Loading>
                 <div className="p-1">
-                  <Skeleton className="h-8 w-full" />
+                  <Skeleton className="w-full h-8" />
                 </div>
               </CommandPrimitive.Loading>
             ) : null}
@@ -145,7 +147,7 @@ export const AutoComplete = ({
               </CommandGroup>
             ) : null}
             {!isLoading ? (
-              <CommandPrimitive.Empty className="select-none rounded-sm px-2 py-3 text-center text-sm">
+              <CommandPrimitive.Empty className="px-2 py-3 text-sm text-center rounded-sm select-none">
                 {emptyMessage}
               </CommandPrimitive.Empty>
             ) : null}

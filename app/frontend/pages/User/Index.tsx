@@ -1,5 +1,5 @@
 
-import { Tabs } from "@/components/ui/tabs";
+import { Tabs } from "@/components/ui/motion-tabs";
 import DefaultLayout from "../DefaultLayout";
 import ChangePassword from './change-password'
 // import useChangeEmail from './use-change-email'

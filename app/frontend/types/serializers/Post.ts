@@ -5,6 +5,8 @@
 type Post = {
   id: number;
   title: string | null;
+  cover: string | null;
+  sub_title: string | null;
   body: string | null;
   content: string | null;
   created_at: string;
