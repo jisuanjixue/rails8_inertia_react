@@ -2,7 +2,7 @@ source 'https://gems.ruby-china.com/'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 8.0.0'
+gem 'rails', '~> 8.0.1'
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem 'propshaft'
 # Use sqlite3 as the database for Active Record
