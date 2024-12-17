@@ -26,8 +26,8 @@ class ApplicationController < ActionController::Base
 
   inertia_share auth: lambda {
     if Current.user
-      { currentUser: Current.user, session: Current.session,
-        avatar: Current.user.avatar.attached? ? polymorphic_url(Current.user.avatar.variant(resize_to_fill: [64, 64])) : nil }
+      { currentUser: Current.user, session: Current.session }
+    #  avatar: Current.user.avatar.attached? ? polymorphic_url(Current.user.avatar.variant(resize_to_fill: [64, 64])) : nil
     else
       { currentUser: nil, session: nil, avatar: nil }
     end

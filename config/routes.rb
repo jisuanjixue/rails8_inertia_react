@@ -24,7 +24,11 @@ Rails.application.routes.draw do
   end
 
   # post
-  resources :posts
+  resources :posts do
+    member do
+      post 'publish'
+    end
+  end
   get 'all_posts', to: 'posts#all_posts'
 
   # user setting
@@ -44,4 +48,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root 'home#index'
+
+  draw(:api)
 end

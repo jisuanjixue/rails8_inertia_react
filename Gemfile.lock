@@ -480,6 +480,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   inertia_rails-contrib (~> 0.3.0)
   jbuilder
+  jwt (~> 2.9)
   kamal
   listen (~> 3.5)
   mini_magick (~> 4.11)

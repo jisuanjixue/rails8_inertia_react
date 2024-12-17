@@ -65,7 +65,7 @@ class PostsController < ApplicationController
   def create
     @post = Current.user.posts.new(post_params)
     @post.category = Category.find_by(id: post_params[:category_id])
-
+    @post.status = :draft # 默认创建为草稿
     if @post.save
       redirect_to @post, notice: 'Post was successfully created.'
     else
@@ -79,6 +79,16 @@ class PostsController < ApplicationController
       redirect_to @post, notice: 'Post was successfully updated.'
     else
       redirect_to edit_post_url(@post), inertia: { errors: @post.errors }
+    end
+  end
+
+  # POST /posts/1/publish
+  def publish
+    @post = Current.user.posts.find(params[:id])
+    if @post.update(status: :published)
+      redirect_to @post, notice: 'Post was successfully published.'
+    else
+      redirect_to new_post_url, inertia: { errors: @post.errors, categories: Category.all }
     end
   end
 
@@ -97,12 +107,12 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.require(:post).permit(:title, :body, :content, :cover, :category_id, :sub_title)
+    params.require(:post).permit(:title, :body, :content, :cover, :category_id, :sub_title, :status, :draft_id)
   end
 
   def serialize_post(post)
     post.as_json(only: %i[
-                   id title body content sub_title cover created_at updated_at category_id
+                   id title body content sub_title created_at updated_at category_id draft_id status
                  ])
   end
 end
