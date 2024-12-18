@@ -8,11 +8,18 @@ import { FileUpload } from '@/components/ui/file-upload';
 import { useSafeState } from 'ahooks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-const EditInfo = ({ user, avatar }) => {
+const EditInfo = ({ userProfile }) => {
+    console.log("🚀 ~ EditInfo ~ user:", userProfile)
     const form = useForm({
-        email: user.email || '',
-        name: user.name || '',
-        avatar: user.avatar || ''
+        // email: user.email || '',
+        name: userProfile?.name || '',
+        full_name: userProfile?.full_name || '',
+        avatar: userProfile?.avatar || '',
+        profile_bio: userProfile?.location || '',
+        profile_tagline: userProfile?.location || '',
+        social_profiles: userProfile?.social_profiles || '',
+        tech_stack: userProfile?.tech_stack || '',
+        available_for: userProfile?.available_for || '',
     })
     const { data, setData, errors, processing } = form
 
@@ -32,7 +39,7 @@ const EditInfo = ({ user, avatar }) => {
     return (
         <>
             <Avatar>
-                <AvatarImage src={avatar} />
+                <AvatarImage src={userProfile.avatar} />
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="w-full h-40 max-w-xs mx-auto mb-4 bg-white border border-dashed rounded-lg dark:bg-black border-neutral-200 dark:border-neutral-800">
@@ -40,14 +47,14 @@ const EditInfo = ({ user, avatar }) => {
             </div>
             <form onSubmit={handleSubmit} className="contents">
                 <LabelInputContainer className="mb-4">
-                    <Label htmlFor="email" className="text-left text-white">
-                        邮箱
+                    <Label htmlFor="full_name" className="text-left text-white">
+                        姓名
                     </Label>
-                    <Input id="email" onChange={(e) => setData('email', e.target.value)} value={data.email} className="col-span-2" />
+                    <Input id="full_name" onChange={(e) => setData('full_name', e.target.value)} value={data.full_name} className="col-span-2" />
                     <div className="px-3 py-2 font-medium text-red-500">
-                        {errors.email && (
+                        {errors.full_name && (
                             <div className="px-3 py-2 font-medium text-red-500">
-                                {errors.email.join(', ')}
+                                {errors.full_name.join(', ')}
                             </div>
                         )}
                     </div>

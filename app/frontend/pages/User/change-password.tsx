@@ -16,7 +16,7 @@ const ChangePassword = ({ user }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     form.transform((data) => (data))
-    form.patch(`/change_password`)
+    form.patch(`/identity/change_password`)
   }
 
   return (

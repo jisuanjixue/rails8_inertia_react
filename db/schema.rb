@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_16_095956) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -91,6 +91,21 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_16_095956) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "profiles", force: :cascade do |t|
+    t.string "full_name"
+    t.string "profile_tagline"
+    t.string "location"
+    t.text "profile_bio"
+    t.text "tech_stack"
+    t.text "available_for"
+    t.text "social_profiles"
+    t.string "name"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "user_agent"
@@ -106,8 +121,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_16_095956) do
     t.boolean "verified", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name"
-    t.string "avatar"
     t.boolean "admin", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
@@ -117,5 +130,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_16_095956) do
   add_foreign_key "connected_accounts", "users"
   add_foreign_key "posts", "categories"
   add_foreign_key "posts", "drafts"
+  add_foreign_key "profiles", "users"
   add_foreign_key "sessions", "users"
 end

@@ -4,9 +4,7 @@
 #
 #  id              :integer          not null, primary key
 #  admin           :boolean          default(FALSE), not null
-#  avatar          :string
 #  email           :string           not null
-#  name            :string
 #  password_digest :string           not null
 #  verified        :boolean          default(FALSE), not null
 #  created_at      :datetime         not null
@@ -18,6 +16,7 @@
 #
 class User < ApplicationRecord
   has_secure_password
+  has_one :profile, dependent: :destroy
 
   # has_one_attached :avatar
   # after_save :attach_avatar, if: :avatar_attached?
@@ -36,10 +35,9 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
 
   encrypts :email, deterministic: true
-  encrypts :name
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :password, allow_nil: true, length: { minimum: 12 }
+  validates :password, allow_nil: true, length: { minimum: 6 }
   # validate :avatar_is_web_image
 
   normalizes :email, with: -> { _1.strip.downcase }

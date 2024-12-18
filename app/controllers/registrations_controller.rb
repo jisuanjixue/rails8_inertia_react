@@ -25,7 +25,7 @@ class RegistrationsController < ApplicationController
   private
 
   def user_params
-    params.permit(:email, :password, :password_confirmation, :avatar).tap { |p| p.delete(:avatar) if p[:avatar].blank? }
+    params.permit(:email, :password, :password_confirmation)
   end
 
   def send_email_verification
@@ -37,8 +37,4 @@ class RegistrationsController < ApplicationController
                    email password password_confirmation
                  ])
   end
-
-  # def attach_avatar
-  #   @user.avatar.attach(params[:user][:avatar])
-  # end
 end

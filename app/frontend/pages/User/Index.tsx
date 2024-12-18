@@ -4,13 +4,10 @@ import DefaultLayout from "../DefaultLayout";
 import ChangePassword from './change-password'
 // import useChangeEmail from './use-change-email'
 import EditInfo from './edit-info'
-import { usePage } from "@inertiajs/react";
+// import { usePage } from "@inertiajs/react";
 
-const UserSetting = () => {
-    const {
-        auth: { currentUser, avatar },
-    } = usePage().props as any;
-    console.log(currentUser, avatar);
+const UserSetting = ({ user, user_profile }) => { 
+console.log("🚀 ~ UserSetting ~ user:", user, user_profile)
 
     const tabs = [
         {
@@ -19,7 +16,7 @@ const UserSetting = () => {
             content: (
                 <div className="relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]">
                     <p>注意！更新密码以后需要重新登录。</p>
-                    {<ChangePassword user={currentUser} />}
+                    {<ChangePassword user={user} />}
                 </div>
             ),
         },
@@ -28,7 +25,7 @@ const UserSetting = () => {
             value: "user_info",
             content: (
                 <div className="relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]">
-                    {<EditInfo user={currentUser} avatar={avatar} />}
+                    {<EditInfo userProfile={user.profile} />}
                 </div>
             ),
         },
