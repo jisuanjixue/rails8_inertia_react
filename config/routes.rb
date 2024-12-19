@@ -33,9 +33,11 @@ Rails.application.routes.draw do
 
   # user setting
   get 'user_setting', to: 'users/setting#index'
-  namespace :users do
-    resource :profile, only: %i[edit update]
-  end
+  # namespace :users do
+  #   resource :profile, only: %i[update]
+  # end
+
+  patch 'update_profile', to: 'users/profile#update'
   # patch 'user_setting/update_profile', to: 'users/setting#update_profile'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

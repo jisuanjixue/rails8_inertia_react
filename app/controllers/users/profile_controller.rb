@@ -1,21 +1,18 @@
 class Users::ProfileController < ApplicationController
-  before_action :set_profile, only: %i[edit update]
-
-  def edit
-  end
+  before_action :set_profile, only: %i[update]
 
   def update
-    if @user.update(profile_params)
+    if @profile.update(profile_params)
       redirect_to user_setting_path, notice: 'Profile updated successfully'
     else
-      redirect_to user_setting_path, inertia: { errors: @user.errors }
+      redirect_to user_setting_path, inertia: { errors: @profile.errors }
     end
   end
 
   private
 
   def set_profile
-    @profile = current_user.profile || current_user.build_profile
+    @profile = Current.user.profile || Current.user.build_profile
   end
 
   # def user_params
@@ -25,10 +22,8 @@ class Users::ProfileController < ApplicationController
   # end
 
   def profile_params
-    params.require(:profile).permit(:full_name, :profile_tagline, :location, :profile_bio, :available_for,
-                                    tech_stack: [], social_profiles: []).tap do |p|
-      p.delete(:avatar) if p[:avatar].blank?
-    end
+    params.permit(:full_name, :profile_tagline, :location, :profile_bio, :available_for, :name, :avatar,
+                  tech_stacks: %i[id text], social_profiles: %i[id text])
   end
 
   # def redirect_to_root

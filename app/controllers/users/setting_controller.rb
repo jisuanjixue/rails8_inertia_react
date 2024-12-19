@@ -21,11 +21,11 @@ class Users::SettingController < ApplicationController
   def set_user
     @user = Current.user
     @profile = @user.profile || @user.build_profile
-    @profile.avatar = if @profile.avatar.attached?
-                        polymorphic_url(@profile.avatar.variant(resize_to_fill: [64, 64]))
-                      else
-                        nil
-                      end
+    # @profile.avatar = if @profile.avatar.attached?
+    #                     polymorphic_url(@profile.avatar.variant(resize_to_fill: [64, 64]), host: request.base_url)
+    #                   else
+    #                     nil
+    #                   end
   end
 
   # def user_params

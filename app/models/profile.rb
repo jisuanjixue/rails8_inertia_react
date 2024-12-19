@@ -9,8 +9,8 @@
 #  name            :string
 #  profile_bio     :text
 #  profile_tagline :string
-#  social_profiles :text
-#  tech_stack      :text
+#  social_profiles :json             not null
+#  tech_stacks     :json             not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  user_id         :integer          not null
@@ -27,10 +27,11 @@ class Profile < ApplicationRecord
   has_one_attached :avatar
   belongs_to :user
   validates :full_name, presence: true
-  store :tech_stack, accessors: [], coder: JSON
-  store :social_profiles, accessors: [], coder: JSON
 
   validate :avatar_is_web_image
+
+  # store :tech_stacks, coder: JSON
+  # store :social_profiles, coder: JSON
 
   private
 

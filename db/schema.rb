@@ -96,14 +96,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
     t.string "profile_tagline"
     t.string "location"
     t.text "profile_bio"
-    t.text "tech_stack"
+    t.json "tech_stacks", default: [], null: false
     t.text "available_for"
-    t.text "social_profiles"
+    t.json "social_profiles", default: [], null: false
     t.string "name"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
+    t.check_constraint "JSON_TYPE(social_profiles) = 'array'", name: "profiles_social_profiles_is_array"
+    t.check_constraint "JSON_TYPE(tech_stacks) = 'array'", name: "profiles_tech_stacks_is_array"
   end
 
   create_table "sessions", force: :cascade do |t|

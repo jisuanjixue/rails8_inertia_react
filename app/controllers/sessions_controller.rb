@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
 
       redirect_to root_path, notice: '登录成功'
     else
-      redirect_to sign_in_path(email_hint: params[:email]), inertia: { errors: @session.errors },
+      redirect_to sign_in_path(email_hint: params[:email]), inertia: { errors: { base: ['That email or password is incorrect'] } },
                                                             alert: 'That email or password is incorrect'
     end
   end

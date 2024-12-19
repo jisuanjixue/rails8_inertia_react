@@ -6,8 +6,8 @@ import ChangePassword from './change-password'
 import EditInfo from './edit-info'
 // import { usePage } from "@inertiajs/react";
 
-const UserSetting = ({ user, user_profile }) => { 
-console.log("🚀 ~ UserSetting ~ user:", user, user_profile)
+const UserSetting = ({ user, user_profile }) => {
+    console.log("🚀 ~ UserSetting ~ user:", user, user_profile)
 
     const tabs = [
         {
@@ -25,7 +25,9 @@ console.log("🚀 ~ UserSetting ~ user:", user, user_profile)
             value: "user_info",
             content: (
                 <div className="relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]">
-                    {<EditInfo userProfile={user.profile} />}
+                    <div className="h-full overflow-y-auto">
+                        {<EditInfo userProfile={user_profile} />}
+                    </div>
                 </div>
             ),
         },
@@ -63,7 +65,7 @@ console.log("🚀 ~ UserSetting ~ user:", user, user_profile)
 
     return (
         <div className="h-[20rem] md:h-[40rem] [perspective:1000px] relative flex flex-col max-w-6xl mx-auto w-full items-start justify-start my-20">
-                <Tabs tabs={tabs}  />
+            <Tabs tabs={tabs} />
         </div>
     );
 }
