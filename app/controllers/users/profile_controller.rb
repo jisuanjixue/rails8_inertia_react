@@ -13,9 +13,9 @@ class Users::ProfileController < ApplicationController
   def upload_avatar
     if params[:avatar].present?
       @profile.avatar.attach(params[:avatar])
-      render json: { message: 'Avatar uploaded successfully' }, status: :ok
+      redirect_to user_setting_path, notice: 'Profile updated successfully'
     else
-      render json: { errors: @user.errors }, status: :unprocessable_entity
+      redirect_to user_setting_path, inertia: { errors: @profile.errors }
     end
   end
 

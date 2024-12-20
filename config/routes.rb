@@ -9,13 +9,12 @@ Rails.application.routes.draw do
   delete 'sign_out/:id', to: 'sessions#destroy'
   get  'sign_up', to: 'registrations#new'
   post 'sign_up', to: 'registrations#create'
-  # patch 'change_password', to: 'home#change_password'
   resources :sessions, only: %i[index show destroy]
   namespace :identity do
     resource :email,              only: %i[edit update]
     resource :email_verification, only: %i[show create]
     resource :password_reset,     only: %i[new edit create update]
-    resource :change_password,    only: %i[update]
+    patch 'change_password', to: 'password_change#change_password'
   end
 
   namespace :admin do

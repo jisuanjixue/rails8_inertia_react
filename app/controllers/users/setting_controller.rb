@@ -4,8 +4,8 @@ class Users::SettingController < ApplicationController
   def index
     render inertia: 'User/Index', props: {
       user: @user,
-      user_profile: @profile,
-      avatar: @avatar
+      user_profile: @profile
+      # avatar: @avatar
     }
   end
 
@@ -14,8 +14,8 @@ class Users::SettingController < ApplicationController
   def set_user
     @user = Current.user
     @profile = @user.profile || @user.build_profile
-    avatar_url = polymorphic_url(@profile.avatar.variant(resize_to_fill: [64, 64]))
-    @avatar = @profile.avatar.attached? ? avatar_url : nil
+    # avatar_url = polymorphic_url(@profile.avatar.variant(resize_to_fill: [64, 64]))
+    # @avatar = @profile.avatar.attached? ? avatar_url : nil
   end
 
   # def user_params

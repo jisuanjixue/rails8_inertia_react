@@ -2,12 +2,14 @@
 import React from "react";
 import { Label } from "@/components/ui/motion-label";
 import { Input } from "@/components/ui/motion-input";
+import { InputWithPasswordStrengthIndicator } from "@/components/ui/input-with-password-strength-indicator";
 import LabelInputContainer from "@/components/ui/label-input-container";
 import BottomGradient from "@/components/ui/bottom-gradient";
 import {
     IconBrandGithub,
 } from "@tabler/icons-react";
 import { router, useForm } from '@inertiajs/react'
+import { cn } from "@/lib/utils";
 
 const LoginForm = ({ is_developer }: { is_developer: boolean }) => {
     const redirect_to_path = new URLSearchParams(window.location.search).get('redirect_to') || '/';
@@ -24,7 +26,7 @@ const LoginForm = ({ is_developer }: { is_developer: boolean }) => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen ">
-            <div className="w-full max-w-md p-4 mx-auto bg-white rounded-none md:rounded-2xl md:p-8 shadow-input dark:bg-black">
+             <div className={cn("w-full max-w-md p-4 mx-auto bg-white rounded-lg shadow-md border-2 border-gray-300", "dark:bg-black dark:border-gray-700")}>
                 <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
                     欢迎您的到来！
                 </h2>
@@ -44,7 +46,7 @@ const LoginForm = ({ is_developer }: { is_developer: boolean }) => {
                     </LabelInputContainer>
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="password">密码</Label>
-                        <Input id="password" placeholder="••••••••" type="password" name="password" value={data.password} onChange={(e) => setData('password', e.target.value)} />
+                        <InputWithPasswordStrengthIndicator id="password" placeholder="••••••••" type="password" name="login_password" value={data.password} onChange={(value) => setData('password', value)} />
                         {errors.password && (
                             <div className="px-3 py-2 font-medium text-red-500">
                                 {errors.password.join(', ')}

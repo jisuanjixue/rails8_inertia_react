@@ -2,6 +2,7 @@
 import React from "react";
 import { Label } from "@/components/ui/motion-label";
 import { Input } from "@/components/ui/motion-input";
+import { InputWithPasswordStrengthIndicator } from "@/components/ui/input-with-password-strength-indicator";
 import { cn } from "@/lib/utils";
 import { router, useForm } from '@inertiajs/react'
 
@@ -17,15 +18,16 @@ const SignUpForm = ({ user }: { user: any }) => {
     };
 
     const { data, setData, errors, processing } = form
+    console.log(errors)
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
-            <div className="w-full max-w-md p-4 mx-auto bg-white rounded-none md:rounded-2xl md:p-8 shadow-input dark:bg-black">
+            <div className={cn("w-full max-w-md p-4 mx-auto bg-white rounded-lg shadow-md border-2 border-gray-300", "dark:bg-black dark:border-gray-700")}>
                 <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
                     新建账号
                 </h2>
                 <p className="max-w-sm mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-                  如果可以的话请注册博客，开始你的新旅程！
+                    如果可以的话请注册博客，开始你的新旅程！
                 </p>
 
                 <form className="my-8" onSubmit={handleSubmit}>
@@ -40,7 +42,7 @@ const SignUpForm = ({ user }: { user: any }) => {
                     </LabelInputContainer>
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="password">密码</Label>
-                        <Input id="password" placeholder="••••••••" type="password" name="password" value={data.password} onChange={(e) => setData('password', e.target.value)} />
+                        <InputWithPasswordStrengthIndicator id="password" placeholder="••••••••" type="password" name="password" value={data.password} onChange={(value) => setData('password', value)} />
                         {errors.password && (
                             <div className="px-3 py-2 font-medium text-red-500">
                                 {errors.password.join(', ')}
@@ -49,7 +51,7 @@ const SignUpForm = ({ user }: { user: any }) => {
                     </LabelInputContainer>
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="password_confirmation">密码确认</Label>
-                        <Input id="password_confirmation" placeholder="••••••••" type="password" name="password_confirmation" value={data.password_confirmation} onChange={(e) => setData('password_confirmation', e.target.value)} />
+                        <InputWithPasswordStrengthIndicator id="password_confirmation" placeholder="••••••••" type="password" name="password_confirmation" value={data.password_confirmation} onChange={(value) => setData('password_confirmation', value)} />
                         {errors.password_confirmation && (
                             <div className="px-3 py-2 font-medium text-red-500">
                                 {errors.password_confirmation.join(', ')}
@@ -82,7 +84,7 @@ const SignUpForm = ({ user }: { user: any }) => {
                         注册 &rarr;
                         <BottomGradient />
                     </button>
-                    <div className="flex items-center text-sm font-light text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center mt-2 text-sm font-light text-gray-500 dark:text-gray-400">
                         已经有账号? <div onClick={() => { router.get(`/sign_in`) }} className="ml-1 font-medium text-primary-600 hover:underline dark:text-primary-500">点击登录</div>
                     </div>
                 </form>

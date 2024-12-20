@@ -77,7 +77,7 @@ export default function Header() {
                             <div className="hidden md:relative md:block">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Avatar onClick={() => { console.log("avatar clicked") }}>
+                                        <Avatar>
                                             <AvatarImage src={avatar} />
                                             <AvatarFallback>CN</AvatarFallback>
                                         </Avatar>
