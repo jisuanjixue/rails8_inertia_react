@@ -18,9 +18,6 @@ class User < ApplicationRecord
   has_secure_password
   has_one :profile, dependent: :destroy
 
-  # has_one_attached :avatar
-  # after_save :attach_avatar, if: :avatar_attached?
-
   generates_token_for :email_verification, expires_in: 2.days do
     email
   end
@@ -38,7 +35,6 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, allow_nil: true, length: { minimum: 6 }
-  # validate :avatar_is_web_image
 
   normalizes :email, with: -> { _1.strip.downcase }
 
@@ -49,13 +45,4 @@ class User < ApplicationRecord
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
   end
-
-  # private
-
-  # def avatar_is_web_image
-  #   return unless avatar.attached?
-  #   return if avatar.content_type.in?(Rails.application.config.active_storage.web_image_content_types)
-
-  #   errors.add(:avatar, 'Must be a .JPG, .PNG or .GIF file')
-  # end
 end

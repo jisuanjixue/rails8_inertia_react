@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react'
+import { router, useForm } from '@inertiajs/react'
 import { Label } from "@/components/ui/motion-label";
 import { Input } from "@/components/ui/motion-input";
 import LabelInputContainer from "@/components/ui/label-input-container";
@@ -9,11 +9,10 @@ import { InputWithTags } from '@/components/ui/input-with-tags';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { TextareaInput } from '@/components/ui/textarea-with-characters-left';
 
-const EditInfo = ({ userProfile }) => {
+const EditInfo = ({ userProfile, avatar }) => {
     const form = useForm({
         name: userProfile?.name || '',
         full_name: userProfile?.full_name || '',
-        avatar: userProfile?.avatar || '',
         profile_bio: userProfile?.profile_bio || '',
         profile_tagline: userProfile?.profile_tagline || '',
         location: userProfile?.location || '',
@@ -22,32 +21,42 @@ const EditInfo = ({ userProfile }) => {
         available_for: userProfile?.available_for || '',
     })
     const { data, setData, errors, processing } = form
-    console.log("🚀 ~ EditInfo ~ data:", data)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        form.patch(`/update_profile`)
+        form.patch(`/update_profile`, {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                console.log("Profile updated successfully");
+            },
+            onError: (errors) => {
+                console.error("Profile update failed:", errors);
+            }
+        })
     }
 
     const handleFileUpload = (files: File[]) => {
-        setData('avatar', files)
-        console.log("🚀 ~ handleFileUpload ~ files:", files[0])
+        const formData = new FormData()
+        formData.append('avatar', files[0])
+        router.post('/upload_avatar', formData, {
+            forceFormData: true,
+          })
     };
-
-    console.log()
 
     return (
         <>
             <Avatar>
-                <AvatarImage src={userProfile.avatar} />
+                <AvatarImage src={avatar} />
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="w-full h-10 max-w-xs mx-auto mb-4 bg-white border border-dashed rounded-lg dark:bg-black border-neutral-200 dark:border-neutral-800">
-                <FileUpload onChange={(files) => {
+                <FileUpload id="avatar" onChange={(files) => {
                     handleFileUpload(files);
                 }} />
             </div>
             <form onSubmit={handleSubmit} className="contents">
+            
                 <LabelInputContainer className="mb-4">
                     <Label htmlFor="name" className="text-left text-white">
                         名称

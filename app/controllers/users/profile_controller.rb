@@ -1,28 +1,32 @@
 class Users::ProfileController < ApplicationController
-  before_action :set_profile, only: %i[update]
+  before_action :set_profile, only: %i[update upload_avatar]
 
   def update
     if @profile.update(profile_params)
+      # @profile.avatar.attach(profile_params[:avatar]) if profile_params[:avatar].present?
       redirect_to user_setting_path, notice: 'Profile updated successfully'
     else
       redirect_to user_setting_path, inertia: { errors: @profile.errors }
     end
   end
 
+  def upload_avatar
+    if params[:avatar].present?
+      @profile.avatar.attach(params[:avatar])
+      render json: { message: 'Avatar uploaded successfully' }, status: :ok
+    else
+      render json: { errors: @user.errors }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_profile
-    @profile = Current.user.profile || Current.user.build_profile
+    @profile = Current.user.profile
   end
 
-  # def user_params
-  #   params.permit(:email, :name, :avatar).tap do |p|
-  #     p.delete(:avatar) if p[:avatar].blank?
-  #   end
-  # end
-
   def profile_params
-    params.permit(:full_name, :profile_tagline, :location, :profile_bio, :available_for, :name, :avatar,
+    params.permit(:full_name, :profile_tagline, :location, :profile_bio, :available_for, :name,
                   tech_stacks: %i[id text], social_profiles: %i[id text])
   end
 

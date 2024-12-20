@@ -30,9 +30,6 @@ class Profile < ApplicationRecord
 
   validate :avatar_is_web_image
 
-  # store :tech_stacks, coder: JSON
-  # store :social_profiles, coder: JSON
-
   private
 
   def avatar_is_web_image

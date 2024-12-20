@@ -4,28 +4,18 @@ class Users::SettingController < ApplicationController
   def index
     render inertia: 'User/Index', props: {
       user: @user,
-      user_profile: @profile
+      user_profile: @profile,
+      avatar: @avatar
     }
   end
 
-  # def update_profile
-  #   if @user.update(user_params)
-  #     redirect_to_root
-  #   else
-  #     redirect_to user_setting_path, inertia: { errors: @user.errors }
-  #   end
-  # end
-
-  # private
+  private
 
   def set_user
     @user = Current.user
     @profile = @user.profile || @user.build_profile
-    # @profile.avatar = if @profile.avatar.attached?
-    #                     polymorphic_url(@profile.avatar.variant(resize_to_fill: [64, 64]), host: request.base_url)
-    #                   else
-    #                     nil
-    #                   end
+    avatar_url = polymorphic_url(@profile.avatar.variant(resize_to_fill: [64, 64]))
+    @avatar = @profile.avatar.attached? ? avatar_url : nil
   end
 
   # def user_params
