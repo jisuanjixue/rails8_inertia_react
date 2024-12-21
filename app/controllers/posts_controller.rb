@@ -3,7 +3,7 @@ class PostsController < ApplicationController
   #   Debugbar.msg('before_action', { params: params.permit!.to_h, callee: __callee__ })
   # end
   load_and_authorize_resource except: :all_posts # 保留其他方法的权限检查
-  before_action :set_post, only: %i[show edit update destroy]
+  before_action :set_post, only: %i[show edit update destroy publish]
 
   inertia_share flash: -> { flash.to_hash }
 
@@ -84,11 +84,19 @@ class PostsController < ApplicationController
 
   # POST /posts/1/publish
   def publish
-    @post = Current.user.posts.find(params[:id])
     if @post.update(status: :published)
       redirect_to @post, notice: 'Post was successfully published.'
     else
       redirect_to new_post_url, inertia: { errors: @post.errors, categories: Category.all }
+    end
+  end
+
+  def upload_cover
+    if params[:cover].present?
+      @post.cover.attach(params[:cover])
+      redirect_to @post, notice: 'Cover uploaded successfully'
+    else
+      redirect_to request.referrer, inertia: { errors: @post.errors }
     end
   end
 

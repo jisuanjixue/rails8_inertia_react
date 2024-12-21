@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react'
+import { router, useForm } from '@inertiajs/react'
 import { ReactTrixRTEInput } from "react-trix-rte";
 import PostType from '../../types/serializers/Post';
 import { Input } from "@/components/ui/motion-input";
@@ -27,7 +27,6 @@ export default function Form({ post, categories, onSubmit, submitText }: { post:
   const form = useForm({
     title: post.title || '',
     body: post.body || '',
-    cover: post.cover || '',
     sub_title: post.sub_title || ''
   })
 
@@ -41,11 +40,12 @@ export default function Form({ post, categories, onSubmit, submitText }: { post:
     onSubmit(form, item?.value, factory.content)
   }
 
-  const [files, setFiles] = useSafeState<File[]>([]);
   const handleFileUpload = (files: File[]) => {
-    setFiles(files);
-    setData('cover', files[0]);
-    // console.log(files[0]);
+    const formData = new FormData()
+    formData.append('cover', files[0])
+    router.post(`/upload_cover`, formData, {
+      forceFormData: true,
+    })
   };
 
   const addSubTitle = () => {
@@ -136,7 +136,7 @@ export default function Form({ post, categories, onSubmit, submitText }: { post:
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                      <FileUpload onChange={handleFileUpload} />
+                      <FileUpload onChange={handleFileUpload} id="cover" />
                     </CardContent>
                     {/* <CardFooter>
                       <Button>Save changes</Button>

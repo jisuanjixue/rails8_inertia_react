@@ -7,6 +7,7 @@ class Ability
     user ||= User.new # guest user (not logged in)
 
     can :read, Post
+    can :upload_cover, Post
     can :create, Post if user.persisted?
     can :update, Post, user_id: user.id
     can :destroy, Post, user_id: user.id

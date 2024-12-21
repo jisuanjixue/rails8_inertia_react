@@ -27,7 +27,7 @@
 #
 class Post < ApplicationRecord
   enum :status, draft: 0, preview: 1, published: 2
-  # has_one_attached :cover
+  has_one_attached :cover
   attribute :sub_title, :string
   include Ransackable
 
