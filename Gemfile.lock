@@ -419,7 +419,7 @@ GEM
     thruster (0.1.9-x86_64-darwin)
     thruster (0.1.9-x86_64-linux)
     timeout (0.4.3)
-    typelizer (0.1.5)
+    typelizer (0.2.0)
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -503,7 +503,7 @@ DEPENDENCIES
   stackprof
   standardrb (~> 1.0)
   thruster
-  typelizer (~> 0.1.5)
+  typelizer (~> 0.2.0)
   tzinfo-data
   vite_rails (~> 3.0)
   web-console
