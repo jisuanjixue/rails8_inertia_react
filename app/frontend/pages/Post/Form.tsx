@@ -27,13 +27,15 @@ export default function Form({ post, categories, onSubmit, submitText }: { post:
   const form = useForm({
     title: post.title || '',
     body: post.body || '',
-    sub_title: post.sub_title || ''
+    sub_title: post.sub_title || '',
+    cover: post.cover || File,
   })
 
   const [item, setItem] = useSafeState<Option | undefined>()
   const [showSubTitle, setShowSubTitle] = useSafeState(false)
 
   const { data, setData, errors, processing } = form
+  console.log("🚀 ~ Form ~ data:", data)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -41,11 +43,12 @@ export default function Form({ post, categories, onSubmit, submitText }: { post:
   }
 
   const handleFileUpload = (files: File[]) => {
-    const formData = new FormData()
-    formData.append('cover', files[0])
-    router.post(`/upload_cover`, formData, {
-      forceFormData: true,
-    })
+    setData('cover', files[0])
+    // const formData = new FormData()
+    // formData.append('cover', files[0])
+    // router.post(`/upload_cover/${post.id}`, formData, {
+    //   forceFormData: true,
+    // })
   };
 
   const addSubTitle = () => {

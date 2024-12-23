@@ -27,7 +27,11 @@ export default defineConfig({
       // Only .tsx files
       include: '**/*.tsx'
     }),
-    react(),
+    react({
+        // 确保热更新配置正确
+        include: '**/*.tsx',
+        exclude: /node_modules/
+    }),
     mkcert(),
   ],
   server: {

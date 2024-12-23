@@ -2,6 +2,7 @@ import { Link, Head } from '@inertiajs/react'
 import Post from './Post'
 
 export default function Show({ post, flash }) {
+  console.log("🚀 ~ Show ~ post:", post)
   const onDestroy = (e) => {
     if (!confirm('Are you sure you want to delete this post?')) {
       e.preventDefault()

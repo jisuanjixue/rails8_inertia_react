@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 
   patch 'update_profile', to: 'users/profile#update'
   post 'upload_avatar', to: 'users/profile#upload_avatar'
-  post 'upload_cover', to: 'posts#upload_cover'
+  # post 'upload_cover/:id', to: 'posts#upload_cover', as: :upload_cover
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -69,12 +69,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
     t.index ["user_id"], name: "index_connected_accounts_on_user_id"
   end
 
-  create_table "drafts", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -85,9 +79,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
     t.integer "category_id", null: false
     t.string "sub_title", limit: 100, default: ""
     t.integer "status", default: 0
-    t.integer "draft_id", null: false
     t.index ["category_id"], name: "index_posts_on_category_id"
-    t.index ["draft_id"], name: "index_posts_on_draft_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -131,7 +123,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "connected_accounts", "users"
   add_foreign_key "posts", "categories"
-  add_foreign_key "posts", "drafts"
   add_foreign_key "profiles", "users"
   add_foreign_key "sessions", "users"
 end
