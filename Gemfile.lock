@@ -158,9 +158,8 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     inertia_rails (3.6.0)
       railties (>= 6)
-    inertia_rails-contrib (0.3.0)
-      inertia_rails
-      railties (>= 6.0.0)
+    inertia_rails-contrib (0.4.0)
+      inertia_rails (>= 3.5.0)
     io-console (0.8.0)
     irb (1.14.3)
       rdoc (>= 4.0.0)
@@ -480,7 +479,7 @@ DEPENDENCIES
   erb_lint
   error_highlight (>= 0.4.0)
   image_processing (~> 1.2)
-  inertia_rails-contrib (~> 0.3.0)
+  inertia_rails-contrib (~> 0.4.0)
   jbuilder
   jwt (~> 2.9)
   kamal
