@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Apicraft::Web::App, at: '/apicraft'
   # mount Debugbar::Engine => Debugbar.config.prefix if defined? Debugbar
   # authentication
   get '/auth/failure', to: 'sessions/omniauth#failure'

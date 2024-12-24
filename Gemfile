@@ -100,3 +100,5 @@ gem 'omniauth-github'
 gem 'omniauth-rails_csrf_protection'
 
 gem 'jwt', '~> 2.9'
+
+gem "apicraft-rails", "~> 1.0"
