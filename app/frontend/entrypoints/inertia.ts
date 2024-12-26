@@ -2,7 +2,7 @@ import { createInertiaApp } from '@inertiajs/react'
 import { createElement, ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-type ResolvedComponent = { default: ReactNode, layout?: (page: ReactNode) => ReactNode }
+interface ResolvedComponent { default: ReactNode, layout?: (page: ReactNode) => ReactNode }
 
 createInertiaApp({
   // Set default page title
@@ -17,11 +17,11 @@ createInertiaApp({
 
   resolve: (name) => {
     const pages = import.meta.glob<ResolvedComponent>('../pages/**/*.tsx', { eager: true })
-    let page = pages[`../pages/${name}.tsx`]
+    const page = pages[`../pages/${name}.tsx`]
     return page
   },
 
-  title: title => (title ? `${title} - blog` : "blog"),
+  title: title => (title ? `${title} - blog` : 'blog'),
   progress: {
     // The delay after which the progress bar will appear, in milliseconds...
     delay: 50,
@@ -30,13 +30,12 @@ createInertiaApp({
     includeCSS: true,
 
     // Whether the NProgress spinner will be shown...
-    showSpinner: true,
+    showSpinner: true
   },
 
-
-  setup({ el, App, props }) {
+  setup ({ el, App, props }) {
     const root = createRoot(el)
 
     root.render(createElement(App, props))
-  },
+  }
 })

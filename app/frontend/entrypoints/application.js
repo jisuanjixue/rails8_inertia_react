@@ -25,4 +25,3 @@ import '@rails/actiontext'
 //
 // If you want to use .jsx or .tsx, add the extension:
 //     <%= vite_javascript_tag 'application.jsx' %>
-

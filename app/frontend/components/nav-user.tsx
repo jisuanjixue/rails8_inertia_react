@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   BadgeCheck,
@@ -6,14 +6,14 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
-  Sparkles,
-} from "lucide-react"
+  Sparkles
+} from 'lucide-react'
 
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+  AvatarImage
+} from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,20 +22,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar"
-import { router, usePage } from "@inertiajs/react"
+  useSidebar
+} from '@/components/ui/sidebar'
+import { router, usePage } from '@inertiajs/react'
 
-export function NavUser() {
+export function NavUser () {
   const {
-    auth: { session, avatar, currentUser },
-  } = usePage().props as any;
+    auth: { session, avatar, currentUser }
+  } = usePage().props as any
   console.log(currentUser)
   const { isMobile } = useSidebar()
 
@@ -45,35 +45,35 @@ export function NavUser() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              size='lg'
+              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
-              <Avatar className="w-8 h-8 rounded-lg">
+              <Avatar className='w-8 h-8 rounded-lg'>
                 <AvatarImage src={avatar} alt={currentUser.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-sm leading-tight text-left">
-                <span className="font-semibold truncate">{currentUser.name}</span>
-                <span className="text-xs truncate">{currentUser.email}</span>
+              <div className='grid flex-1 text-sm leading-tight text-left'>
+                <span className='font-semibold truncate'>{currentUser.name}</span>
+                <span className='text-xs truncate'>{currentUser.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
+            className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+            side={isMobile ? 'bottom' : 'right'}
+            align='end'
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="w-8 h-8 rounded-lg">
+            <DropdownMenuLabel className='p-0 font-normal'>
+              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                <Avatar className='w-8 h-8 rounded-lg'>
                   <AvatarImage src={avatar} alt={currentUser.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-sm leading-tight text-left">
-                  <span className="font-semibold truncate">{currentUser.name}</span>
-                  <span className="text-xs truncate">{currentUser.email}</span>
+                <div className='grid flex-1 text-sm leading-tight text-left'>
+                  <span className='font-semibold truncate'>{currentUser.name}</span>
+                  <span className='text-xs truncate'>{currentUser.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -101,28 +101,31 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={(e) => {
-              e.preventDefault();
+              e.preventDefault()
               if (session) {
                 router.delete(`/sign_out/${session.id}`, {
                   preserveScroll: true,
                   preserveState: true,
                   onSuccess: () => {
-                    router.reload();
-                  },
-                });
+                    router.reload()
+                  }
+                })
               } else {
-                router.get(`/sign_in`);
+                router.get('/sign_in')
               }
-            }}>
-              {session ? (
-                <>
-                  <LogOut />
-                  <div>登出</div>
-                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                </>
-              ) : (
-                <div>登录</div>
-              )}
+            }}
+            >
+              {session
+                ? (
+                  <>
+                    <LogOut />
+                    <div>登出</div>
+                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                  </>
+                  )
+                : (
+                  <div>登录</div>
+                  )}
             </DropdownMenuItem>
             {/* <DropdownMenuItem>
               <LogOut />

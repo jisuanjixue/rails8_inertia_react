@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "build": "bin/vite build",
-    "lint": "standard",
+    "lint:fix": "ts-standard app/frontend --fix",
+    "lint": "ts-standard app/frontend --report",
     "lint:yml": "yarn prettier --check data/**/**/*.yml",
     "format": "standard --fix",
     "format:yml": "yarn run lint:yml --write"
@@ -22,7 +23,8 @@
     "vite": "^5.4.11",
     "vite-plugin-mkcert": "^1.17.6",
     "vite-plugin-rails": "^0.5.0",
-    "vite-plugin-ruby": "^5.1.1"
+    "vite-plugin-ruby": "^5.1.1",
+    "ts-standard": "^12.0.2"
   },
   "dependencies": {
     "@inertiajs/react": "^1.2.0",
@@ -64,9 +66,10 @@
     "trix": "^2.1.8",
     "vaul": "^1.1.1"
   },
-  "standard": {
-    "globals": [
-      "requestAnimationFrame"
+  "ts-standard": {
+    "ignore": [
+      "app/frontend/components/ui",
+      "vite-env.d.ts"
     ]
   }
 }

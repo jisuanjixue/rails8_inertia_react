@@ -1,9 +1,9 @@
 import { useForm } from '@inertiajs/react'
-import { Label } from "@/components/ui/motion-label";
-import { Input } from "@/components/ui/motion-input";
-import LabelInputContainer from "@/components/ui/label-input-container";
-import { Button } from "@/components/ui/button"
-import BottomGradient from "@/components/ui/bottom-gradient";
+import { Label } from '@/components/ui/motion-label'
+import { Input } from '@/components/ui/motion-input'
+import LabelInputContainer from '@/components/ui/label-input-container'
+import { Button } from '@/components/ui/button'
+import BottomGradient from '@/components/ui/bottom-gradient'
 
 const useChangeEmail = ({ user }) => {
   const form = useForm({
@@ -15,42 +15,43 @@ const useChangeEmail = ({ user }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     form.transform((data) => (data))
-    form.patch(`/change_email`)
+    form.patch('/change_email')
   }
 
   const render = () => {
-
     return (
-      <form onSubmit={handleSubmit} className="contents">
-           <LabelInputContainer className="mb-4">
-            <Label htmlFor="password_challenge" className="text-left">
-              密码
-            </Label>
-            <Input id="password_challenge" onChange={(e) => setData('password_challenge', e.target.value)} value={data.password_challenge} className="col-span-3" />
-            {errors.password_challenge && (
-              <div className="px-3 py-2 font-medium text-red-500">
-                {errors.password_challenge.join(', ')}
+      <form onSubmit={handleSubmit} className='contents'>
+        <LabelInputContainer className='mb-4'>
+          <Label htmlFor='password_challenge' className='text-left'>
+            密码
+          </Label>
+          <Input id='password_challenge' onChange={(e) => setData('password_challenge', e.target.value)} value={data.password_challenge} className='col-span-3' />
+          {errors.password_challenge && (
+            <div className='px-3 py-2 font-medium text-red-500'>
+              {errors.password_challenge.join(', ')}
+            </div>
+          )}
+        </LabelInputContainer>
+        <LabelInputContainer className='mb-4'>
+          <Label htmlFor='email' className='text-left'>
+            新邮箱
+          </Label>
+          <Input id='email' onChange={(e) => setData('email', e.target.value)} value={data.email} className='col-span-2' />
+          <div className='px-3 py-2 font-medium text-red-500'>
+            {errors.email && (
+              <div className='px-3 py-2 font-medium text-red-500'>
+                {errors.email.join(', ')}
               </div>
             )}
-          </LabelInputContainer>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="email" className="text-left">
-              新邮箱
-            </Label>
-            <Input id="email" onChange={(e) => setData('email', e.target.value)} value={data.email} className="col-span-2" />
-            <div className="px-3 py-2 font-medium text-red-500">
-              {errors.email && (
-                <div className="px-3 py-2 font-medium text-red-500">
-                  {errors.email.join(', ')}
-                </div>
-              )}
-            </div>
-          </LabelInputContainer>
+          </div>
+        </LabelInputContainer>
         <Button
-          variant="secondary"
-          type="submit"
-          disabled={processing}>修改邮箱</Button>
-            <BottomGradient />
+          variant='secondary'
+          type='submit'
+          disabled={processing}
+        >修改邮箱
+        </Button>
+        <BottomGradient />
       </form>
     )
   }
