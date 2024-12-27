@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react'
-import { Label } from '@/components/ui/motion-label'
-import { Input } from '@/components/ui/motion-input'
+import { Label } from '@/components/forms/motion-label'
+import { Input } from '@/components/forms/motion-input'
 import LabelInputContainer from '@/components/ui/label-input-container'
 import { Button } from '@/components/ui/button'
 import BottomGradient from '@/components/ui/bottom-gradient'

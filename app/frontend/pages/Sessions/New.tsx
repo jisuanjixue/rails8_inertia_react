@@ -1,28 +1,56 @@
 'use client'
-import React from 'react'
-import { Label } from '@/components/ui/motion-label'
-import { Input } from '@/components/ui/motion-input'
-import { InputWithPasswordStrengthIndicator } from '@/components/ui/input-with-password-strength-indicator'
+import React, { ReactElement } from 'react'
+import { Label } from '@/components/forms/motion-label'
+import { Input } from '@/components/forms/motion-input'
+import { InputWithPasswordStrengthIndicator } from '@/components/forms/input-with-password-strength-indicator'
 import LabelInputContainer from '@/components/ui/label-input-container'
 import BottomGradient from '@/components/ui/bottom-gradient'
 import {
   IconBrandGithub
 } from '@tabler/icons-react'
-import { router, useForm } from '@inertiajs/react'
+import { router } from '@inertiajs/react'
 import { cn } from '@/lib/utils'
+import useFormHandler from '@/hooks/useFormHandler'
+import { KeysWithStringValues } from '@/types/utilityTypes'
+
+interface LoginData {
+  email: string
+  password: string
+}
 
 const LoginForm = ({ is_developer }: { is_developer: boolean }) => {
   const redirect_to_path = new URLSearchParams(window.location.search).get('redirect_to') || '/'
-  const form = useForm({
-    email: '',
-    password: ''
+
+  const {
+    data,
+    processing,
+    updateField,
+    submit,
+    errors
+  } = useFormHandler<LoginData>({
+    initialData: {
+      email: '',
+      password: '',
+    },
+    postUrl: '/sign_in',
+    onSuccess: () => {
+    }
   })
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    form.post('/sign_in')
+    submit(e)
   }
 
-  const { data, setData, errors, processing } = form
+
+  const renderTextInput =  (
+    type: string,
+    id: KeysWithStringValues<LoginData>,
+    placeholder: string
+  ): ReactElement  => {
+    return (
+      <Input id={id} placeholder={placeholder} type={type} name={id} value={data[id]} onChange={(e) => updateField(id, e.target.value)}  error={errors.email}/>
+    )
+  }
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen '>
@@ -37,21 +65,11 @@ const LoginForm = ({ is_developer }: { is_developer: boolean }) => {
         <form className='my-8' onSubmit={handleSubmit}>
           <LabelInputContainer className='mb-4'>
             <Label htmlFor='email'>电子邮箱</Label>
-            <Input id='email' placeholder='projectmayhem@fc.com' type='email' name='email' value={data.email} onChange={(e) => setData('email', e.target.value)} />
-            {errors.email && (
-              <div className='px-3 py-2 font-medium text-red-500'>
-                {errors.email.join(', ')}
-              </div>
-            )}
+            {renderTextInput('email', 'email', 'projectmayhem@fc.com')}
           </LabelInputContainer>
           <LabelInputContainer className='mb-4'>
             <Label htmlFor='password'>密码</Label>
-            <InputWithPasswordStrengthIndicator id='password' placeholder='••••••••' type='password' name='login_password' value={data.password} onChange={(value) => setData('password', value)} />
-            {errors.password && (
-              <div className='px-3 py-2 font-medium text-red-500'>
-                {errors.password.join(', ')}
-              </div>
-            )}
+            <InputWithPasswordStrengthIndicator id='password' placeholder='••••••••' type='password' name='login_password' value={data.password} onChange={(value) => updateField('password', value)} error={errors.password}/>
           </LabelInputContainer>
 
           <button

@@ -4,12 +4,16 @@ import { cn } from "@/lib/utils";
 import { useMotionTemplate, useMotionValue, motion } from "framer-motion";
 import {  useControllableValue, useSafeState } from "ahooks";
 import { EyeOff, Eye, Check, X } from "lucide-react";
+import InputError from "./input-rrror";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+    error?: string;
+  }
 
   const InputWithPasswordStrengthIndicator = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className, type, value, onChange, ...props }, ref) => {
+    ({ className, type, value, onChange, error, ...props }, ref) => {
+       const errorClass = (error !== null && error !== undefined && error !== '') ? 'border-red-600' : ''
       const radius = 100;
       const [visible, setVisible] = useSafeState(false);
       const [password, setPassword] = useControllableValue({value, onChange});
@@ -88,17 +92,18 @@ export interface InputProps
                 focus-visible:outline-none focus-visible:ring-[2px]  focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600
                  disabled:cursor-not-allowed disabled:opacity-50
                  dark:shadow-[0px_0px_1px_1px_var(--neutral-700)]
-                 group-hover/input:shadow-none transition duration-400
+                 group-hover/input:shadow-none transition duration-400 ${errorClass}
                  `,
                   className
                 )}
                 ref={ref}
                 {...props}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value )}
                 aria-invalid={strengthScore < 4}
                 aria-describedby="password-strength"
               />
+               {Boolean(error) && <InputError>{error}</InputError>}
               {type === "password" && (
                 <button
                   className="absolute inset-y-0 flex items-center justify-center h-full transition-colors end-0 w-9 rounded-e-lg text-muted-foreground/80 outline-offset-2 hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"

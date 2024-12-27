@@ -1,8 +1,7 @@
 import { createInertiaApp } from '@inertiajs/react'
 import { createElement, ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
-
-interface ResolvedComponent { default: ReactNode, layout?: (page: ReactNode) => ReactNode }
+import { getTitle, resolvePage } from '@/lib/inertiaConfig'
 
 createInertiaApp({
   // Set default page title
@@ -14,28 +13,36 @@ createInertiaApp({
   //
   // see https://inertia-rails.netlify.app/guide/progress-indicators
   // progress: false,
+ resolve: resolvePage,
+  // resolve: (name) => {
+  //   const pages = import.meta.glob<ResolvedComponent>('../pages/**/*.tsx', { eager: true })
+  //   const page = pages[`../pages/${name}.tsx`]
+  //   if (!page) {
+  //     console.error(`Missing Inertia page component: '${name}.tsx'`)
+  //   }
+  //   return page
+  // },
 
-  resolve: (name) => {
-    const pages = import.meta.glob<ResolvedComponent>('../pages/**/*.tsx', { eager: true })
-    const page = pages[`../pages/${name}.tsx`]
-    return page
-  },
-
-  title: title => (title ? `${title} - blog` : 'blog'),
+  title: getTitle,
   progress: {
     // The delay after which the progress bar will appear, in milliseconds...
     delay: 50,
-
     // Whether to include the default NProgress styles...
     includeCSS: true,
-
     // Whether the NProgress spinner will be shown...
     showSpinner: true
   },
 
   setup ({ el, App, props }) {
-    const root = createRoot(el)
-
-    root.render(createElement(App, props))
+    if (el !== null && el !== undefined) {
+      const root = createRoot(el)
+        root.render(createElement(App, props))
+    } else {
+      console.error(
+        'Missing root element.\n\n' +
+          'If you see this error, it probably means you load Inertia.js on non-Inertia pages.\n' +
+          "Consider moving <%= vite_typescript_tag 'inertia' %> to the Inertia-specific layout instead."
+      )
+    }
   }
 })

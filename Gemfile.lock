@@ -272,6 +272,12 @@ GEM
       omniauth (~> 2.0)
     openapi_parser (2.2.3)
     ostruct (0.6.1)
+    overmind (2.5.1)
+    overmind (2.5.1-aarch64-linux)
+    overmind (2.5.1-arm-linux)
+    overmind (2.5.1-arm64-darwin)
+    overmind (2.5.1-x86-linux)
+    overmind (2.5.1-x86_64-darwin)
     pagy (9.3.3)
     parallel (1.26.3)
     parser (3.3.6.0)
@@ -508,12 +514,14 @@ DEPENDENCIES
   omniauth
   omniauth-github
   omniauth-rails_csrf_protection
+  overmind
   pagy (~> 9.3)
   propshaft
   puma (>= 5.0)
   rack-mini-profiler
   rails (~> 8.0)
   ransack (~> 4.1)
+  ruby-lsp
   ruby-lsp-rails
   solid_cable
   solid_cache

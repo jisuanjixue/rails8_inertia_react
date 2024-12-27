@@ -14,10 +14,10 @@ export default function New ({ post, categories }: { post: PostType, categories:
         <Form
           post={post}
           categories={categories}
-          onSubmit={(form, categoryId) => {
-            form.transform((data) => ({ post: { ...data, category_id: categoryId } }))
-            form.post('/posts')
-          }}
+          // onSubmit={(form, categoryId) => {
+          //   form.transform((data) => ({ post: { ...data, category_id: categoryId } }))
+          //   form.post('/posts')
+          // }}
           submitText='新建'
         />
 

@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/motion-label'
-import { InputWithPasswordStrengthIndicator } from '@/components/ui/input-with-password-strength-indicator'
+import { Label } from '@/components/forms/motion-label'
+import { InputWithPasswordStrengthIndicator } from '@/components/forms/input-with-password-strength-indicator'
 
 import LabelInputContainer from '@/components/ui/label-input-container'
 import BottomGradient from '@/components/ui/bottom-gradient'

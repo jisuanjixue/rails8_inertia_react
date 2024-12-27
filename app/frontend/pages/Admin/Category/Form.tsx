@@ -1,7 +1,7 @@
 // import { useForm } from '@inertiajs/react'
 // import categoryType from '../../types/serializers/Category';
-import { Input } from '@/components/ui/motion-input'
-import { Label } from '@/components/ui/motion-label'
+import { Input } from '@/components/forms/motion-input'
+import { Label } from '@/components/forms/motion-label'
 import LabelInputContainer from '@/components/ui/label-input-container'
 
 export default function Form ({ form }: { form: any }) {

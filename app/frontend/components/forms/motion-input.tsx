@@ -2,12 +2,16 @@
 import { cn } from "@/lib/utils";
 import { useMotionTemplate, useMotionValue, motion } from "framer-motion";
 import React from "react";
+import InputError from "./input-rrror";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+    error?: string;
+  }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, error, ...props }, ref) => {
+     const errorClass = (error !== null && error !== undefined && error !== '') ? 'border-red-600' : ''
     const radius = 100; // change this to increase the rdaius of the hover effect
     const [visible, setVisible] = React.useState(false);
 
@@ -44,13 +48,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           focus-visible:outline-none focus-visible:ring-[2px]  focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600
            disabled:cursor-not-allowed disabled:opacity-50
            dark:shadow-[0px_0px_1px_1px_var(--neutral-700)]
-           group-hover/input:shadow-none transition duration-400
+           group-hover/input:shadow-none transition duration-400 ${errorClass}
            `,
             className
           )}
           ref={ref}
           {...props}
         />
+        {Boolean(error) && <InputError>{error}</InputError>}
       </motion.div>
     );
   }

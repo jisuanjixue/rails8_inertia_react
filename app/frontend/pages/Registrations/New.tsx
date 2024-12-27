@@ -1,24 +1,53 @@
 'use client'
-import React from 'react'
-import { Label } from '@/components/ui/motion-label'
-import { Input } from '@/components/ui/motion-input'
-import { InputWithPasswordStrengthIndicator } from '@/components/ui/input-with-password-strength-indicator'
+import React, { ReactElement } from 'react'
+import { Label } from '@/components/forms/motion-label'
+import { Input } from '@/components/forms/motion-input'
+import { InputWithPasswordStrengthIndicator } from '@/components/forms/input-with-password-strength-indicator'
 import { cn } from '@/lib/utils'
-import { router, useForm } from '@inertiajs/react'
+import { router } from '@inertiajs/react'
+import useFormHandler from '@/hooks/useFormHandler'
+import { KeysWithStringValues } from '@/types/utilityTypes'
+import LabelInputContainer from '@/components/ui/label-input-container'
+import BottomGradient from '@/components/ui/bottom-gradient'
 
-const SignUpForm = ({ user }: { user: any }) => {
-  const form = useForm({
-    email: user.email || '',
-    password: user.password || '',
-    password_confirmation: user.password_confirmation || ''
-  })
+interface SignUpData {
+  email: string
+  password: string
+  password_confirmation: string
+}
+
+const SignUpForm = ({ user }: { user: SignUpData }) => {
+    const {
+      data,
+      processing,
+      updateField,
+      submit,
+      errors
+    } = useFormHandler<SignUpData>({
+      initialData: {
+        email: user.email || '',
+        password: user.password || '',
+        password_confirmation: user.password_confirmation || ''
+      },
+      postUrl: '/sign_up',
+      onSuccess: () => {
+      }
+    })
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    form.post('/sign_up')
+    submit(e)
   }
 
-  const { data, setData, errors, processing } = form
-  console.log(errors)
+  const renderTextInput =  (
+    type: string,
+    id: KeysWithStringValues<SignUpData>,
+    placeholder: string
+  ): ReactElement  => {
+    return (
+      <Input id={id} placeholder={placeholder} type={type} name={id} value={data[id]} onChange={(e) => updateField(id, e.target.value)}  error={errors.email}/>
+    )
+  }
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
@@ -33,30 +62,15 @@ const SignUpForm = ({ user }: { user: any }) => {
         <form className='my-8' onSubmit={handleSubmit}>
           <LabelInputContainer className='mb-4'>
             <Label htmlFor='email'>电子邮箱</Label>
-            <Input id='email' placeholder='projectmayhem@fc.com' type='email' name='email' value={data.email} onChange={(e) => setData('email', e.target.value)} />
-            {errors.email && (
-              <div className='px-3 py-2 font-medium text-red-500'>
-                {errors.email.join(', ')}
-              </div>
-            )}
+            {renderTextInput('email', 'email', 'projectmayhem@fc.com')}
           </LabelInputContainer>
           <LabelInputContainer className='mb-4'>
             <Label htmlFor='password'>密码</Label>
-            <InputWithPasswordStrengthIndicator id='password' placeholder='••••••••' type='password' name='password' value={data.password} onChange={(value) => setData('password', value)} />
-            {errors.password && (
-              <div className='px-3 py-2 font-medium text-red-500'>
-                {errors.password.join(', ')}
-              </div>
-            )}
+            <InputWithPasswordStrengthIndicator id='password' placeholder='••••••••' type='password' name='password' value={data.password} onChange={(value) => updateField('password', value)}   error={errors.password}/>
           </LabelInputContainer>
           <LabelInputContainer className='mb-4'>
             <Label htmlFor='password_confirmation'>密码确认</Label>
-            <InputWithPasswordStrengthIndicator id='password_confirmation' placeholder='••••••••' type='password' name='password_confirmation' value={data.password_confirmation} onChange={(value) => setData('password_confirmation', value)} />
-            {errors.password_confirmation && (
-              <div className='px-3 py-2 font-medium text-red-500'>
-                {errors.password_confirmation.join(', ')}
-              </div>
-            )}
+            <InputWithPasswordStrengthIndicator id='password_confirmation' placeholder='••••••••' type='password' name='password_confirmation' value={data.password_confirmation} onChange={(value) => updateField('password_confirmation', value)} error={errors.password_confirmation} />
           </LabelInputContainer>
 
           <div className='bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full' />
@@ -93,28 +107,4 @@ const SignUpForm = ({ user }: { user: any }) => {
     </div>
   )
 }
-
-const BottomGradient = () => {
-  return (
-    <>
-      <span className='absolute inset-x-0 block w-full h-px transition duration-500 opacity-0 group-hover/btn:opacity-100 -bottom-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent' />
-      <span className='absolute block w-1/2 h-px mx-auto transition duration-500 opacity-0 group-hover/btn:opacity-100 blur-sm -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent' />
-    </>
-  )
-}
-
-const LabelInputContainer = ({
-  children,
-  className
-}: {
-  children: React.ReactNode
-  className?: string
-}) => {
-  return (
-    <div className={cn('flex flex-col space-y-2 w-full', className)}>
-      {children}
-    </div>
-  )
-}
-
 export default SignUpForm

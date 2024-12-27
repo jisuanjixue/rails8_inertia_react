@@ -73,6 +73,8 @@ group :development do
 
   # Use listen to watch files for changes [https://github.com/guard/listen]
   gem 'listen', '~> 3.5'
+  gem 'overmind', require: false
+  gem 'ruby-lsp', require: false
 
   gem 'authentication-zero', require: false
   gem 'debugbar', '~> 0.3.3'
@@ -101,4 +103,4 @@ gem 'omniauth-rails_csrf_protection'
 
 gem 'jwt', '~> 2.9'
 
-gem "apicraft-rails", "~> 1.0"
+gem 'apicraft-rails', '~> 1.0'

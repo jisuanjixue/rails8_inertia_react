@@ -1,8 +1,8 @@
-import { router, useForm } from '@inertiajs/react'
+// import { router, useForm } from '@inertiajs/react'
 import { ReactTrixRTEInput } from 'react-trix-rte'
 import PostType from '../../types/serializers/Post'
-import { Input } from '@/components/ui/motion-input'
-import { Label } from '@/components/ui/motion-label'
+import { Input } from '@/components/forms/motion-input'
+import { Label } from '@/components/forms/motion-label'
 import { TextareaInput } from '@/components/ui/textarea-with-characters-left'
 import LabelInputContainer from '@/components/ui/label-input-container'
 import BottomGradient from '@/components/ui/bottom-gradient'
@@ -16,34 +16,64 @@ import { FloatingPanelRoot, FloatingPanelTrigger, FloatingPanelContent, Floating
 import { AnimatePresence, motion } from 'framer-motion'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { FocusCards } from '@/components/ui/focus-cards'
+import { KeysWithStringValues } from '@/types/utilityTypes'
+import { ReactElement } from 'react'
+import useFormHandler from '@/hooks/useFormHandler'
 
-export default function Form ({ post, categories, onSubmit, submitText }: { post: PostType, categories?: CategoryType[], onSubmit: (form: any, categoryId: string | undefined, content?: string) => void, submitText: string }) {
+export default function Form({ post, categories, submitText }: { post: PostType, categories?: CategoryType[], submitText: string }) {
   const factory = useCreation(
     () => ({
       content: ''
     }),
     []
   )
-  const form = useForm({
-    title: post.title || '',
-    body: post.body || '',
-    sub_title: post.sub_title || '',
-    cover: post.cover || File
+  // const form = useForm({
+  //   title: post.title || '',
+  //   body: post.body || '',
+  //   sub_title: post.sub_title || '',
+  //   cover: post.cover || File
+  // })
+
+  const {
+    data,
+    processing,
+    updateField,
+    submit,
+    errors,
+    setData,
+    transform,
+  } = useFormHandler<PostType>({
+    initialData: {
+      title: post.title || '',
+      body: post.body || '',
+      sub_title: post.sub_title || '',
+      cover: post.cover || File
+    },
+    postUrl: post.id?  '/sign_up',
+    onSuccess: () => {
+    }
   })
 
   const [item, setItem] = useSafeState<Option | undefined>()
   const [showSubTitle, setShowSubTitle] = useSafeState(false)
 
-  const { data, setData, errors, processing } = form
-  console.log('🚀 ~ Form ~ data:', data)
+  // const { data, setData, errors, processing } = form
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(form, item?.value, factory.content)
+    submit(e)
+    transform((data: PostType) => ({ post: { ...data, content: factory.content } }))
+    // onSubmit(form, item?.value, factory.content)
+  }
+  const handNewSubmit = (e) => {
+    e.preventDefault()
+    submit(e)
+    transform((data: PostType) => ({ post: { ...data, category_id: item?.value } }))
+    // onSubmit(form, item?.value, factory.content)
   }
 
   const handleFileUpload = (files: File[]) => {
-    setData('cover', files[0])
+    setData?.('cover', files[0])
     // const formData = new FormData()
     // formData.append('cover', files[0])
     // router.post(`/upload_cover/${post.id}`, formData, {
@@ -173,29 +203,40 @@ export default function Form ({ post, categories, onSubmit, submitText }: { post
     )
   }
 
+  const renderTextInput = (
+    type: string,
+    id: KeysWithStringValues<PostType>,
+    placeholder: string
+  ): ReactElement => {
+    return (
+      <Input id={id} placeholder={placeholder} type={type} name={id} value={data[id]} onChange={(e) => updateField(id, e.target.value)} error={errors[id]} />
+    )
+  }
+
   return (
     <>
       <div className='flex items-center justify-start w-full mb-4'>
         <QuickActionsFloatingPanel />
         <Button variant='outline' onClick={() => addSubTitle()}>添加副标题</Button>
       </div>
-      <form onSubmit={handleSubmit} className='contents'>
+      <form onSubmit={post.id? handleSubmit : handNewSubmit} className='contents'>
         {showSubTitle &&
           <div className='flex items-center justify-start w-full mb-4'>
             <div className='w-4/5'>
-              <Input
+            {renderTextInput('text', 'sub_title', '副标题')}
+              {/* <Input
                 name='sub_title'
                 id='sub_title'
                 value={data.sub_title}
                 maxLength={180}
                 placeholder=''
                 onChange={(e) => setData('sub_title', e.target.value)}
-              />
-              {errors.sub_title && (
+              /> */}
+              {/* {errors.sub_title && (
                 <div className='px-3 py-2 font-medium text-red-500'>
                   {errors.sub_title.join(', ')}
                 </div>
-              )}
+              )} */}
             </div>
             <button type='button' onClick={() => setShowSubTitle(false)} className='w-1/5 ml-2'>
               <svg xmlns='http://www.w3.org/2000/svg' className='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
@@ -217,19 +258,20 @@ export default function Form ({ post, categories, onSubmit, submitText }: { post
           </div>
           <div className='w-2/3'>
             <LabelInputContainer>
-              <Input
+            {renderTextInput('text', 'title', '在这里输入标题')}
+              {/* <Input
                 type='text'
                 name='title'
                 id='title'
                 placeholder='在这里输入标题'
                 value={data.title}
                 onChange={(e) => setData('title', e.target.value)}
-              />
-              {errors.title && (
+              /> */}
+              {/* {errors.title && (
                 <div className='px-3 py-2 font-medium text-red-500'>
                   {errors.title.join(', ')}
                 </div>
-              )}
+              )} */}
             </LabelInputContainer>
           </div>
         </div>
@@ -243,7 +285,7 @@ export default function Form ({ post, categories, onSubmit, submitText }: { post
             rows={1}
             maxLength={180}
             className='block w-full px-3 py-2 mt-2 border border-gray-400 rounded-md shadow outline-none'
-            onChange={(e) => setData('body', e.target.value)}
+            onChange={(e) => setData?.('body', e.target.value)}
           />
           {errors.body && (
             <div className='px-3 py-2 font-medium text-red-500'>
