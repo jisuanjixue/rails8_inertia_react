@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import NoProfilePicture from '../assets/user/no-profile-picture.svg'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import {
   NavigationMenu,
@@ -13,9 +14,8 @@ import { Link, router, usePage } from '@inertiajs/react'
 
 export default function Header () {
   const {
-    auth: { session, avatar, currentUser }
+    auth: { session, currentUser, profile_picture_url }
   } = usePage().props as any
-  console.log(currentUser, avatar)
   const placeholders = [
     '输入文章标题关键字查询',
     '输入文章标题关键字查询',
@@ -77,7 +77,7 @@ export default function Header () {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Avatar>
-                        <AvatarImage src={avatar} />
+                        <AvatarImage src={profile_picture_url ?? NoProfilePicture} />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
                   </DropdownMenuTrigger>

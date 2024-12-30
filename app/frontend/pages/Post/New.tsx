@@ -2,22 +2,17 @@ import { Link, Head } from '@inertiajs/react'
 import Form from './Form'
 import CategoryType from '../../types/serializers/Category'
 import PostType from '../../types/serializers/Post'
+import DefaultLayout from '../DefaultLayout'
 
-export default function New ({ post, categories }: { post: PostType, categories: CategoryType[] }) {
+const PostNew = ({ post, categories }: { post: PostType, categories: CategoryType[] }) => {
   return (
     <>
       <Head title='新建文章' />
-
       <div className='w-full px-8 pt-8 mx-auto md:w-2/3'>
-        <h1 className='text-4xl font-bold'>新建</h1>
-
         <Form
           post={post}
           categories={categories}
-          // onSubmit={(form, categoryId) => {
-          //   form.transform((data) => ({ post: { ...data, category_id: categoryId } }))
-          //   form.post('/posts')
-          // }}
+          postUrl='/posts'
           submitText='新建'
         />
 
@@ -31,3 +26,6 @@ export default function New ({ post, categories }: { post: PostType, categories:
     </>
   )
 }
+
+PostNew.layout = (page: any) => <DefaultLayout children={page} />
+export default PostNew

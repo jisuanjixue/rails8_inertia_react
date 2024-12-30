@@ -4,7 +4,8 @@ import { FormEvent } from 'react'
 
 interface UseFormHandlerProps<T extends object> {
   initialData: T
-  postUrl: string
+  postUrl?: string
+  patchUrl?: string
   validation?: ZodType<Partial<T>>
   onSuccess?: (page: any) => void
 }
@@ -19,7 +20,7 @@ interface FormHandler<T> {
   transform?: any
 }
 
-export default function useFormHandler<T extends object> ({ initialData, pachpostUrl, validation, onSuccess }: UseFormHandlerProps<T>): FormHandler<T> {
+export default function useFormHandler<T extends object> ({ initialData, postUrl, patchUrl, validation, onSuccess }: UseFormHandlerProps<T>): FormHandler<T> {
   const { data, setData, post, patch, processing, errors, clearErrors, setError, transform } = useForm<T>(initialData)
 
   function updateField (field: keyof T, value: T[keyof T]): void {
@@ -40,7 +41,12 @@ export default function useFormHandler<T extends object> ({ initialData, pachpos
         return
       }
     }
-    post(postUrl, { onSuccess })
+    if (patchUrl) {
+      patch(patchUrl, { onSuccess })
+    }
+    if(postUrl) {
+      post(postUrl, { onSuccess })
+    }
   }
 
   return { data, updateField, submit, processing, errors, setData, transform }

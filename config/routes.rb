@@ -37,8 +37,12 @@ Rails.application.routes.draw do
   #   resource :profile, only: %i[update]
   # end
 
+  resources :users, only: [:update] do
+    resource :profile_picture, only: [:update, :destroy], module: :users
+  end
+
   patch 'update_profile', to: 'users/profile#update'
-  post 'upload_avatar', to: 'users/profile#upload_avatar'
+  # post 'upload_avatar', to: 'users/profile#upload_avatar'
   # post 'upload_cover/:id', to: 'posts#upload_cover', as: :upload_cover
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

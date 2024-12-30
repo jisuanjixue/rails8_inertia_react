@@ -24,18 +24,18 @@
 #  user_id  (user_id => users.id)
 #
 class Profile < ApplicationRecord
-  has_one_attached :avatar
+  # has_one_attached :avatar
   belongs_to :user
   validates :full_name, presence: true
 
-  validate :avatar_is_web_image
+  # validate :avatar_is_web_image
 
-  private
+  # private
 
-  def avatar_is_web_image
-    return unless avatar.attached?
-    return if avatar.content_type.in?(Rails.application.config.active_storage.web_image_content_types)
+  # def avatar_is_web_image
+  #   return unless avatar.attached?
+  #   return if avatar.content_type.in?(Rails.application.config.active_storage.web_image_content_types)
 
-    errors.add(:avatar, 'Must be a .JPG, .PNG or .GIF file')
-  end
+  #   errors.add(:avatar, 'Must be a .JPG, .PNG or .GIF file')
+  # end
 end

@@ -1,17 +1,17 @@
-import { router, useForm, usePage } from '@inertiajs/react'
+import {  useForm, usePage } from '@inertiajs/react'
 import { Label } from '@/components/forms/motion-label'
 import { Input } from '@/components/forms/motion-input'
 import LabelInputContainer from '@/components/ui/label-input-container'
 import { Button } from '@/components/ui/button'
 import BottomGradient from '@/components/ui/bottom-gradient'
-import { FileUpload } from '@/components/ui/file-upload'
 import { InputWithTags } from '@/components/ui/input-with-tags'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { TextareaInput } from '@/components/ui/textarea-with-characters-left'
+import UserAvatarEdit from '@/components/pages/user/UserAvatarEdit'
 
 const EditInfo = ({ userProfile }) => {
   const {
-    auth: { avatar }
+    auth: {  profile_picture_url, currentUser }
   } = usePage().props as any
   const form = useForm({
     name: userProfile?.name || '',
@@ -39,34 +39,35 @@ const EditInfo = ({ userProfile }) => {
     })
   }
 
-  const handleFileUpload = (files: File[]) => {
-    const formData = new FormData()
-    formData.append('avatar', files[0])
-    router.post('/upload_avatar', formData, {
-      forceFormData: true,
-      preserveScroll: true,
-      preserveState: true,
-      onSuccess: () => {
-        router.reload()
-      },
-      onError: (errors) => {
-        console.error('Profile update failed:', errors)
-      }
-    })
-  }
+  // const handleFileUpload = (files: File[]) => {
+  //   const formData = new FormData()
+  //   formData.append('avatar', files[0])
+  //   router.post('/upload_avatar', formData, {
+  //     forceFormData: true,
+  //     preserveScroll: true,
+  //     preserveState: true,
+  //     onSuccess: () => {
+  //       router.reload()
+  //     },
+  //     onError: (errors) => {
+  //       console.error('Profile update failed:', errors)
+  //     }
+  //   })
+  // }
 
   return (
     <>
       <Avatar>
-        <AvatarImage src={avatar} />
+        <AvatarImage src={profile_picture_url} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
-      <div className='w-full h-10 max-w-xs mx-auto mb-4 bg-white border border-dashed rounded-lg dark:bg-black border-neutral-200 dark:border-neutral-800'>
-        <FileUpload
+      <div className='w-full max-w-xs mx-auto mb-4 p-4 bg-white border border-dashed rounded-lg dark:bg-black border-neutral-200 dark:border-neutral-800'>
+        {/* <FileUpload
           id='avatar' onChange={(files) => {
             handleFileUpload(files)
           }}
-        />
+        /> */}
+        <UserAvatarEdit userId={currentUser.id} />
       </div>
       <form onSubmit={handleSubmit} className='contents'>
 

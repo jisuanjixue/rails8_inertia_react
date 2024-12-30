@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useMotionTemplate, useMotionValue, motion } from "framer-motion";
 import {  useControllableValue, useSafeState } from "ahooks";
 import { EyeOff, Eye, Check, X } from "lucide-react";
-import InputError from "./input-rrror";
+import InputError from "./input-error";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {

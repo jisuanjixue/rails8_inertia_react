@@ -15,6 +15,7 @@
 #  index_users_on_email  (email) UNIQUE
 #
 class User < ApplicationRecord
+  include User::ProfilePicture
   has_secure_password
   has_one :profile, dependent: :destroy
 

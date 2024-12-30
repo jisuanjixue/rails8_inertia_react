@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { useMotionTemplate, useMotionValue, motion } from "framer-motion";
 import React from "react";
-import InputError from "./input-rrror";
+import InputError from "./input-error";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {

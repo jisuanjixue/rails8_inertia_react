@@ -1,5 +1,5 @@
 class Users::ProfileController < ApplicationController
-  before_action :set_profile, only: %i[update upload_avatar]
+  before_action :set_profile, only: %i[update]
 
   # def new
   #   @profile = Current.user.profile.new(avatar: nil) # 默认创建为草稿
@@ -19,23 +19,23 @@ class Users::ProfileController < ApplicationController
     end
   end
 
-  def upload_avatar
-    if params[:avatar].present?
-      @profile.avatar.attach(params[:avatar])
-      render inertia: 'User/Index', props: {
-        user: Current.user,
-        user_profile: @profile.merge(avatar: polymorphic_url(@profile.avatar.variant(resize_to_fill: [64, 64])))
-        # avatar: @avatar
-      }
-    else
-      redirect_to user_setting_path, inertia: { errors: @profile.errors }
-    end
-  end
+  # def upload_avatar
+  #   if params[:avatar].present?
+  #     @profile.avatar.attach(params[:avatar])
+  #     render inertia: 'User/Index', props: {
+  #       user: Current.user,
+  #       user_profile: @profile.merge(avatar: polymorphic_url(@profile.avatar.variant(resize_to_fill: [64, 64])))
+  #       # avatar: @avatar
+  #     }
+  #   else
+  #     redirect_to user_setting_path, inertia: { errors: @profile.errors }
+  #   end
+  # end
 
   private
 
   def set_profile
-    @profile = Current.user.profile || Current.user.build_profile(profile_params.merge(avatar: nil))
+    @profile = Current.user.profile || Current.user.build_profile(profile_params)
   end
 
   def profile_params

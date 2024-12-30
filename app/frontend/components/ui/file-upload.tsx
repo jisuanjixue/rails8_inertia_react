@@ -58,13 +58,15 @@ export const FileUpload = ({
       <motion.div
         onClick={handleClick}
         whileHover="animate"
-        className="relative block w-full p-10 overflow-hidden rounded-lg cursor-pointer group/file"
+        className="relative block w-full p-6 overflow-hidden rounded-lg cursor-pointer group/file"
       >
         <input
           ref={fileInputRef}
           id={id}
           type="file"
-          onChange={(e) => handleFileChange(Array.from(e.target.files || []))}
+          onChange={(e) => {
+            handleFileChange(Array.from(e.target.files || []))
+          }}
           className="hidden"
         />
         <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,white,transparent)]">
@@ -72,7 +74,7 @@ export const FileUpload = ({
         </div>
         <div className="flex flex-col items-center justify-center">
           <p className="relative z-20 font-sans text-base font-bold text-neutral-700 dark:text-neutral-300">
-            Upload file
+            上传文件
           </p>
           <p className="relative z-20 mt-2 font-sans text-base font-normal text-neutral-400 dark:text-neutral-400">
             Drag or drop your files here or click to upload
@@ -138,7 +140,7 @@ export const FileUpload = ({
                   damping: 20,
                 }}
                 className={cn(
-                  "relative group-hover/file:shadow-2xl z-40 bg-white dark:bg-neutral-900 flex items-center justify-center h-32 mt-4 w-full max-w-[8rem] mx-auto rounded-md",
+                  "relative group-hover/file:shadow-2xl z-40 bg-white dark:bg-neutral-900 flex items-center justify-center h-16 mt-4 w-full max-w-[4rem] mx-auto rounded-md",
                   "shadow-[0px_10px_50px_rgba(0,0,0,0.1)]"
                 )}
               >
@@ -149,10 +151,10 @@ export const FileUpload = ({
                     className="flex flex-col items-center text-neutral-600"
                   >
                     Drop it
-                    <IconUpload className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+                    <IconUpload className="w-2 h-2 text-neutral-600 dark:text-neutral-400" />
                   </motion.p>
                 ) : (
-                  <IconUpload className="w-4 h-4 text-neutral-600 dark:text-neutral-300" />
+                  <IconUpload className="w-2 h-2 text-neutral-600 dark:text-neutral-300" />
                 )}
               </motion.div>
             )}

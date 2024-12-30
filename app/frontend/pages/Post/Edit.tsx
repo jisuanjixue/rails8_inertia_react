@@ -1,33 +1,37 @@
 import { Link, Head } from '@inertiajs/react'
 import Form from './Form'
 import PostType from '../../types/serializers/Post'
+import CategoryType from '../../types/serializers/Category'
+import DefaultLayout from '../DefaultLayout'
 
-export default function Edit ({ post }: { post: PostType }) {
+const  PostEdit = ({ post, categories }: { post: PostType, categories: CategoryType[] }) => {
   return (
     <>
-      <Head title='Editing post' />
-
+      <Head title='编辑文章' />
       <div className='w-full px-8 pt-8 mx-auto md:w-2/3'>
-        <h1 className='text-4xl font-bold'>Editing post</h1>
-
         <Form
           post={post}
-          submitText='Update post'
+          categories={categories}
+          patchUrl={`/posts/${post.id}`}
+          submitText='编辑'
         />
 
         <Link
           href={`/posts/${post.id}`}
           className='inline-block px-5 py-3 ml-2 font-medium bg-gray-100 rounded-lg'
         >
-          Show this post
+          查看
         </Link>
         <Link
           href='/posts'
           className='inline-block px-5 py-3 ml-2 font-medium bg-gray-100 rounded-lg'
         >
-          Back to posts
+          返回
         </Link>
       </div>
     </>
   )
 }
+
+PostEdit.layout = (page: any) => <DefaultLayout children={page} />
+export default PostEdit

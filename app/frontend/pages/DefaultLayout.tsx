@@ -5,6 +5,7 @@ import { usePage } from '@inertiajs/react'
 import { AlertCircle } from 'lucide-react'
 import { ShootingStars } from '@/components/ui/shooting-stars'
 import { StarsBackground } from '@/components/ui/stars-background'
+import { Toaster } from '@/components/ui/toaster'
 
 interface Flash {
   alert: string | undefined
@@ -37,6 +38,7 @@ export default function DefaultLayout ({ children }: { children: React.ReactNode
         </>}
         <article>
           <main className='relative'>{children}</main>
+          <Toaster />
         </article>
       </main>
       <Footer />

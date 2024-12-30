@@ -26,11 +26,12 @@ class ApplicationController < ActionController::Base
 
   inertia_share auth: lambda {
     if Current.user
-      profile = Current.user.profile
-      avatar_url = profile&.avatar&.attached? ? polymorphic_url(profile.avatar.variant(resize_to_fill: [64, 64])) : nil
-      { currentUser: Current.user, session: Current.session, avatar: avatar_url }
+      # profile = Current.user.profile
+      # avatar_url = profile&.avatar&.attached? ? polymorphic_url(profile.avatar.variant(resize_to_fill: [64, 64])) : nil
+      profile_picture_url = Current.user&.profile_picture&.attached? ? url_for(Current.user.profile_picture) : nil
+      { currentUser: Current.user, session: Current.session, profile_picture_url: profile_picture_url }
     else
-      { currentUser: nil, session: nil, avatar: nil }
+      { currentUser: nil, session: nil, profile_picture_url: nil }
     end
   }
 
