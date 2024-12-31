@@ -19,27 +19,28 @@ export default function DefaultLayout ({ children }: { children: React.ReactNode
       <ShootingStars />
       <StarsBackground />
       <Header />
-      <main className='flex-grow overflow-y-auto '>
-        {flash.alert &&
-          <>
-            <Alert variant='destructive'>
+      <main className='flex flex-col flex-grow overflow-y-auto'>
+        <div className='container flex items-center justify-center flex-grow mx-auto'>
+          {flash.alert &&
+            <Alert variant='destructive' className='mb-4'>
               <AlertCircle className='w-4 h-4' />
               <AlertTitle>错误消息</AlertTitle>
               <AlertDescription>
                 {flash.alert}
               </AlertDescription>
-            </Alert>
-          </>}
-        {flash.notice && <>
-          <AlertTitle>警告消息</AlertTitle>
-          <AlertDescription>
-            {flash.notice}
-          </AlertDescription>
-        </>}
-        <article>
-          <main className='relative'>{children}</main>
-          <Toaster />
-        </article>
+            </Alert>}
+          {flash.notice &&
+            <Alert className='mb-4'>
+              <AlertTitle>警告消息</AlertTitle>
+              <AlertDescription>
+                {flash.notice}
+              </AlertDescription>
+            </Alert>}
+          <div className='relative flex-grow w-full max-w-6xl px-4 py-8 mx-auto md:px-8'>
+            {children}
+          </div>
+        </div>
+        <Toaster />
       </main>
       <Footer />
     </div>

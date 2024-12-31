@@ -15,7 +15,8 @@ import { ReactElement } from 'react'
 import useFormHandler from '@/hooks/useFormHandler'
 import QuickActionsFloatingPanel from './components/QuickActionsFloatingPanel'
 
-export default function Form({ post, postUrl, patchUrl, categories, submitText }: { post: PostType,  postUrl?: string, patchUrl?: string, categories?: CategoryType[], submitText: string }) {
+export default function Form({ post, categories=[], submitText,postUrl, patchUrl }: { post: PostType,  submitText: string, categories?: CategoryType[], postUrl?: string, patchUrl?: string,  }) {
+  console.log("🚀 ~ Form ~ categories:", categories)
   const factory = useCreation(
     () => ({
       content: ''
@@ -35,8 +36,7 @@ export default function Form({ post, postUrl, patchUrl, categories, submitText }
     initialData: {
       title: post.title || '',
       body: post.body || '',
-      sub_title: post.sub_title || '',
-      cover: post.cover || File
+      sub_title: post.sub_title || ''
     },
     postUrl: postUrl,
     patchUrl: patchUrl,
@@ -50,23 +50,19 @@ export default function Form({ post, postUrl, patchUrl, categories, submitText }
   // const { data, setData, errors, processing } = form
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    transform((data: PostType) => ({ post: {...data, category_id: item?.value,content: factory.content}  }))
     submit(e)
-    transform((data: PostType) => ({ post: { ...data, content: factory.content } }))
     // onSubmit(form, item?.value, factory.content)
   }
   const handNewSubmit = (e) => {
-    e.preventDefault()
+    transform((data: PostType) => ({ post: { ...data, category_id: item?.value, content: factory.content } }))
     submit(e)
-    transform((data: PostType) => ({ post: { ...data, category_id: item?.value } }))
     // onSubmit(form, item?.value, factory.content)
   }
 
   const addSubTitle = () => {
     setShowSubTitle(true)
   }
-
-
 
   const renderTextInput = (
     type: string,
@@ -81,7 +77,7 @@ export default function Form({ post, postUrl, patchUrl, categories, submitText }
   return (
     <>
       <div className='flex items-center justify-start w-full mb-4'>
-        <QuickActionsFloatingPanel setData={setData} />
+        <QuickActionsFloatingPanel  postId={post.id} />
         <Button variant='outline' onClick={() => addSubTitle()}>添加副标题</Button>
       </div>
       <form onSubmit={post.id? handleSubmit : handNewSubmit} className='contents'>
@@ -100,7 +96,7 @@ export default function Form({ post, postUrl, patchUrl, categories, submitText }
           <div className='w-1/3'>
             <div className='flex flex-col gap-4 not-prose'>
               <AutoComplete
-                options={((categories?.map(v => ({ label: v.name, value: v.id.toString() }))) != null) || []}
+                options={categories?.map(v => ({ label: v.name, value: v.id.toString() })) ?? []}
                 emptyMessage='没有结果.'
                 placeholder='选择话题或输入关键字查询'
                 onValueChange={setItem}

@@ -1,14 +1,13 @@
-import { FileUpload } from '@/components/ui/file-upload'
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FloatingPanelRoot, FloatingPanelTrigger, FloatingPanelContent, FloatingPanelBody, FloatingPanelButton, FloatingPanelFooter, FloatingPanelCloseButton } from '@/components/ui/floating-panel'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { FocusCards } from '@/components/ui/focus-cards'
+import PostCoverEdit from '@/components/pages/post/PostCoverEdit'
 
-const QuickActionsFloatingPanel = ({  setData }: {  setData?: any }) => {
-    const handleFileUpload = (files: File[]) => {
-        setData?.('cover', files[0])
-      }
+
+const QuickActionsFloatingPanel = ({ postId }: {   postId: number }) => {
 
     const cards = [
       {
@@ -93,7 +92,7 @@ const QuickActionsFloatingPanel = ({  setData }: {  setData?: any }) => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className='space-y-2'>
-                      <FileUpload onChange={handleFileUpload} id='cover' />
+                      <PostCoverEdit postId={postId} />
                     </CardContent>
                     {/* <CardFooter>
                       <Button>Save changes</Button>

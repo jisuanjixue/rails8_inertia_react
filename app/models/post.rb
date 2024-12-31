@@ -23,8 +23,8 @@
 #  category_id  (category_id => categories.id)
 #
 class Post < ApplicationRecord
+  include Post::PostCover
   enum :status, draft: 0, preview: 1, published: 2
-  has_one_attached :cover
   attribute :sub_title, :string
   include Ransackable
 

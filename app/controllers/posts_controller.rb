@@ -4,7 +4,6 @@ class PostsController < ApplicationController
   # end
   load_and_authorize_resource except: :all_posts # 保留其他方法的权限检查
   before_action :set_post, only: %i[show edit update destroy publish]
-  before_action :set_cover_url, only: %i[show edit index]
 
   inertia_share flash: -> { flash.to_hash }
 
@@ -23,11 +22,6 @@ class PostsController < ApplicationController
       posts: paged_posts.map do |post|
         serialize_post(post).merge(
           category_name: post.category.name
-          # cover_url: if post&.cover&.attached?
-          #              polymorphic_url(post.cover.variant(resize_to_fill: [64, 64]))
-          #            else
-          #              nil
-          #            end
         )
       end,
       meta: pagy_metadata(pagy),
@@ -40,7 +34,7 @@ class PostsController < ApplicationController
     @posts = Current.user.posts.accessible_by(current_ability).includes(%i[rich_text_content category])
     render inertia: 'Post/Index', props: {
       posts: @posts.map do |post|
-        serialize_post(post).merge(category_name: post.category.name, cover_url: @cover_url)
+        serialize_post(post).merge(category_name: post.category.name)
       end
     }
   end
@@ -48,7 +42,7 @@ class PostsController < ApplicationController
   # GET /posts/1
   def show
     render inertia: 'Post/Show', props: {
-      post: serialize_post(@post).merge(cover_url: @cover_url)
+      post: serialize_post(@post)
     }
   end
 
@@ -67,7 +61,7 @@ class PostsController < ApplicationController
   # GET /posts/1/edit
   def edit
     render inertia: 'Post/Edit', props: {
-      post: serialize_post(@post).merge(cover_url: @cover_url)
+      post: serialize_post(@post)
     }
   end
 
@@ -77,7 +71,6 @@ class PostsController < ApplicationController
     @post.category = Category.find_by(id: post_params[:category_id])
     @post.status = :draft # 默认创建为草稿
     if @post.save
-      @post.cover.attach(params[:cover]) if params[:cover].present?
       redirect_to @post, notice: 'Post was successfully created.'
     else
       redirect_to new_post_url, inertia: { errors: @post.errors, categories: Category.all }
@@ -87,7 +80,6 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   def update
     if @post.update(post_params)
-      @post.cover.attach(params[:cover]) if params[:cover].present?
       redirect_to @post, notice: 'Post was successfully updated.'
     else
       redirect_to edit_post_url(@post), inertia: { errors: @post.errors }
@@ -103,16 +95,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # def upload_cover
-  #   @post = Current.user.posts.find(params[:id]) # 确保找到正确的post
-  #   if params[:cover].present?
-  #     @post.cover.attach(params[:cover])
-  #     redirect_to @post, notice: 'Cover uploaded successfully'
-  #   else
-  #     redirect_to request.referrer, inertia: { errors: @post.errors }
-  #   end
-  # end
-
   # DELETE /posts/1
   def destroy
     @post.destroy!
@@ -126,13 +108,9 @@ class PostsController < ApplicationController
     @post = Current.user.posts.find(params[:id])
   end
 
-  def set_cover_url
-    @cover_url = @post&.cover&.attached? ? polymorphic_url(@post.cover.variant(resize_to_fill: [64, 64])) : nil
-  end
-
   # Only allow a list of trusted parameters through.
   def post_params
-    params.require(:post).permit(:title, :body, :content, :cover, :category_id, :sub_title, :status)
+    params.require(:post).permit(:title, :body, :content, :category_id, :sub_title, :status)
   end
 
   def serialize_post(post)

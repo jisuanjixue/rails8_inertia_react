@@ -25,10 +25,13 @@ Rails.application.routes.draw do
 
   # post
   resources :posts do
+    resource :post_cover, only: [ :update, :destroy], module: :posts
     member do
       post 'publish'
     end
   end
+
+  post 'upload_cover', to: 'posts/post_covers#create'
   get 'all_posts', to: 'posts#all_posts'
 
   # user setting
@@ -42,8 +45,6 @@ Rails.application.routes.draw do
   end
 
   patch 'update_profile', to: 'users/profile#update'
-  # post 'upload_avatar', to: 'users/profile#upload_avatar'
-  # post 'upload_cover/:id', to: 'posts#upload_cover', as: :upload_cover
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
