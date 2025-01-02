@@ -8,7 +8,8 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -16,6 +17,7 @@ import { z } from 'zod'
 import { FileUpload } from '@/components/ui/file-upload'
 import InputError from '@/components/forms/input-error'
 import { useToast } from '@/hooks/use-toast'
+import { Trash2 } from 'lucide-react'
 
 const ALLOWED_CONTENT_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp']
 const MAX_post_cover_SIZE = 3 * 1024 * 1024 // 1MB
@@ -33,13 +35,15 @@ const profilePicSchema = z.object({
 
 interface PostCoverProps {
   postId: number
+  postCoverUrl?: string
 }
 
 export default function PostCoverEdit({
-  postId
+  postId,
+  postCoverUrl
 }: PostCoverProps): ReactElement {
   const { toast } = useToast()
-  const { data, setData, patch, post,processing, errors, setError, clearErrors, hasErrors } = useForm({
+  const { data, setData, patch, post, processing, errors, setError, clearErrors, hasErrors } = useForm({
     post_cover: '' as File | string
   })
   const [activeStorage, setActiveStorage] = useState<typeof import('@rails/activestorage') | null>(null)
@@ -97,7 +101,7 @@ export default function PostCoverEdit({
         })
       } else {
         data.post_cover = blob.signed_id
-        if(postId){
+        if (postId) {
           patch(`/posts/${postId}/post_cover`, {
             onSuccess: () => {
               // if (!hasErrors) {
@@ -108,16 +112,17 @@ export default function PostCoverEdit({
             }
           })
         } else {
-        post(`/upload_cover`, {
-          onSuccess: () => {
-            // if (!hasErrors) {
-            //   toast({
-            //     title: "文章封面已成功更新.",
-            //   })
-            // }
-          }
-        })
-      }}
+          post(`/upload_cover`, {
+            onSuccess: () => {
+              // if (!hasErrors) {
+              //   toast({
+              //     title: "文章封面已成功更新.",
+              //   })
+              // }
+            }
+          })
+        }
+      }
     })
   }
 
@@ -133,13 +138,43 @@ export default function PostCoverEdit({
 
 
   return (
-    <AlertDialog>
-      <form onSubmit={submit} className=''>
+    <div className="grid grid-cols-2 gap-8">
+    {postCoverUrl && (
+      <div className="relative group w-full h-[200px]">
+        <img src={postCoverUrl} className='object-cover w-full h-full rounded-lg' />
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              size="icon"
+              className="absolute transition-opacity opacity-0 top-2 right-2 group-hover:opacity-100"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>您确定吗？</AlertDialogTitle>
+              <AlertDialogDescription>
+                您即将删除文章封面。
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>返回</AlertDialogCancel>
+              <AlertDialogAction onClick={destroy}>
+                继续
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    )}
+    <div>
+      <form onSubmit={submit} className='space-y-4'>
         <FileUpload
           id='post_cover' onChange={(files) => {
             if (files == null) return
             setData('post_cover', files[0])
-            // handleFileUpload(files)
             clearErrors('post_cover')
           }}
         />
@@ -148,27 +183,14 @@ export default function PostCoverEdit({
           type='submit'
           disabled={uploadProgress !== null || processing || hasErrors}
         >
-          更新
+          确定
         </Button>
       </form>
       <Progress
         className={uploadProgress !== null ? 'mt-4' : 'hidden'}
         value={uploadProgress ?? 0}
       />
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>您确定吗？</AlertDialogTitle>
-          <AlertDialogDescription>
-            您即将删除文章封面。
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>返回</AlertDialogCancel>
-          <AlertDialogAction onClick={destroy}>
-            继续
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    </div>
+  </div>
   )
 }

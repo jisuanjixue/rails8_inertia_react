@@ -16,14 +16,13 @@ import useFormHandler from '@/hooks/useFormHandler'
 import QuickActionsFloatingPanel from './components/QuickActionsFloatingPanel'
 
 export default function Form({ post, categories=[], submitText, post_cover_url, postUrl, patchUrl }: { post: PostType,  submitText: string, categories?: CategoryType[], post_cover_url?: string, postUrl?: string, patchUrl?: string,  }) {
-  const selectCategoryList = categories.map(v => ({ label: v.name, value: v.id.toString() }))
   const factory = useCreation(
     () => ({
       content: ''
     }),
     []
   )
-
+console.log("🚀 ~ Form ~ categories:", categories)
   const {
     data,
     processing,
@@ -63,8 +62,12 @@ export default function Form({ post, categories=[], submitText, post_cover_url, 
   }
 
   useEffect(() => {
-    setItem(selectCategoryList.find(f => f.value === data.category_id.toString()))
-  }, [post.category_id, selectCategoryList])
+    if (categories.length === 0) return
+    const found = categories.find(f => f.id === data.category_id)
+    if (found) {
+      setItem({ label: found.name, value: found.id.toString() })
+    }
+  }, [])
 
   useEffect(() => {
     setShowSubTitle(true)
@@ -102,7 +105,7 @@ export default function Form({ post, categories=[], submitText, post_cover_url, 
           <div className='w-1/3'>
             <div className='flex flex-col gap-4 not-prose'>
               <AutoComplete
-                options={selectCategoryList ?? []}
+                options={categories.map(v => ({ label: v.name, value: v.id.toString() })) ?? []}
                 emptyMessage='没有结果.'
                 placeholder='选择话题或输入关键字查询'
                 onValueChange={setItem}

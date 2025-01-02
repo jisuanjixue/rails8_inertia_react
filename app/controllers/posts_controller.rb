@@ -4,6 +4,7 @@ class PostsController < ApplicationController
   # end
   load_and_authorize_resource except: :all_posts # 保留其他方法的权限检查
   before_action :set_post, only: %i[show edit update destroy publish]
+  before_action :set_categories, only: [:new, :edit]
 
   inertia_share flash: -> { flash.to_hash }
 
@@ -50,7 +51,6 @@ class PostsController < ApplicationController
   def new
     @post = Current.user.posts.new(status: :draft) # 默认创建为草稿
     @drafts = Current.user.posts.draft.order(created_at: :desc) # 获取用户的草稿列表
-    @categories = Category.all
     render inertia: 'Post/New', props: {
       post: serialize_post(@post),
       categories: @categories,
@@ -63,6 +63,7 @@ class PostsController < ApplicationController
   def edit
     render inertia: 'Post/Edit', props: {
       post: serialize_post(@post),
+      categories: @categories,
       post_cover_url: @post&.post_cover&.attached? ? url_for(@post&.post_cover) : nil
     }
   end
@@ -113,6 +114,10 @@ class PostsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def post_params
     params.require(:post).permit(:title, :body, :content, :category_id, :sub_title, :status)
+  end
+
+  def set_categories
+    @categories = Category.all
   end
 
   def serialize_post(post)

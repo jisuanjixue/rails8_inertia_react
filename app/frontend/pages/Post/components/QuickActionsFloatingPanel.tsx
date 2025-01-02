@@ -38,7 +38,6 @@ const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: number, p
 
     return (
       <div>
-        {postCoverUrl && <img src={postCoverUrl} className='object-cover w-full h-full' />}
       <FloatingPanelRoot>
         <FloatingPanelTrigger
           title='添加封面图'
@@ -94,11 +93,8 @@ const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: number, p
                       </CardDescription>
                     </CardHeader>
                     <CardContent className='space-y-2'>
-                      <PostCoverEdit postId={postId} />
+                      <PostCoverEdit postId={postId} postCoverUrl={postCoverUrl} />
                     </CardContent>
-                    {/* <CardFooter>
-                      <Button>Save changes</Button>
-                    </CardFooter> */}
                   </Card>
                 </TabsContent>
                 <TabsContent value='select'>
@@ -112,9 +108,6 @@ const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: number, p
                     <CardContent className='space-y-2'>
                       <FocusCards cards={cards} />
                     </CardContent>
-                    {/* <CardFooter>
-                      <Button>Save password</Button>
-                    </CardFooter> */}
                   </Card>
                 </TabsContent>
               </Tabs>

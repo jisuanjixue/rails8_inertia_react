@@ -25,8 +25,8 @@ module Posts
 
     def destroy
       @post.post_cover.purge_later
-
-      redirect_to post_url(@post)
+      head :no_content
+      # redirect_to post_url(@post)
     end
 
     private

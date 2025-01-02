@@ -77,7 +77,7 @@ export const FileUpload = ({
             上传文件
           </p>
           <p className="relative z-20 mt-2 font-sans text-base font-normal text-neutral-400 dark:text-neutral-400">
-            Drag or drop your files here or click to upload
+          拖放文件到这里或点击上传
           </p>
           <div className="relative w-full max-w-xl mx-auto mt-10">
             {files.length > 0 &&
