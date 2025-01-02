@@ -4,14 +4,14 @@ import CategoryType from '../../types/serializers/Category'
 import PostType from '../../types/serializers/Post'
 import DefaultLayout from '../DefaultLayout'
 
-const PostNew = ({ post, categories }: { post: PostType, categories: CategoryType[] }) => {
-  console.log("🚀 ~ PostNew ~ categories:", categories)
+const PostNew = ({ post, categories, post_cover_url }: { post: PostType, categories: CategoryType[], post_cover_url?: string }) => {
   return (
     <>
       <Head title='新建文章' />
       <div className='w-full px-8 pt-8 mx-auto text-gray-900 bg-white rounded-lg shadow-lg  min-h-[calc(100vh-200px)] overflow-y-auto'>
         <Form
           post={post}
+          post_cover_url={post_cover_url}
           categories={categories}
           postUrl='/posts'
           submitText='新建'

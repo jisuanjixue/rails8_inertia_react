@@ -39,34 +39,13 @@ const EditInfo = ({ userProfile }) => {
     })
   }
 
-  // const handleFileUpload = (files: File[]) => {
-  //   const formData = new FormData()
-  //   formData.append('avatar', files[0])
-  //   router.post('/upload_avatar', formData, {
-  //     forceFormData: true,
-  //     preserveScroll: true,
-  //     preserveState: true,
-  //     onSuccess: () => {
-  //       router.reload()
-  //     },
-  //     onError: (errors) => {
-  //       console.error('Profile update failed:', errors)
-  //     }
-  //   })
-  // }
-
   return (
     <>
       <Avatar>
         <AvatarImage src={profile_picture_url} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
-      <div className='w-full max-w-xs mx-auto mb-4 p-4 bg-white border border-dashed rounded-lg dark:bg-black border-neutral-200 dark:border-neutral-800'>
-        {/* <FileUpload
-          id='avatar' onChange={(files) => {
-            handleFileUpload(files)
-          }}
-        /> */}
+      <div className='w-full max-w-xs p-4 mx-auto mb-4 bg-white border border-dashed rounded-lg dark:bg-black border-neutral-200 dark:border-neutral-800'>
         <UserAvatarEdit userId={currentUser.id} />
       </div>
       <form onSubmit={handleSubmit} className='contents'>

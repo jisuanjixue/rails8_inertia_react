@@ -100,21 +100,21 @@ export default function PostCoverEdit({
         if(postId){
           patch(`/posts/${postId}/post_cover`, {
             onSuccess: () => {
-              if (!hasErrors) {
-                toast({
-                  title: "文章封面已成功更新.",
-                })
-              }
+              // if (!hasErrors) {
+              //   toast({
+              //     title: "文章封面已成功更新.",
+              //   })
+              // }
             }
           })
         } else {
         post(`/upload_cover`, {
           onSuccess: () => {
-            if (!hasErrors) {
-              toast({
-                title: "文章封面已成功更新.",
-              })
-            }
+            // if (!hasErrors) {
+            //   toast({
+            //     title: "文章封面已成功更新.",
+            //   })
+            // }
           }
         })
       }}

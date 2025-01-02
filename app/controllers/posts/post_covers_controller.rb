@@ -4,9 +4,11 @@ module Posts
 
     def update
       post_cover = PostCover.new(post_cover: params[:post_cover])
-      post_cover.attach_to(@post)
-
-      redirect_to post_url(@post), inertia: {errors: post_cover.errors}
+      if post_cover.attach_to(@post)
+        redirect_to edit_post_url(@post), notice: '文章封面已成功更新.'
+      else
+        redirect_to edit_post_url(@post), inertia: {errors: post_cover.errors} 
+      end
     end
 
     def create
@@ -15,7 +17,7 @@ module Posts
       post_cover = PostCover.new(post_cover: params[:post_cover])
 
       if post_cover.attach_to(@post)
-        redirect_to edit_post_url(@post), inertia: {errors: post_cover.errors}
+        redirect_to edit_post_url(@post), notice: '文章封面已成功添加.'
       else
         redirect_to new_post_url, inertia: {errors: post_cover.errors}
       end
@@ -30,7 +32,7 @@ module Posts
     private
 
     def set_post
-      @post = Current.user.posts.find(params[:id])
+      @post = Current.user.posts.find(params[:post_id])
     end
   end
 end

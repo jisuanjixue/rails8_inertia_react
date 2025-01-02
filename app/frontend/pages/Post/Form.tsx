@@ -11,12 +11,12 @@ import { AutoComplete, type Option } from '@/components/ui/autocomplete'
 import CategoryType from '../../types/serializers/Category'
 import { Button } from '@/components/ui/button'
 import { KeysWithStringValues } from '@/types/utilityTypes'
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import useFormHandler from '@/hooks/useFormHandler'
 import QuickActionsFloatingPanel from './components/QuickActionsFloatingPanel'
 
-export default function Form({ post, categories=[], submitText,postUrl, patchUrl }: { post: PostType,  submitText: string, categories?: CategoryType[], postUrl?: string, patchUrl?: string,  }) {
-  console.log("🚀 ~ Form ~ categories:", categories)
+export default function Form({ post, categories=[], submitText, post_cover_url, postUrl, patchUrl }: { post: PostType,  submitText: string, categories?: CategoryType[], post_cover_url?: string, postUrl?: string, patchUrl?: string,  }) {
+  const selectCategoryList = categories.map(v => ({ label: v.name, value: v.id.toString() }))
   const factory = useCreation(
     () => ({
       content: ''
@@ -34,9 +34,15 @@ export default function Form({ post, categories=[], submitText,postUrl, patchUrl
     transform,
   } = useFormHandler<PostType>({
     initialData: {
+      id: post.id || 0,
       title: post.title || '',
       body: post.body || '',
-      sub_title: post.sub_title || ''
+      category_id: post.category_id || 0,
+      sub_title: post.sub_title || '',
+      content: post.content || '',
+      created_at: post.created_at || '',
+      updated_at: post.updated_at || '',
+      status: post.status || ''
     },
     postUrl: postUrl,
     patchUrl: patchUrl,
@@ -47,22 +53,22 @@ export default function Form({ post, categories=[], submitText,postUrl, patchUrl
   const [item, setItem] = useSafeState<Option | undefined>()
   const [showSubTitle, setShowSubTitle] = useSafeState(false)
 
-  // const { data, setData, errors, processing } = form
-
   const handleSubmit = (e) => {
-    transform((data: PostType) => ({ post: {...data, category_id: item?.value,content: factory.content}  }))
+    transform((data: PostType) => ({...data, category_id: item?.value, content: factory.content, status: data.status === 'draft' ? 0 : 1 }))
     submit(e)
-    // onSubmit(form, item?.value, factory.content)
-  }
-  const handNewSubmit = (e) => {
-    transform((data: PostType) => ({ post: { ...data, category_id: item?.value, content: factory.content } }))
-    submit(e)
-    // onSubmit(form, item?.value, factory.content)
   }
 
   const addSubTitle = () => {
     setShowSubTitle(true)
   }
+
+  useEffect(() => {
+    setItem(selectCategoryList.find(f => f.value === data.category_id.toString()))
+  }, [post.category_id, selectCategoryList])
+
+  useEffect(() => {
+    setShowSubTitle(true)
+  }, [post.id])
 
   const renderTextInput = (
     type: string,
@@ -77,14 +83,14 @@ export default function Form({ post, categories=[], submitText,postUrl, patchUrl
   return (
     <>
       <div className='flex items-center justify-start w-full mb-4'>
-        <QuickActionsFloatingPanel  postId={post.id} />
-        <Button variant='outline' onClick={() => addSubTitle()}>添加副标题</Button>
+        <QuickActionsFloatingPanel  postId={post.id} postCoverUrl={post_cover_url} />
+        <Button variant='outline' onClick={() => addSubTitle()}>添加副标题</Button> 
       </div>
-      <form onSubmit={post.id? handleSubmit : handNewSubmit} className='contents'>
+      <form onSubmit={handleSubmit} className='contents'>
         {showSubTitle &&
           <div className='flex items-center justify-start w-full mb-4'>
             <div className='w-4/5'>
-            {renderTextInput('text', 'sub_title', '副标题')}
+            {renderTextInput('text', 'sub_title' as KeysWithStringValues<PostType>, '副标题')}
             </div>
             <button type='button' onClick={() => setShowSubTitle(false)} className='w-1/5 ml-2'>
               <svg xmlns='http://www.w3.org/2000/svg' className='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
@@ -96,7 +102,7 @@ export default function Form({ post, categories=[], submitText,postUrl, patchUrl
           <div className='w-1/3'>
             <div className='flex flex-col gap-4 not-prose'>
               <AutoComplete
-                options={categories?.map(v => ({ label: v.name, value: v.id.toString() })) ?? []}
+                options={selectCategoryList ?? []}
                 emptyMessage='没有结果.'
                 placeholder='选择话题或输入关键字查询'
                 onValueChange={setItem}
@@ -106,7 +112,7 @@ export default function Form({ post, categories=[], submitText,postUrl, patchUrl
           </div>
           <div className='w-2/3'>
             <LabelInputContainer>
-            {renderTextInput('text', 'title', '在这里输入标题')}
+            {renderTextInput('text', 'title' as KeysWithStringValues<PostType>, '在这里输入标题')}
             </LabelInputContainer>
           </div>
         </div>

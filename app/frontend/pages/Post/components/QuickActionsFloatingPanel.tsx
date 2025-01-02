@@ -7,7 +7,7 @@ import { FocusCards } from '@/components/ui/focus-cards'
 import PostCoverEdit from '@/components/pages/post/PostCoverEdit'
 
 
-const QuickActionsFloatingPanel = ({ postId }: {   postId: number }) => {
+const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: number, postCoverUrl?: string }) => {
 
     const cards = [
       {
@@ -37,6 +37,8 @@ const QuickActionsFloatingPanel = ({ postId }: {   postId: number }) => {
     ]
 
     return (
+      <div>
+        {postCoverUrl && <img src={postCoverUrl} className='object-cover w-full h-full' />}
       <FloatingPanelRoot>
         <FloatingPanelTrigger
           title='添加封面图'
@@ -123,6 +125,7 @@ const QuickActionsFloatingPanel = ({ postId }: {   postId: number }) => {
           </FloatingPanelFooter>
         </FloatingPanelContent>
       </FloatingPanelRoot>
+      </div>
     )
   }
 

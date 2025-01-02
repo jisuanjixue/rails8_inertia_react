@@ -54,14 +54,16 @@ class PostsController < ApplicationController
     render inertia: 'Post/New', props: {
       post: serialize_post(@post),
       categories: @categories,
-      drafts: @drafts.map { |draft| serialize_post(draft) }
+      drafts: @drafts.map { |draft| serialize_post(draft) },
+      post_cover_url: @post&.post_cover&.attached? ? url_for(@post&.post_cover) : nil
     }
   end
 
   # GET /posts/1/edit
   def edit
     render inertia: 'Post/Edit', props: {
-      post: serialize_post(@post)
+      post: serialize_post(@post),
+      post_cover_url: @post&.post_cover&.attached? ? url_for(@post&.post_cover) : nil
     }
   end
 

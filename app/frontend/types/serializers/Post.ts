@@ -10,6 +10,8 @@ interface Post {
   content: string | null
   created_at: string
   updated_at: string
+  category_id: number
+  status: string // 添加status字段
 }
 
 export default Post

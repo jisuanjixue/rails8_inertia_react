@@ -4,7 +4,7 @@ import PostType from '../../types/serializers/Post'
 import CategoryType from '../../types/serializers/Category'
 import DefaultLayout from '../DefaultLayout'
 
-const  PostEdit = ({ post, categories }: { post: PostType, categories: CategoryType[] }) => {
+const  PostEdit = ({ post, categories, post_cover_url }: { post: PostType, categories: CategoryType[], post_cover_url?: string }) => {
   return (
     <>
       <Head title='编辑文章' />
@@ -13,6 +13,7 @@ const  PostEdit = ({ post, categories }: { post: PostType, categories: CategoryT
           post={post}
           categories={categories}
           patchUrl={`/posts/${post.id}`}
+          post_cover_url={post_cover_url}
           submitText='编辑'
         />
 
