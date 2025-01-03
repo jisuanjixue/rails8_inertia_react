@@ -14,15 +14,16 @@ import { KeysWithStringValues } from '@/types/utilityTypes'
 import { ReactElement, useEffect } from 'react'
 import useFormHandler from '@/hooks/useFormHandler'
 import QuickActionsFloatingPanel from './components/QuickActionsFloatingPanel'
+import PostCoverShow from '@/components/pages/post/PostCoverShow'
 
-export default function Form({ post, categories=[], submitText, post_cover_url, postUrl, patchUrl }: { post: PostType,  submitText: string, categories?: CategoryType[], post_cover_url?: string, postUrl?: string, patchUrl?: string,  }) {
+export default function Form({ post, categories = [], submitText, post_cover_url, postUrl, patchUrl }: { post: PostType, submitText: string, categories?: CategoryType[], post_cover_url?: string, postUrl?: string, patchUrl?: string, }) {
+  console.log(post_cover_url)
   const factory = useCreation(
     () => ({
       content: ''
     }),
     []
   )
-console.log("🚀 ~ Form ~ categories:", categories)
   const {
     data,
     processing,
@@ -33,10 +34,10 @@ console.log("🚀 ~ Form ~ categories:", categories)
     transform,
   } = useFormHandler<PostType>({
     initialData: {
-      id: post.id || 0,
+      id: post.id || '',
       title: post.title || '',
       body: post.body || '',
-      category_id: post.category_id || 0,
+      category_id: post.category_id,
       sub_title: post.sub_title || '',
       content: post.content || '',
       created_at: post.created_at || '',
@@ -53,7 +54,7 @@ console.log("🚀 ~ Form ~ categories:", categories)
   const [showSubTitle, setShowSubTitle] = useSafeState(false)
 
   const handleSubmit = (e) => {
-    transform((data: PostType) => ({...data, category_id: item?.value, content: factory.content, status: data.status === 'draft' ? 0 : 1 }))
+    transform((data: PostType) => ({ ...data, category_id: item?.value, content: factory.content, status: data.status === 'draft' ? 0 : 1 }))
     submit(e)
   }
 
@@ -86,14 +87,14 @@ console.log("🚀 ~ Form ~ categories:", categories)
   return (
     <>
       <div className='flex items-center justify-start w-full mb-4'>
-        <QuickActionsFloatingPanel  postId={post.id} postCoverUrl={post_cover_url} />
-        <Button variant='outline' onClick={() => addSubTitle()}>添加副标题</Button> 
+        {post_cover_url ? <PostCoverShow postCoverUrl={post_cover_url} postId={post.id} /> : <QuickActionsFloatingPanel postId={post.id} postCoverUrl={post_cover_url} />}
+        <Button variant='outline' onClick={() => addSubTitle()}>添加副标题</Button>
       </div>
       <form onSubmit={handleSubmit} className='contents'>
         {showSubTitle &&
           <div className='flex items-center justify-start w-full mb-4'>
             <div className='w-4/5'>
-            {renderTextInput('text', 'sub_title' as KeysWithStringValues<PostType>, '副标题')}
+              {renderTextInput('text', 'sub_title' as KeysWithStringValues<PostType>, '副标题')}
             </div>
             <button type='button' onClick={() => setShowSubTitle(false)} className='w-1/5 ml-2'>
               <svg xmlns='http://www.w3.org/2000/svg' className='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
@@ -115,7 +116,7 @@ console.log("🚀 ~ Form ~ categories:", categories)
           </div>
           <div className='w-2/3'>
             <LabelInputContainer>
-            {renderTextInput('text', 'title' as KeysWithStringValues<PostType>, '在这里输入标题')}
+              {renderTextInput('text', 'title' as KeysWithStringValues<PostType>, '在这里输入标题')}
             </LabelInputContainer>
           </div>
         </div>

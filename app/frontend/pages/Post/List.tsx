@@ -8,8 +8,9 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, Pagi
 import { convertToQueryParams } from '@/lib/utils'
 
 const List = ({ posts, total, meta, flash }: { posts: PostType[], total: number, meta: any, flash: any }) => {
+console.log("🚀 ~ List ~ posts:", posts)
+
   const [initQuery, setInitQuery] = useSafeState(true)
-  console.log('🚀 ~ List ~ posts:', total, meta)
   const pageCount = Math.ceil(total / meta.limit)
   const pages = Array.from({ length: pageCount }, (_, i) => i + 1)
   const [active, setActive] = useSafeState<(typeof cards)[number] | boolean | null>(
@@ -106,8 +107,8 @@ const List = ({ posts, total, meta, flash }: { posts: PostType[], total: number,
       </motion.svg>
     )
   }
-  // posts.map(v => ({id:v.id, description: v.body, title: v.title,  src: "https://assets.aceternity.com/demos/lana-del-rey.jpeg",  ctaText: "查看更多", content: v.content }))
-  const cards = (posts || [])?.map(v => ({ id: v.id, description: v.body, title: v.title, src: 'https://assets.aceternity.com/demos/lana-del-rey.jpeg', ctaLink: `/posts/${v.id}`, ctaText: '查看更多', content: () => { return (<p>{v?.content?.body}</p>) } }))
+  const cards = (posts || [])?.map(v => ({ id: v.id, description: v.body, title: v.title, src: v.user.avatar_url, ctaLink: `/posts/${v.id}`, ctaText: '查看更多', content: () => { return (<p>{v?.content?.body}</p>) } }))
+  
   return (
     <>
       <AnimatePresence>

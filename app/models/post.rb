@@ -28,6 +28,9 @@ class Post < ApplicationRecord
   attribute :sub_title, :string
   include Ransackable
 
+  scope :with_content, -> { includes(:rich_text_content) }
+  scope :with_attachments, -> { includes(%i[category post_cover_attachment]) }
+
   RANSACK_ATTRIBUTES = %w[body content title created_at updated_at].freeze
 
   has_rich_text :content

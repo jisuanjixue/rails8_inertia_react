@@ -7,37 +7,37 @@ import { FocusCards } from '@/components/ui/focus-cards'
 import PostCoverEdit from '@/components/pages/post/PostCoverEdit'
 
 
-const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: number, postCoverUrl?: string }) => {
+const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: string, postCoverUrl?: string, onUploadSuccess?: (url: string) => void }) => {
 
-    const cards = [
-      {
-        title: 'Forest Adventure',
-        src: 'https://assets.aceternity.com/the-first-rule.png'
-      },
-      {
-        title: 'Valley of life',
-        src: 'https://assets.aceternity.com/the-first-rule.png'
-      },
-      {
-        title: 'Sala behta hi jayega',
-        src: 'https://assets.aceternity.com/the-first-rule.png'
-      },
-      {
-        title: 'Camping is for pros',
-        src: 'https://assets.aceternity.com/the-first-rule.png'
-      },
-      {
-        title: 'The road not taken',
-        src: 'https://assets.aceternity.com/the-first-rule.png'
-      },
-      {
-        title: 'The First Rule',
-        src: 'https://assets.aceternity.com/the-first-rule.png'
-      }
-    ]
+  const cards = [
+    {
+      title: 'Forest Adventure',
+      src: 'https://assets.aceternity.com/the-first-rule.png'
+    },
+    {
+      title: 'Valley of life',
+      src: 'https://assets.aceternity.com/the-first-rule.png'
+    },
+    {
+      title: 'Sala behta hi jayega',
+      src: 'https://assets.aceternity.com/the-first-rule.png'
+    },
+    {
+      title: 'Camping is for pros',
+      src: 'https://assets.aceternity.com/the-first-rule.png'
+    },
+    {
+      title: 'The road not taken',
+      src: 'https://assets.aceternity.com/the-first-rule.png'
+    },
+    {
+      title: 'The First Rule',
+      src: 'https://assets.aceternity.com/the-first-rule.png'
+    }
+  ]
 
-    return (
-      <div>
+  return (
+    <div>
       <FloatingPanelRoot>
         <FloatingPanelTrigger
           title='添加封面图'
@@ -93,7 +93,7 @@ const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: number, p
                       </CardDescription>
                     </CardHeader>
                     <CardContent className='space-y-2'>
-                      <PostCoverEdit postId={postId} postCoverUrl={postCoverUrl} />
+                        <PostCoverEdit postId={postId} postCoverUrl={postCoverUrl} />
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -102,7 +102,7 @@ const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: number, p
                     <CardHeader>
                       <CardTitle>选择</CardTitle>
                       <CardDescription>
-                        Change your password here. After saving, you'll be logged out.
+                        通过搜索查找你想要的的封面图
                       </CardDescription>
                     </CardHeader>
                     <CardContent className='space-y-2'>
@@ -118,8 +118,8 @@ const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: number, p
           </FloatingPanelFooter>
         </FloatingPanelContent>
       </FloatingPanelRoot>
-      </div>
-    )
-  }
+    </div>
+  )
+}
 
-  export default QuickActionsFloatingPanel
+export default QuickActionsFloatingPanel

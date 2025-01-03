@@ -10,7 +10,7 @@ class PostsController < ApplicationController
 
   def all_posts
     begin
-      @posts = Post.all.includes([:rich_text_content])
+      @posts = Post.all.with_content.with_attachments
       @q = @posts.ransack(params[:q])
       @search_posts = @q.result(distinct: true).order(created_at: :desc)
       pagy, paged_posts = pagy(@search_posts)
@@ -22,7 +22,14 @@ class PostsController < ApplicationController
     render inertia: 'Post/List', props: {
       posts: paged_posts.map do |post|
         serialize_post(post).merge(
-          category_name: post.category.name
+          category_name: post.category.name,
+          post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil,
+          user: {
+            id: post.user.id,
+            name: post.user.profile&.name,
+            profile_tagline: post.user.profile&.profile_tagline,
+            avatar_url: post.user.profile_picture&.attached? ? url_for(post.user.profile_picture) : nil
+          }
         )
       end,
       meta: pagy_metadata(pagy),
@@ -32,10 +39,10 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Current.user.posts.accessible_by(current_ability).includes(%i[rich_text_content category])
+    @posts = Current.user.posts.accessible_by(current_ability).with_content.with_attachments
     render inertia: 'Post/Index', props: {
       posts: @posts.map do |post|
-        serialize_post(post).merge(category_name: post.category.name)
+        serialize_post(post).merge(category_name: post.category.name, post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil)
       end
     }
   end
@@ -49,13 +56,13 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Current.user.posts.new(status: :draft) # 默认创建为草稿
+    @post = Current.user.posts.with_content.new(status: :draft) # 默认创建为草稿
     @drafts = Current.user.posts.draft.order(created_at: :desc) # 获取用户的草稿列表
     render inertia: 'Post/New', props: {
       post: serialize_post(@post),
       categories: @categories,
       drafts: @drafts.map { |draft| serialize_post(draft) },
-      post_cover_url: @post&.post_cover&.attached? ? url_for(@post&.post_cover) : nil
+      post_cover_url: nil
     }
   end
 
@@ -73,10 +80,11 @@ class PostsController < ApplicationController
     @post = Current.user.posts.new(post_params)
     @post.category = Category.find_by(id: post_params[:category_id])
     @post.status = :draft # 默认创建为草稿
+
     if @post.save
       redirect_to @post, notice: 'Post was successfully created.'
     else
-      redirect_to new_post_url, inertia: { errors: @post.errors, categories: Category.all }
+      redirect_to new_post_url, inertia: { errors: @post.errors, categories: Category.all}
     end
   end
 
@@ -123,6 +131,8 @@ class PostsController < ApplicationController
   def serialize_post(post)
     post.as_json(only: %i[
                    id title body content sub_title created_at updated_at category_id status
-                 ])
+                 ]).merge(
+                  user_id: post.user_id
+                )
   end
 end

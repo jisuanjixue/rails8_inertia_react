@@ -7,9 +7,10 @@ import React, {
   useState,
 } from "react"
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion"
-import { ArrowLeftIcon } from "lucide-react"
+import { ArrowLeftIcon, Trash2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Button } from "./button"
 
 const TRANSITION = {
   type: "spring",
@@ -394,6 +395,7 @@ export function FloatingPanelFooter({
 
 interface FloatingPanelCloseButtonProps {
   className?: string
+  variant?: 'destructive' | 'default'
 }
 
 export function FloatingPanelCloseButton({
@@ -415,12 +417,32 @@ export function FloatingPanelCloseButton({
   )
 }
 
+export function FloatingPanelDeleteButton({
+  className,
+}: FloatingPanelCloseButtonProps) {
+  const { closeFloatingPanel } = useFloatingPanel()
+  return (
+    <Button
+      variant="destructive"
+      size="icon"
+      className={cn("flex items-center", className)}
+      onClick={closeFloatingPanel}
+    >
+      <Trash2 className="w-4 h-4" />
+    </Button>
+  )
+}
+
 interface FloatingPanelSubmitButtonProps {
   className?: string
+  submitText?: string
+  disabled?: boolean
 }
 
 export function FloatingPanelSubmitButton({
   className,
+  submitText,
+  disabled
 }: FloatingPanelSubmitButtonProps) {
   return (
     <motion.button
@@ -432,8 +454,9 @@ export function FloatingPanelSubmitButton({
       aria-label="Submit note"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
+      disabled={disabled}
     >
-      Submit Note
+      {submitText}
     </motion.button>
   )
 }
@@ -475,6 +498,7 @@ export {
   FloatingPanelBody as Body,
   FloatingPanelFooter as Footer,
   FloatingPanelCloseButton as CloseButton,
+  FloatingPanelDeleteButton as DeleteButton,
   FloatingPanelSubmitButton as SubmitButton,
   FloatingPanelButton as Button,
 }

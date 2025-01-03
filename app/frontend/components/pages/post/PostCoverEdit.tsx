@@ -1,23 +1,13 @@
 import { useState, useEffect, ReactElement } from 'react'
-import { useForm, router } from '@inertiajs/react'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+import {  useForm } from '@inertiajs/react'
+// import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { z } from 'zod'
 import { FileUpload } from '@/components/ui/file-upload'
 import InputError from '@/components/forms/input-error'
 import { useToast } from '@/hooks/use-toast'
-import { Trash2 } from 'lucide-react'
+import { FloatingPanelForm, FloatingPanelSubmitButton } from '@/components/ui/floating-panel'
+// import PostCoverShow from './PostCoverShow'
 
 const ALLOWED_CONTENT_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp']
 const MAX_post_cover_SIZE = 3 * 1024 * 1024 // 1MB
@@ -34,13 +24,13 @@ const profilePicSchema = z.object({
 })
 
 interface PostCoverProps {
-  postId: number
+  postId: string
   postCoverUrl?: string
 }
 
 export default function PostCoverEdit({
   postId,
-  postCoverUrl
+  // postCoverUrl
 }: PostCoverProps): ReactElement {
   const { toast } = useToast()
   const { data, setData, patch, post, processing, errors, setError, clearErrors, hasErrors } = useForm({
@@ -57,8 +47,7 @@ export default function PostCoverEdit({
     })()
   }, [])
 
-  function submit(e: React.FormEvent): void {
-    e.preventDefault()
+  function submit(): void {
 
     const result = profilePicSchema.safeParse(data)
     if (!result.success) {
@@ -102,23 +91,13 @@ export default function PostCoverEdit({
       } else {
         data.post_cover = blob.signed_id
         if (postId) {
-          patch(`/posts/${postId}/post_cover`, {
-            onSuccess: () => {
-              // if (!hasErrors) {
-              //   toast({
-              //     title: "文章封面已成功更新.",
-              //   })
-              // }
-            }
-          })
+          patch(`/posts/${postId}/post_cover`)
         } else {
           post(`/upload_cover`, {
             onSuccess: () => {
-              // if (!hasErrors) {
-              //   toast({
-              //     title: "文章封面已成功更新.",
-              //   })
-              // }
+              if (!hasErrors) {
+              //  router.get(`/posts/${postId}/edit`)
+              }
             }
           })
         }
@@ -126,71 +105,35 @@ export default function PostCoverEdit({
     })
   }
 
-  function destroy(): void {
-    router.delete(`/posts/${postId}/post_cover`, {
-      onSuccess: () => {
-        toast({
-          title: "文章封面已被删除.",
-        })
-      }
-    })
-  }
 
 
   return (
+   
     <div className="grid grid-cols-2 gap-8">
-    {postCoverUrl && (
-      <div className="relative group w-full h-[200px]">
-        <img src={postCoverUrl} className='object-cover w-full h-full rounded-lg' />
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              variant="destructive"
-              size="icon"
-              className="absolute transition-opacity opacity-0 top-2 right-2 group-hover:opacity-100"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>您确定吗？</AlertDialogTitle>
-              <AlertDialogDescription>
-                您即将删除文章封面。
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>返回</AlertDialogCancel>
-              <AlertDialogAction onClick={destroy}>
-                继续
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+    {/* {postCoverUrl && (
+      <PostCoverShow postCoverUrl={postCoverUrl}  postId={postId} />
+    )} */}
+      <div>
+     <FloatingPanelForm onSubmit={submit}>
+          <FileUpload
+            id='post_cover' 
+            onChange={(files) => {
+              if (files == null) return
+              setData('post_cover', files[0])
+              clearErrors('post_cover')
+            }}
+          />
+          {Boolean(errors.post_cover) && <InputError>{errors.post_cover}</InputError>}
+          <FloatingPanelSubmitButton
+            disabled={uploadProgress !== null || processing || hasErrors}
+            submitText="确定"
+          />
+          <Progress
+            className={uploadProgress !== null ? 'mt-4' : 'hidden'}
+            value={uploadProgress ?? 0}
+          />
+        </FloatingPanelForm>
       </div>
-    )}
-    <div>
-      <form onSubmit={submit} className='space-y-4'>
-        <FileUpload
-          id='post_cover' onChange={(files) => {
-            if (files == null) return
-            setData('post_cover', files[0])
-            clearErrors('post_cover')
-          }}
-        />
-        {Boolean(errors.post_cover) && <InputError>{errors.post_cover}</InputError>}
-        <Button
-          type='submit'
-          disabled={uploadProgress !== null || processing || hasErrors}
-        >
-          确定
-        </Button>
-      </form>
-      <Progress
-        className={uploadProgress !== null ? 'mt-4' : 'hidden'}
-        value={uploadProgress ?? 0}
-      />
-    </div>
   </div>
   )
 }
