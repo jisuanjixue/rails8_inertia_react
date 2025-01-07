@@ -6,16 +6,18 @@ class Admin::CategoriesController < ApplicationController
   # GET /categorys
   def index
     @categories = Category.all.order(created_at: :desc)
-    render inertia: 'Admin/Category/Index', props: {
-      categories: @categories.map do |category|
-        serialize_category(category)
-      end
+    render inertia: "Admin/Category/Index", props: {
+      categories: -> {
+        @categories.map do |category|
+          serialize_category(category)
+        end
+      }
     }
   end
 
   # GET /categorys/1
   def show
-    render inertia: 'Admin/category/Show', props: {
+    render inertia: "Admin/category/Show", props: {
       category: serialize_category(@category)
     }
   end
@@ -23,14 +25,14 @@ class Admin::CategoriesController < ApplicationController
   # GET /categorys/new
   def new
     @category = Category.new
-    render inertia: 'Admin/Category/New', props: {
+    render inertia: "Admin/Category/New", props: {
       category: serialize_category(@category)
     }
   end
 
   # GET /categorys/1/edit
   def edit
-    render inertia: 'Admin/Category/Edit', props: {
+    render inertia: "Admin/Category/Edit", props: {
       category: serialize_category(@category)
     }
   end
@@ -40,27 +42,27 @@ class Admin::CategoriesController < ApplicationController
     @category = Category.new(category_params)
 
     if @category.save
-      redirect_to admin_categories_path, notice: 'category was successfully created.'
+      redirect_to admin_categories_path, notice: "category was successfully created."
     else
-      redirect_to admin_categories_path, inertia: { errors: @category.errors }
+      redirect_to admin_categories_path, inertia: {errors: @category.errors}
     end
   end
 
   # PATCH/PUT /categorys/1
   def update
     if @category.update(category_params)
-      redirect_to admin_categories_path, notice: 'category was successfully updated.'
+      redirect_to admin_categories_path, notice: "category was successfully updated."
     else
-      redirect_to admin_categories_path, inertia: { errors: @category.errors }
+      redirect_to admin_categories_path, inertia: {errors: @category.errors}
     end
   end
 
   # DELETE /categorys/1
   def destroy
     if @category.destroy!
-      redirect_to admin_categories_path, notice: 'category was successfully destroyed.'
+      redirect_to admin_categories_path, notice: "category was successfully destroyed."
     else
-      redirect_to admin_categories_path, inertia: { errors: @category.errors }
+      redirect_to admin_categories_path, inertia: {errors: @category.errors}
     end
   end
 
@@ -78,7 +80,7 @@ class Admin::CategoriesController < ApplicationController
 
   def serialize_category(category)
     category.as_json(only: %i[
-                       id name created_at updated_at
-                     ])
+      id name created_at updated_at
+    ])
   end
 end

@@ -32,16 +32,16 @@ const CategoryIndex = ({ categories, flash }: { categories: CategoryType[], flas
       <div className='relative flex flex-col items-start justify-start min-h-screen mt-8'>
         <Head title='Posts' />
         <Drawer>
-          <DrawerTrigger>Open</DrawerTrigger>
+          <DrawerTrigger>打开</DrawerTrigger>
           <DrawerContent side='right'>
             <DrawerHeader>
               <DrawerTitle>Are you absolutely sure?</DrawerTitle>
               <DrawerDescription>This action cannot be undone.</DrawerDescription>
             </DrawerHeader>
             <DrawerFooter>
-              <Button>Submit</Button>
+              <Button>确定</Button>
               <DrawerClose>
-                <Button variant='outline'>Cancel</Button>
+                <Button variant='outline'>取消</Button>
               </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
@@ -98,7 +98,7 @@ const CategoryIndex = ({ categories, flash }: { categories: CategoryType[], flas
                                             preserveScroll: true,
                                             preserveState: true,
                                             onSuccess: () => {
-                                              router.reload()
+                                              router.reload({ only: ['categories'] })
                                               flash.notice = '分类删除成功'
                                             },
                                             onError: () => {
@@ -110,7 +110,6 @@ const CategoryIndex = ({ categories, flash }: { categories: CategoryType[], flas
                                       </AlertDialogFooter>
                                   </AlertDialogContent>
                               </AlertDialog>
-
                           </div>
                       </TableCell>
                   </TableRow>

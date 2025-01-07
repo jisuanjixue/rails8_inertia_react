@@ -29,7 +29,7 @@ class Post < ApplicationRecord
   include Ransackable
 
   scope :with_content, -> { includes(:rich_text_content) }
-  scope :with_attachments, -> { includes(%i[category post_cover_attachment]) }
+  scope :with_attachments, -> { includes(%i[category post_cover_attachment user]) }
 
   RANSACK_ATTRIBUTES = %w[body content title created_at updated_at].freeze
 

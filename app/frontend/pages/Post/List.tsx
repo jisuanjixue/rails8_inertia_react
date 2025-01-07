@@ -7,8 +7,8 @@ import { Link, router } from '@inertiajs/react'
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 import { convertToQueryParams } from '@/lib/utils'
 
-const List = ({ posts, total, meta, flash }: { posts: PostType[], total: number, meta: any, flash: any }) => {
-console.log("🚀 ~ List ~ posts:", posts)
+const List = ({ posts, total, meta }: { posts: PostType[], total: number, meta: any }) => {
+console.log("🚀 ~ List ~ meta:", meta)
 
   const [initQuery, setInitQuery] = useSafeState(true)
   const pageCount = Math.ceil(total / meta.limit)
@@ -206,7 +206,7 @@ console.log("🚀 ~ List ~ posts:", posts)
           </div>
         ) : null}
       </AnimatePresence>
-      <div ref={ref} className='min-h-screen'>
+      <div ref={ref} className='min-h-screen bg-black'>
         <ul className='max-w-4xl gap-4 mx-auto mt-10 translate-y-10 '>
           {cards.map((card, index) => (
             <motion.div
@@ -215,7 +215,7 @@ console.log("🚀 ~ List ~ posts:", posts)
               onClick={() => {
                 setActive(card)
               }}
-              className='flex flex-col items-center justify-between p-4 cursor-pointer md:flex-row hover:bg-neutral-50 dark:hover:bg-neutral-50 rounded-xl'
+              className='flex flex-col items-center justify-between p-4 cursor-pointer md:flex-row hover:bg-neutral-800 rounded-xl'
             >
               <div className='flex flex-col gap-4 md:flex-row '>
                 <motion.div layoutId={`image-${card.title}-${card.id}`}>
@@ -226,16 +226,16 @@ console.log("🚀 ~ List ~ posts:", posts)
                     className='object-cover object-top w-40 h-40 rounded-lg md:h-14 md:w-14'
                   />
                 </motion.div>
-                <div className='hover:text-neutral-800'>
+                <div className='hover:text-neutral-200'>
                   <motion.h3
                     layoutId={`title-${card.title}-${card.id}`}
-                    className='font-medium text-center text-neutral-50 dark:text-neutral-200 md:text-left hover:text-neutral-800'
+                    className='font-medium text-center text-neutral-100 md:text-left hover:text-neutral-200'
                   >
                     {card.title}
                   </motion.h3>
                   <motion.p
                     layoutId={`description-${card.description}-${card.id}`}
-                    className='text-center text-neutral-50 dark:text-neutral-400 md:text-left'
+                    className='text-center text-neutral-300 md:text-left'
                   >
                     {card.description}
                   </motion.p>
@@ -243,14 +243,14 @@ console.log("🚀 ~ List ~ posts:", posts)
               </div>
               <motion.button
                 layoutId={`button-${card.title}-${card.id}`}
-                className='px-4 py-2 mt-4 text-sm font-bold text-black bg-gray-100 rounded-full hover:bg-green-500 hover:text-white md:mt-0'
+                className='px-4 py-2 mt-4 text-sm font-bold text-white bg-green-600 rounded-full hover:bg-green-500 md:mt-0'
               >
                 {card.ctaText}
               </motion.button>
             </motion.div>
           ))}
         </ul>
-        <Pagination className='relative mt-10'>
+        <Pagination className='relative mt-10 text-white'>
           <PaginationContent>
             <PaginationItem onClick={() => setQueryParams({ ...queryParams, page: 1 })}>
               <PaginationPrevious />
@@ -267,9 +267,9 @@ console.log("🚀 ~ List ~ posts:", posts)
                 <PaginationEllipsis />
               </PaginationItem>
             )}
-            <PaginationItem onClick={() => setQueryParams({ ...queryParams, page: meta.page + 1 })}>
+            { meta.page !== meta.last && <PaginationItem onClick={() => setQueryParams({ ...queryParams, page: meta.page + 1 })}>
               <PaginationNext />
-            </PaginationItem>
+            </PaginationItem>}
           </PaginationContent>
         </Pagination>
       </div>

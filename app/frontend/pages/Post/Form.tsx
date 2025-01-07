@@ -15,9 +15,9 @@ import { ReactElement, useEffect } from 'react'
 import useFormHandler from '@/hooks/useFormHandler'
 import QuickActionsFloatingPanel from './components/QuickActionsFloatingPanel'
 import PostCoverShow from '@/components/pages/post/PostCoverShow'
+import { Deferred } from '@inertiajs/react'
 
 export default function Form({ post, categories = [], submitText, post_cover_url, postUrl, patchUrl }: { post: PostType, submitText: string, categories?: CategoryType[], post_cover_url?: string, postUrl?: string, patchUrl?: string, }) {
-  console.log(post_cover_url)
   const factory = useCreation(
     () => ({
       content: ''
@@ -105,13 +105,15 @@ export default function Form({ post, categories = [], submitText, post_cover_url
         <div className='flex items-center justify-start w-full mb-4'>
           <div className='w-1/3'>
             <div className='flex flex-col gap-4 not-prose'>
-              <AutoComplete
-                options={categories.map(v => ({ label: v.name, value: v.id.toString() })) ?? []}
-                emptyMessage='没有结果.'
-                placeholder='选择话题或输入关键字查询'
-                onValueChange={setItem}
-                value={item}
-              />
+              <Deferred data="categories" fallback={<div>Loading...</div>}>
+                <AutoComplete
+                  options={categories.map(v => ({ label: v.name, value: v.id.toString() })) ?? []}
+                  emptyMessage='没有结果.'
+                  placeholder='选择话题或输入关键字查询'
+                  onValueChange={setItem}
+                  value={item}
+                />
+              </Deferred>
             </div>
           </div>
           <div className='w-2/3'>

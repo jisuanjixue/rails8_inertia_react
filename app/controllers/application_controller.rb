@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  inertia_config(encrypt_history: true)
+
   include Pagy::Backend
 
   include Auth
@@ -29,9 +31,9 @@ class ApplicationController < ActionController::Base
       # profile = Current.user.profile
       # avatar_url = profile&.avatar&.attached? ? polymorphic_url(profile.avatar.variant(resize_to_fill: [64, 64])) : nil
       profile_picture_url = Current.user&.profile_picture&.attached? ? url_for(Current.user.profile_picture) : nil
-      { currentUser: Current.user, session: Current.session, profile_picture_url: profile_picture_url }
+      {currentUser: Current.user, session: Current.session, profile_picture_url: profile_picture_url}
     else
-      { currentUser: nil, session: nil, profile_picture_url: nil }
+      {currentUser: nil, session: nil, profile_picture_url: nil}
     end
   }
 
@@ -42,7 +44,7 @@ class ApplicationController < ActionController::Base
 
     status = ActionDispatch::ExceptionWrapper.new(nil, exception).status_code
 
-    render inertia: 'Error', props: { status: }, status:
+    render inertia: "Error", props: {status:}, status:
   end
 
   def current_ability
