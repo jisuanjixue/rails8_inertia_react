@@ -6,10 +6,14 @@ export function PlaceholdersAndVanishInput({
   placeholders,
   onChange,
   onSubmit,
+  value: externalValue, // 新增
+  onClick, // 新增
 }: {
   placeholders: string[];
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  value?: string; // 新增
+  onClick?: () => void; // 新增
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
 
@@ -43,7 +47,14 @@ export function PlaceholdersAndVanishInput({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const newDataRef = useRef<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(externalValue || "");
+
+  useEffect(() => {
+    if (externalValue !== undefined) {
+      setValue(externalValue);
+    }
+  }, [externalValue]);
+  
   const [animating, setAnimating] = useState(false);
 
   const draw = useCallback(() => {
@@ -188,6 +199,7 @@ export function PlaceholdersAndVanishInput({
         ref={canvasRef}
       />
       <input
+       onClick={onClick} // 新增
         onChange={(e) => {
           if (!animating) {
             setValue(e.target.value);

@@ -104,3 +104,5 @@ gem 'omniauth-rails_csrf_protection'
 gem 'jwt', '~> 2.9'
 
 gem 'apicraft-rails', '~> 1.0'
+
+gem "meilisearch-rails", "~> 0.14.1"

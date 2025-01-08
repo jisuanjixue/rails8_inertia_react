@@ -28,6 +28,13 @@ class Profile < ApplicationRecord
   belongs_to :user
   validates :full_name, presence: true
 
+  include MeiliSearch::Rails
+
+  meilisearch do
+    attribute :full_name, :name, :tech_stacks
+    searchable_attributes [:full_name, :name, :tech_stacks]
+  end
+
   # validate :avatar_is_web_image
 
   # private

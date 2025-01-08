@@ -24,9 +24,20 @@
 #
 class Post < ApplicationRecord
   include Post::PostCover
+
+  include Ransackable
+
+  include MeiliSearch::Rails
+  extend Pagy::Meilisearch
+
   enum :status, draft: 0, preview: 1, published: 2
   attribute :sub_title, :string
-  include Ransackable
+
+  meilisearch do
+    attribute :title, :body, :content
+    searchable_attributes [:title, :body, :content]
+    filterable_attributes [:category_id]
+  end
 
   scope :with_content, -> { includes(:rich_text_content) }
   scope :with_attachments, -> { includes(%i[category post_cover_attachment user]) }

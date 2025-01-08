@@ -68,6 +68,7 @@ Pagy::DEFAULT[:page] = 1
 # Default original :search method called internally to do the actual search
 # Pagy::DEFAULT[:elasticsearch_rails_search] = :search
 # require 'pagy/extras/elasticsearch_rails'
+require "pagy/extras/meilisearch"
 
 # Headers extra: http response headers (and other helpers) useful for API pagination
 # See https://ddnexus.github.io/pagy/docs/extras/headers
@@ -93,8 +94,8 @@ Pagy::DEFAULT[:page] = 1
 # Metadata extra: Provides the pagination metadata to Javascript frameworks like Vue.js, react.js, etc.
 # See https://ddnexus.github.io/pagy/docs/extras/metadata
 # you must require the JS Tools internal extra (BEFORE the metadata extra) ONLY if you need also the :sequels
-require 'pagy/extras/js_tools'
-require 'pagy/extras/metadata'
+require "pagy/extras/js_tools"
+require "pagy/extras/metadata"
 # For performance reasons, you should explicitly set ONLY the metadata you use in the frontend
 # Pagy::DEFAULT[:metadata] = %i[scaffold_url page prev next last]   # example
 Pagy::DEFAULT[:metadata] = %i[scaffold_url page limit prev next last]
@@ -123,7 +124,7 @@ Pagy::DEFAULT[:metadata] = %i[scaffold_url page limit prev next last]
 # Pagy extra: Add the pagy styled versions of the javascript-powered navs
 # and a few other components to the Pagy::Frontend module.
 # See https://ddnexus.github.io/pagy/docs/extras/pagy
-require 'pagy/extras/pagy'
+require "pagy/extras/pagy"
 
 # Multi size var used by the *_nav_js helpers
 # See https://ddnexus.github.io/pagy/docs/extras/pagy#steps

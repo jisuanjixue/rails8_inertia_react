@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 
   include InertiaCsrf
   include InertiaFlash
+  include MeilisearchHandler
   include InertiaJson
   include InertiaErrors
 
