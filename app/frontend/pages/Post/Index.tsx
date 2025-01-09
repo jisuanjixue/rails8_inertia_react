@@ -3,129 +3,80 @@ import { Link, Head, router } from '@inertiajs/react'
 // import Post from './Post'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import {
-  IconBoxAlignRightFilled
-} from '@tabler/icons-react'
-import { cn } from '@/lib/utils'
+// import {
+//   IconBoxAlignRightFilled
+// } from '@tabler/icons-react'
+// import { cn } from '@/lib/utils'
 import DefaultLayout from '../DefaultLayout'
 import PostType from '../../types/serializers/Post'
-import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
-import { motion } from 'framer-motion'
+// import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
+// import { motion } from 'framer-motion'
+// import { LayoutGrid } from '@/components/ui/layout-grid'
+import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card'
 
 const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
-  console.log('🚀 ~ PostIndex ~ posts:', posts)
-  const SkeletonFive = (item) => {
-    const variants = {
-      initial: {
-        x: 0
-      },
-      animate: {
-        x: 10,
-        rotate: 5,
-        transition: {
-          duration: 0.2
-        }
-      }
-    }
-    const variantsSecond = {
-      initial: {
-        x: 0
-      },
-      animate: {
-        x: -10,
-        rotate: -5,
-        transition: {
-          duration: 0.2
-        }
-      }
-    }
-
+  console.log("🚀 ~ PostIndex ~ posts:", posts)
+  const renderCards = posts.map((post, index) => {
     return (
-      <motion.div
-        initial='initial'
-        whileHover='animate'
-        className='flex flex-1 w-full h-full min-h-[6rem] dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2'
-      >
-        <motion.div
-          variants={variants}
-          className='flex flex-row rounded-2xl border border-neutral-100 dark:border-white/[0.2] p-2  items-start space-x-2 bg-white dark:bg-black'
-        >
-          <img
-            src='https://pbs.twimg.com/profile_images/1417752099488636931/cs2R59eW_400x400.jpg'
-            alt='avatar'
-            height='100'
-            width='100'
-            className='w-10 h-10 rounded-full'
-          />
-          <p className='text-xs text-neutral-500'>
-            There are a lot of cool framerworks out there like React, Angular,
-            Vue, Svelte that can make your life ....
-          </p>
-        </motion.div>
-        <motion.div
-          variants={variantsSecond}
-          className='flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center justify-end space-x-2 w-3/4 ml-auto bg-white dark:bg-black'
-        >
-          <p className='text-xs text-neutral-500'>Use PHP.</p>
-          <div className='flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-pink-500 to-violet-500' />
-        </motion.div>
-      </motion.div>
+      <CardContainer containerClassName="w-full">
+      <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[35rem] h-auto rounded-xl p-6 border">
+        <div className="flex flex-col h-full">
+          {/* Top: Cover Image */}
+          <CardItem translateZ="50" className="relative h-48 overflow-hidden rounded-t-lg">
+            <img
+              src={post.post_cover_url || 'https://source.unsplash.com/random/800x600'}
+              className="object-cover w-full h-full"
+            />
+          </CardItem>
+
+          {/* Middle: Title & Subtitle */}
+          <CardItem translateZ="30" className="flex-1 p-4">
+            <h2 className="text-xl font-bold text-neutral-100">
+              {post.title}
+            </h2>
+            <p className="mt-2 text-sm text-neutral-400 line-clamp-3">
+              {post.sub_title || 'No subtitle available'}
+            </p>
+          </CardItem>
+
+          {/* Bottom: Author Info */}
+          <CardItem translateZ="20" className="flex items-center p-4 border-t border-neutral-800 hover:border-neutral-700">
+            <img
+              src={post.user.avatar_url || 'https://i.pravatar.cc/150?img=3'}
+              className="w-10 h-10 rounded-full"
+            />
+            <div className="ml-3">
+              <p className="text-sm font-medium text-neutral-100">
+                {post.user.name}
+              </p>
+              <p className="text-xs text-neutral-400 line-clamp-1">
+                {post.user.profile_tagline || 'No bio available'}
+              </p>
+            </div>
+          </CardItem>
+        </div>
+      </CardBody>
+    </CardContainer>
     )
-  }
+  })
+
   return (
-    <div className='relative flex flex-col items-start justify-start min-h-screen mt-8'>
-      <Head title='Posts' />
-      <div className='w-full px-8 pt-8 mx-auto md:w-2/3'>
+    <div className="relative flex flex-col items-start justify-start min-h-screen mt-8 bg-black">
+      <Head title="Posts" />
+      <div className="w-full px-8 pt-8 mx-auto md:w-2/3">
         {flash.notice && (
-          <Card className='p-3 mb-4 rounded-lg bg-green-50'>
-            <p className='text-sm'>{flash.notice}</p>
+          <Card className="p-3 mb-4 rounded-lg bg-green-50">
+            <p className="text-sm">{flash.notice}</p>
           </Card>
         )}
-        <div className='flex items-center justify-between'>
-          <h1 className='text-4xl font-bold'>文章</h1>
-          <Link
-            href='/posts/new'
-            className='px-5 py-3'
-          >
-            <Button variant='destructive'>
-              创建
-            </Button>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-4xl font-bold text-white">文章</h1>
+          <Link href="/posts/new" className="px-5 py-3">
+            <Button variant="destructive">创建</Button>
           </Link>
         </div>
-
-        <div className='min-w-full'>
-          {/* <HoverEffect  /> */}
-          <BentoGrid>
-            {posts.map((item, i) => (
-              <div onClick={() => router.get(`/posts/${item.id}`)}>
-                <BentoGridItem
-                  key={i}
-                  title={item.title}
-                  description={<span className='text-sm'>
-                    {item.body}
-                  </span>}
-                  header={SkeletonFive(item)}
-                  className={cn('[&>p:text-lg]', 'md:col-span-1')}
-                  icon={<IconBoxAlignRightFilled className='w-4 h-4 text-neutral-500' />}
-                />
-              </div>
-            ))}
-          </BentoGrid>
-          {/* {posts.map((post) => (
-            <Fragment key={post.id}>
-              <Post post={post} />
-              <p className="my-5">
-                <Link
-                  href={`/posts/${post.id}`}
-                  className='py-3 pr-5 ml-2'
-                >
-                  <Button variant="outline">
-                    详情
-                  </Button>
-                </Link>
-              </p>
-            </Fragment>
-          ))} */}
+        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {renderCards}
         </div>
       </div>
     </div>

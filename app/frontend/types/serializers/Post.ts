@@ -9,6 +9,15 @@ type Post = {
   content: string | null;
   created_at: string;
   updated_at: string;
+  post_cover_url: string | null;
+  user: {
+    id: number;
+    name: string | null;
+    profile_tagline: string | null;
+    avatar_url: string | null;
+  };
+  category_name: string | null;
+  sub_title: string | null;
 }
 
 export default Post;

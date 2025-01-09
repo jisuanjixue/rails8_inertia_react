@@ -41,10 +41,19 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Current.user.posts.accessible_by(current_ability).with_content.with_attachments
+    @posts = Current.user.posts.with_current_user_posts.with_content.accessible_by(current_ability)
     render inertia: "Post/Index", props: {
       posts: @posts.map do |post|
-        serialize_post(post).merge(category_name: post.category.name, post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil)
+        serialize_post(post).merge(
+          category_name: post.category.name,
+          post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil,
+          user: {
+            id: post.user.id,
+            name: post.user.profile&.name,
+            profile_tagline: post.user.profile&.profile_tagline,
+            avatar_url: post.user.profile_picture&.attached? ? url_for(post.user.profile_picture) : nil
+          }
+        )
       end
     }
   end
