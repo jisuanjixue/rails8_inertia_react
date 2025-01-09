@@ -31,6 +31,10 @@ default: &default
 development:
   <<: *default
   database: storage/<%= `git branch --show-current`.chomp || 'development' %>.sqlite3
+  queue:
+    <<: *default
+    database: storage/development_queue.sqlite3
+    migrations_paths: db/queue_migrate
   cable:
     <<: *default
     database: storage/development_cable.sqlite3
