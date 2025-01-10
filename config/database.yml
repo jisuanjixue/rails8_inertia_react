@@ -29,8 +29,9 @@ default: &default
     cache_size: 2000
 
 development:
-  <<: *default
-  database: storage/<%= `git branch --show-current`.chomp || 'development' %>.sqlite3
+  primary:  # 需要明确指定 primary
+    <<: *default
+    database: storage/<%= `git branch --show-current`.chomp || 'development' %>.sqlite3
   queue:
     <<: *default
     database: storage/development_queue.sqlite3

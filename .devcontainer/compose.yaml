@@ -1,0 +1,46 @@
+name: "blog-demo"
+
+services:
+  blog-demo:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ../..:/workspaces:cached
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    environment:
+      SELENIUM_REMOTE_HOST: true
+
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    depends_on:
+      - selenium
+      - meilisearch # 添加依赖
+
+  selenium:
+    image: selenium/standalone-chromium
+    restart: unless-stopped
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    ports:
+      - "7701:7700"
+    volumes:
+      - ./storage:/rails/storage
+    environment:
+      MEILI_DB_PATH: /rails/storage/meilisearch
+      MEILI_NO_ANALYTICS: true
+      MEILI_ENV: development
+    restart: unless-stopped
+    networks:
+      - meilisearch
+
+networks:
+  meilisearch:
+    driver: bridge

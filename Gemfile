@@ -79,7 +79,6 @@ group :development do
   gem 'authentication-zero', require: false
   gem 'debugbar', '~> 0.3.3'
   gem 'erb_lint', require: false
-  gem 'error_highlight', '>= 0.4.0', platforms: [:ruby]
   gem 'ruby-lsp-rails', require: false
   gem 'standardrb', '~> 1.0', require: false
 end

@@ -1,0 +1,69 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ruby
+{
+  "name": "blog-demo",
+  "dockerComposeFile": "compose.yaml",
+  "service": "blog-demo",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "containerEnv": {
+    "VITE_RUBY_HOST": "0.0.0.0"
+  },
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/rails/devcontainer/features/activestorage": {},
+    "ghcr.io/rails/devcontainer/features/sqlite3": {},
+    "ghcr.io/duduribeiro/devcontainer-features/tmux:1": {},
+    "ghcr.io/rails/devcontainer/features/bundler-cache:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22.11.0"
+    }
+  },
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+ "forwardPorts": [3100],
+  // Run `git update-index --assume-unchanged .devcontainer/devcontainer.json`
+  // if you want to ignore local changes to this file.
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "[ruby]": {
+          "editor.defaultFormatter": "Shopify.ruby-lsp"
+        },
+        "editor.formatOnSave": true,
+        "rubyLsp.formatter": "standard",
+        "rubyLsp.linters": [
+          "standard"
+        ],
+        "standard.validate": [
+          "typescript",
+          "typescriptreact"
+        ],
+        "standard.engine": "ts-standard",
+        "standard.autoFixOnSave": true
+      },
+      "extensions": [
+        "shopify.ruby-lsp",
+        "standard.vscode-standard"
+      ]
+    }
+  },
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root",
+  // Run `git update-index --assume-unchanged .devcontainer/devcontainer.json`
+  // if you want to ignore local changes to this file.
+  "mounts": [
+    // Keep your irb history between sessions
+    // "source=${HOME}/.irb-history,target=/home/vscode/.irb-history,type=bind",
+    // Keep command line history between sessions
+    // If you use bash
+    //   "source=${HOME}/.bash_history,target=/home/vscode/.bash_history,type=bind",
+    // If you use zsh
+    // "source=${HOME}/.zsh_history,target=/home/vscode/.zsh_history,type=bind",
+    // "source=${HOME}/.zshrc,target=/home/vscode/.zshrc,type=bind",
+    // "source=${HOME}/.oh-my-zsh,target=/home/vscode/.oh-my-zsh,type=bind"
+  ],
+  "postCreateCommand": "bin/setup --skip-server"
+}

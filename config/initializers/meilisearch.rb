@@ -1,8 +1,8 @@
 meilisearch_url = {
   development: "http://localhost:7700",
   test: "http://localhost:7700"
-  # production: "http://rubyvideo-search:7700",
-  # staging: "http://rubyvideo_staging-search:7700"
+  # production: "http://blogdemo-search:7700",
+  # staging: "http://blogdemo_staging-search:7700"
 }[Rails.env.to_sym]
 
 MeiliSearch::Rails.configuration = {
