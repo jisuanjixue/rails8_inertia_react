@@ -41,8 +41,10 @@ export default defineConfig({
     },
     hmr: {
       host: 'localhost',
+      port: 3036,  // 添加port配置
+      protocol: 'ws',  // 明确协议
       overlay: true,
-      clientPort: 3036
+      clientPort: 3100
     }
   },
   build: {

@@ -52,7 +52,7 @@ export default function DefaultLayout ({ children }: { children: React.ReactNode
                 {flash.notice}
               </AlertDescription>
             </Alert>} */}
-          <div className='relative flex-grow w-full max-w-6xl px-4 py-8 mx-auto md:px-8'>
+          <div className='relative flex-grow w-full max-w-full px-4 py-8 mx-auto md:px-6 lg:px-8'>
             {children}
           </div>
         </div>
