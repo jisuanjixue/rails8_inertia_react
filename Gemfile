@@ -83,7 +83,7 @@ group :development do
   gem 'standardrb', '~> 1.0', require: false
 end
 
-gem 'inertia_rails-contrib', '~> 0.3.0'
+gem 'inertia_rails-contrib', '~> 0.4.0'
 
 gem 'vite_rails', '~> 3.0'
 
