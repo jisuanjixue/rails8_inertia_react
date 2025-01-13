@@ -1,310 +1,279 @@
-import * as React from "react"
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import UserType from '../../../types/serializers/User'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useClickAway, useDeepCompareEffect, useSafeState } from 'ahooks'
+import { useEffect, useId, useRef } from 'react'
+import { Link, router } from '@inertiajs/react'
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
+import { convertToQueryParams } from '@/lib/utils'
+import DefaultLayout from '../DefaultLayout'
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+const List = ({ users, total, meta }: { users: UserType[], total: number, meta: any }) => {
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-]
-
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
-export const columns: ColumnDef<Payment>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+  const [initQuery, setInitQuery] = useSafeState(true)
+  const pageCount = Math.ceil(total / meta.limit)
+  const pages = Array.from({ length: pageCount }, (_, i) => i + 1)
+  const [active, setActive] = useSafeState<(typeof cards)[number] | boolean | null>(
+    null
+  )
+  const [queryParams, setQueryParams] = useSafeState({ page: 1, pageSize: meta.limit, filters: undefined, sorts: undefined })
+  const refresh = () => {
+    router.get(
+      '/admin/users',
+      {
+        page: queryParams.page,
+        items: queryParams.pageSize,
+        q: { ...convertToQueryParams(queryParams.filters), sorts: queryParams.sorts }
+      },
+      {
+        replace: false,
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+          setInitQuery(false)
+        },
+        onFinish: () => {
+          // Additional cleanup or actions can be added here
         }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      )
+      }
+    )
+  }
+
+  useDeepCompareEffect(() => {
+    if (!initQuery) {
+      refresh()
+    } else {
+      setInitQuery(false)
+    }
+  }, [queryParams, initQuery])
+
+  useEffect(() => {
+    function onKeyDown (event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setActive(false)
+      }
+    }
+
+    if (active && typeof active === 'object') {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [active])
+
+  const ref = useRef<HTMLDivElement>(null)
+
+  const id = useId()
+
+  useClickAway(
+    () => {
+      setActive(null)
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
-
-      return <div className="font-medium text-right">{formatted}</div>
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
-
-export function DataTableDemo() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    ref
   )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
 
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  })
-
-  return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+  const CloseIcon = () => {
+    return (
+      <motion.svg
+        initial={{
+          opacity: 0
+        }}
+        animate={{
+          opacity: 1
+        }}
+        exit={{
+          opacity: 0,
+          transition: {
+            duration: 0.05
           }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+        }}
+        xmlns='http://www.w3.org/2000/svg'
+        width='24'
+        height='24'
+        viewBox='0 0 24 24'
+        fill='none'
+        stroke='currentColor'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        className='w-4 h-4 text-black'
+      >
+        <path stroke='none' d='M0 0h24v24H0z' fill='none' />
+        <path d='M18 6l-12 12' />
+        <path d='M6 6l12 12' />
+      </motion.svg>
+    )
+  }
+  const cards = (users || [])?.map(v => ({ id: v.id, name: v.name, email: v.email, avatar_url: v.avatar_url, ctaLink: `/admin/users/${v.id}`, ctaText: '查看更多', content: () => { return (<p>{v?.profile_bio}</p>) } }))
+  
+  return (
+  <DefaultLayout>
+      <AnimatePresence>
+        {active && typeof active === 'object' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className='fixed inset-0 z-10 w-full h-full bg-black/20'
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {active && typeof active === 'object' ? (
+          <div className='fixed inset-0  grid place-items-center z-[100]'>
+            <motion.button
+              key={`button-${active.name}-${id}`}
+              layout
+              initial={{
+                opacity: 0
+              }}
+              animate={{
+                opacity: 1
+              }}
+              exit={{
+                opacity: 0,
+                transition: {
+                  duration: 0.05
+                }
+              }}
+              className='absolute flex items-center justify-center w-6 h-6 bg-white rounded-full top-2 right-2 lg:hidden'
+              onClick={() => setActive(null)}
+            >
+              <CloseIcon />
+            </motion.button>
+            <motion.div
+              layoutId={`card-${active.name}-${id}`}
+              className='w-full max-w-[500px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden shadow-xl'
+            >
+              <motion.div layoutId={`image-${active.name}-${id}`}>
+                <img
+                  width={200}
+                  height={200}
+                  src={active.avatar_url}
+                  className='object-cover object-top w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg'
+                />
+              </motion.div>
+
+              <div>
+                <div className='flex items-start justify-between p-4'>
+                  <div className=''>
+                    <motion.h3
+                        layoutId={`name-${active.name}-${id}`}
+                        className='font-bold text-neutral-800'
+                      >
+                        {active.name}
+                      </motion.h3>
+                    <motion.p
+                        layoutId={`description-${active.email}-${id}`}
+                        className='text-neutral-600 '
+                      >
+                        {active.email}
+                      </motion.p>
+                  </div>
+                  {/* <Link
+                                        // layoutId={`button-${active.title}-${id}`}
+                    href={active.ctaLink}
+                    className='px-4 py-3 text-sm font-bold text-white bg-green-500 rounded-full'
                   >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <div className="border rounded-md">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
+                    {active.ctaText}
+                  </Link> */}
+                  <motion.div
+                                        layoutId={`button-${active.name}-${id}`}
+                                        className="px-4 py-3 text-sm font-bold text-white bg-green-500 rounded-full"
+                                        onClick={() => router.get(`/admin/users/${active.id}`)}
+                                    >
+                                        {active.ctaText}
+                                    </motion.div>
+                </div>
+                <div className='relative px-4 pt-4'>
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className='text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]'
+                  >
+                    {typeof active.content === 'function'
+                        ? active?.content()
+                        : active.content}
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        ) : null}
+      </AnimatePresence>
+      <div ref={ref} className='min-h-screen bg-white'>
+        <ul className='max-w-4xl gap-4 mx-auto mt-10 translate-y-10 '>
+          {cards.map((card, index) => (
+            <motion.div
+              layoutId={`card-${card.name}-${card.id}`}
+              key={`card-${card.name}-${card.id}`}
+              onClick={() => {
+                setActive(card)
+              }}
+              className='flex flex-col items-center justify-between p-4 cursor-pointer md:flex-row hover:bg-neutral-100 rounded-xl border-neutral-200'
+            >
+              <div className='flex flex-col gap-4 md:flex-row '>
+                <motion.div layoutId={`image-${card.name}-${card.id}`}>
+                  <img
+                    width={100}
+                    height={100}
+                    src={card.avatar_url}
+                    className='object-cover object-top w-40 h-40 rounded-lg md:h-14 md:w-14'
+                  />
+                </motion.div>
+                <div className='hover:text-neutral-200'>
+                  <motion.h3
+                    layoutId={`name-${card.name}-${card.id}`}
+                    className='font-medium text-center text-neutral-800 md:text-left hover:text-neutral-200'
+                  >
+                    {card.name}
+                  </motion.h3>
+                  <motion.p
+                    layoutId={`description-${card.email}-${card.id}`}
+                    className='text-center text-neutral-600 md:text-left'
+                  >
+                    {card.email}
+                  </motion.p>
+                </div>
+              </div>
+              <motion.button
+                layoutId={`button-${card.name}-${card.id}`}
+                className='px-4 py-2 mt-4 text-sm font-bold text-white bg-green-600 rounded-full hover:bg-green-500 md:mt-0'
+              >
+                {card.ctaText}
+              </motion.button>
+            </motion.div>
+          ))}
+        </ul>
+        <Pagination className='relative mt-10 '>
+          <PaginationContent>
+            <PaginationItem onClick={() => setQueryParams({ ...queryParams, page: 1 })}>
+              <PaginationPrevious />
+            </PaginationItem>
+            {pages.map(page => (
+              <PaginationItem key={page} onClick={() => setQueryParams({ ...queryParams, page })}>
+                <PaginationLink isActive={page === meta.page} className='text-neutral-800 hover:bg-neutral-100'>
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
             ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
+            {pages.length > 10 && (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
             )}
-          </TableBody>
-        </Table>
+            { meta.page !== meta.last && <PaginationItem onClick={() => setQueryParams({ ...queryParams, page: meta.page + 1 })}>
+              <PaginationNext />
+            </PaginationItem>}
+          </PaginationContent>
+        </Pagination>
       </div>
-      <div className="flex items-center justify-end py-4 space-x-2">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-    </div>
+    </DefaultLayout>
   )
 }
+
+export default List

@@ -28,12 +28,16 @@ class Profile < ApplicationRecord
   belongs_to :user
   validates :full_name, presence: true
 
+  include Ransackable
+
   include MeiliSearch::Rails
 
   meilisearch do
     attribute :full_name, :name, :tech_stacks
     searchable_attributes [:full_name, :name, :tech_stacks]
   end
+
+  RANSACK_ATTRIBUTES = %w[name full_name location profile_tagline created_at updated_at].freeze
 
   # validate :avatar_is_web_image
 

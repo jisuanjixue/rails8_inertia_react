@@ -41,8 +41,8 @@ const data = {
           url: '/admin/dashboard'
         },
         {
-          title: 'Starred',
-          url: '#'
+          title: '文章分析',
+          url: '/admin/posts/all_posts'
         },
         {
           title: 'Settings',
@@ -59,37 +59,17 @@ const data = {
           title: '分类',
           url: '/admin/categories'
         },
-        {
-          title: 'Explorer',
-          url: '#'
-        },
-        {
-          title: 'Quantum',
-          url: '#'
-        }
       ]
     },
     {
-      title: '文档',
+      title: '用户设置',
       url: '#',
       icon: BookOpen,
       items: [
         {
-          title: 'Introduction',
-          url: '#'
+          title: '用户列表',
+          url: '/admin/users'
         },
-        {
-          title: 'Get Started',
-          url: '#'
-        },
-        {
-          title: 'Tutorials',
-          url: '#'
-        },
-        {
-          title: 'Changelog',
-          url: '#'
-        }
       ]
     },
     {

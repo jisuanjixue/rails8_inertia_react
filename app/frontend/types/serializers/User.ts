@@ -8,6 +8,14 @@ interface User {
   email: string
   created_at: string
   updated_at: string
+  avatar_url: string
+  profile_bio: string
+  location: string
+  tech_stacks: unknown | unknown[]
+  social_profiles: unknown | unknown[]
+  user_id: number
+  profile_tagline: string
+  admin: boolean
 }
 
 export default User
