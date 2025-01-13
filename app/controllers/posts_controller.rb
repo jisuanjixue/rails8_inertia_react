@@ -61,7 +61,11 @@ class PostsController < ApplicationController
   # GET /posts/1
   def show
     render inertia: "Post/Show", props: {
-      post: serialize_post(@post)
+      post: serialize_post(@post).merge(
+        user_id: Current.user.id,
+        can_edit: can?(:edit, @post),
+        can_destroy: can?(:destroy, @post)
+      )
     }
   end
 
@@ -127,7 +131,7 @@ class PostsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_post
-    @post = Current.user.posts.find(params[:id])
+    @post = Post.find(params[:id])
   end
 
   # Only allow a list of trusted parameters through.

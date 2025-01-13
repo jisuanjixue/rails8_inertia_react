@@ -1,8 +1,10 @@
-import { Link, Head } from '@inertiajs/react'
+import { Link, Head, usePage } from '@inertiajs/react'
 import Post from './Post'
 import DefaultLayout from '../DefaultLayout'
 
-const Show = ({ post, flash }) => {
+const Show = ({ post }) => {
+  console.log("🚀 ~ Show ~ post:", post)
+  const {auth: {currentUser}} = usePage().props as any
   const onDestroy = (e) => {
     if (!confirm('Are you sure you want to delete this post?')) {
       e.preventDefault()
@@ -15,28 +17,22 @@ const Show = ({ post, flash }) => {
 
       <div className='w-full px-8 pt-8 mx-auto md:w-2/3'>
         <div className='mx-auto'>
-          {flash.notice && (
-            <p className='inline-block px-3 py-2 mb-5 font-medium text-green-500 rounded-lg bg-green-50'>
-              {flash.notice}
-            </p>
-          )}
-
-          <h1 className='text-4xl font-bold'>文章 #{post.id}</h1>
-
           <Post post={post} />
 
+          {post.can_edit &&
           <Link
             href={`/posts/${post.id}/edit`}
             className='inline-block px-5 py-3 mt-2 font-medium bg-gray-100 rounded-lg'
           >
             编辑
-          </Link>
+          </Link>}
           <Link
             href='/posts'
             className='inline-block px-5 py-3 ml-2 font-medium bg-gray-100 rounded-lg'
           >
             返回列表
           </Link>
+          {post.can_destroy &&
           <div className='inline-block ml-2'>
             <Link
               href={`/posts/${post.id}`}
@@ -47,7 +43,7 @@ const Show = ({ post, flash }) => {
             >
               删除
             </Link>
-          </div>
+          </div>}
         </div>
       </div>
     </>

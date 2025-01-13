@@ -15,7 +15,6 @@ import PostType from '../../types/serializers/Post'
 import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card'
 
 const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
-  console.log("🚀 ~ PostIndex ~ posts:", posts)
   const renderCards = posts.map((post, index) => {
     return (
       <div onClick={() => router.get(`/posts/${post.id}`)}>
