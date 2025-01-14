@@ -12,7 +12,7 @@ interface Flash {
   notice: string | undefined
 }
 
-export default function DefaultLayout ({ children }: { children: React.ReactNode }) {
+export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   const { flash } = usePage().props as unknown as { flash: Flash }
   useEffect(() => {
     if (flash.alert) {
@@ -37,21 +37,6 @@ export default function DefaultLayout ({ children }: { children: React.ReactNode
       <Header />
       <main className='flex flex-col flex-grow overflow-y-auto'>
         <div className='container flex items-center justify-center flex-grow mx-auto'>
-          {/* {flash.alert &&
-            <Alert variant='destructive' className='mb-4'>
-              <AlertCircle className='w-4 h-4' />
-              <AlertTitle>错误消息</AlertTitle>
-              <AlertDescription>
-                {flash.alert}
-              </AlertDescription>
-            </Alert>}
-          {flash.notice &&
-            <Alert className='mb-4'>
-              <AlertTitle>警告消息</AlertTitle>
-              <AlertDescription>
-                {flash.notice}
-              </AlertDescription>
-            </Alert>} */}
           <div className='relative flex-grow w-full max-w-full px-4 py-8 mx-auto md:px-6 lg:px-8'>
             {children}
           </div>

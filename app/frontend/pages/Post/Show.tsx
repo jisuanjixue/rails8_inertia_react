@@ -1,10 +1,8 @@
-import { Link, Head, usePage } from '@inertiajs/react'
+import { Link, Head } from '@inertiajs/react'
 import Post from './Post'
 import DefaultLayout from '../DefaultLayout'
 
 const Show = ({ post }) => {
-  console.log("🚀 ~ Show ~ post:", post)
-  const {auth: {currentUser}} = usePage().props as any
   const onDestroy = (e) => {
     if (!confirm('Are you sure you want to delete this post?')) {
       e.preventDefault()
