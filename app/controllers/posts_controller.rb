@@ -10,7 +10,7 @@ class PostsController < ApplicationController
 
   def all_posts
     begin
-      @posts = Post.all.with_content.with_attachments
+      @posts = Post.all.with_content.with_attachments.includes(user: [:profile, :profile_picture_attachment])
       @q = @posts.ransack(params[:q])
       @search_posts = @q.result(distinct: true).order(created_at: :desc)
       pagy, paged_posts = pagy(@search_posts)
@@ -41,7 +41,7 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Current.user.posts.with_current_user_posts.with_content.accessible_by(current_ability)
+    @posts = Current.user.posts.with_current_user_posts.with_content.includes(user: [:profile, :profile_picture_attachment]).accessible_by(current_ability)
     render inertia: "Post/Index", props: {
       posts: @posts.map do |post|
         serialize_post(post).merge(

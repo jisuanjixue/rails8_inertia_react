@@ -23,10 +23,10 @@ export const MenuItem = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <div onMouseEnter={() => setActive(item)} className="relative ">
+    <div onMouseEnter={() => setActive(item)} className="relative">
       <motion.p
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
+        className="text-black cursor-pointer hover:text-gray-600 dark:text-white dark:hover:text-gray-300"
       >
         {item}
       </motion.p>
@@ -37,16 +37,13 @@ export const MenuItem = ({
           transition={transition}
         >
           {active === item && (
-            <div className="absolute top-[calc(100%_+_1.2rem)] left-1/2 transform -translate-x-1/2 pt-4">
+            <div className="absolute top-[calc(100%_+_0.5rem)] left-1/2 transform -translate-x-1/2">
               <motion.div
                 transition={transition}
-                layoutId="active" // layoutId ensures smooth animation
-                className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
+                layoutId="active"
+                className="bg-white dark:bg-black backdrop-blur-sm rounded-lg overflow-hidden border border-black/[0.1] dark:border-white/[0.1] shadow-lg"
               >
-                <motion.div
-                  layout // layout ensures smooth animation
-                  className="h-full p-4 w-max"
-                >
+                <motion.div layout className="h-full p-3 w-max">
                   {children}
                 </motion.div>
               </motion.div>
@@ -57,7 +54,6 @@ export const MenuItem = ({
     </div>
   );
 };
-
 export const Menu = ({
   setActive,
   children,
@@ -67,8 +63,8 @@ export const Menu = ({
 }) => {
   return (
     <nav
-      onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full border border-transparent dark:bg-black dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-4 px-8 py-6 "
+      onMouseLeave={() => setActive(null)}
+      className="relative flex justify-center space-x-4"
     >
       {children}
     </nav>

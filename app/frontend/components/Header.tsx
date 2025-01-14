@@ -1,14 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import NoProfilePicture from '../assets/user/no-profile-picture.svg'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from '@/components/ui/navigation-menu'
+// import {
+//   NavigationMenu,
+//   NavigationMenuContent,
+//   NavigationMenuItem,
+//   NavigationMenuLink,
+//   NavigationMenuList,
+//   NavigationMenuTrigger
+// } from '@/components/ui/navigation-menu'
 import {
   Modal,
   ModalBody,
@@ -20,8 +20,10 @@ import { Link, router, usePage } from '@inertiajs/react'
 import { useDebounceFn, useSafeState } from 'ahooks'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import Logo from './Logo'
+import { MenuItem, HoveredLink, ProductItem, Menu } from './ui/navbar-menu'
 
 export default function Header() {
+  const [active, setActive] = useSafeState<string | null>(null);
   const [searchTerm, setSearchTerm] = useSafeState('');
   const { run } = useDebounceFn(
     (value) => {
@@ -38,8 +40,8 @@ export default function Header() {
   );
 
   const {
-    auth: { session, currentUser, profile_picture_url },
-    global_search_results
+    auth: { session, currentUser, profile_picture_url, recent_posts },
+    global_search_results,
   } = usePage().props as any
 
   const placeholders = [
@@ -69,7 +71,46 @@ export default function Header() {
                   <Logo className='h-8 text-teal-600' />
                 </Link>
               </div>
-              <NavigationMenu>
+              <Menu setActive={setActive}>
+                <MenuItem setActive={setActive} active={active} item="Services">
+                  <div className="flex flex-col space-y-4 text-sm">
+                    <HoveredLink href="/web-dev">Web Development</HoveredLink>
+                    <HoveredLink href="/interface-design">Interface Design</HoveredLink>
+                    <HoveredLink href="/seo">Search Engine Optimization</HoveredLink>
+                    <HoveredLink href="/branding">Branding</HoveredLink>
+                  </div>
+                </MenuItem>
+                <MenuItem setActive={setActive} active={active} item="文章">
+                  <div className="grid grid-cols-2 gap-10 p-4 text-sm">
+                    {recent_posts?.map((post) => (
+                      <ProductItem
+                        key={post.id}
+                        title={post.title}
+                        href={`/posts/${post.id}`}
+                        src={post.post_cover_url}
+                        description={post.sub_title}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-4 text-center">
+                    <Link
+                      href="/all_posts"
+                      className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                    >
+                      查看全部文章
+                    </Link>
+                  </div>
+                </MenuItem>
+                <MenuItem setActive={setActive} active={active} item="Pricing">
+                  <div className="flex flex-col space-y-4 text-sm">
+                    <HoveredLink href="/hobby">Hobby</HoveredLink>
+                    <HoveredLink href="/individual">Individual</HoveredLink>
+                    <HoveredLink href="/team">Team</HoveredLink>
+                    <HoveredLink href="/enterprise">Enterprise</HoveredLink>
+                  </div>
+                </MenuItem>
+              </Menu>
+              {/* <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
                     <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
@@ -83,7 +124,7 @@ export default function Header() {
                     </Link>
                   </NavigationMenuItem>
                 </NavigationMenuList>
-              </NavigationMenu>
+              </NavigationMenu> */}
             </div>
 
             <div className='md:flex md:items-center md:gap-16'>
