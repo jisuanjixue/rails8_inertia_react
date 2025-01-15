@@ -19,29 +19,29 @@ Rails.application.configure do
   config.public_file_server.headers = {"cache-control" => "public, max-age=#{1.year.to_i}"}
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.asset_host = "https://www.blog_demo.dev"
+  config.asset_host = "https://staging.blog_demo.dev"
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = true # 假设所有请求都经过SSL代理
+  config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # config.force_ssl = true
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Log to STDOUT with the current request id as a default log tag.
-  config.log_tags = [:request_id] # 日志中添加请求ID
+  config.log_tags = [:request_id]
   config.logger = ActiveSupport::TaggedLogging.logger($stdout)
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!)
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info") # 日志级别
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Prevent health checks from clogging up the logs.
-  config.silence_healthcheck_path = "/up" # 忽略健康检查日志
+  config.silence_healthcheck_path = "/up"
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
@@ -50,7 +50,7 @@ Rails.application.configure do
   config.cache_store = :solid_cache_store
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue # 使用Solid Queue作为后台任务队列
+  config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = {database: {writing: :queue, reading: :queue}}
 
   config.action_mailer.perform_caching = false
@@ -60,7 +60,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = {host: "blog_demo.dev"}
+  config.action_mailer.default_url_options = {host: "staging.blog_demo.dev"}
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -76,18 +76,17 @@ Rails.application.configure do
   config.i18n.fallbacks = true
 
   # Do not dump schema after migrations.
-  config.active_record.dump_schema_after_migration = false # 迁移后不导出schema
+  config.active_record.dump_schema_after_migration = false
 
   # Only use :id for inspections in production.
-  config.active_record.attributes_for_inspect = [:id] # 只显示id字段
+  config.active_record.attributes_for_inspect = [:id]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # 防止DNS重绑定攻击
   config.hosts = [
-    "blog_demo.dev",     # Allow requests from example.com
-    /.*\.blog_demo\.dev/ # Allow requests from subdomains like `www.example.com`
+    "blog_demo.dev", # Allow requests to the server itself
+    /.*\.blog_demo\.dev/, # Allow requests from subdomains like `www.example.com`
+    /.*\.adrienpoly\.com/ # Allow requests from subdomains like `www.example.com`
   ]
-  #
   # Skip DNS rebinding protection for the default health check endpoint.
   config.host_authorization = {exclude: ->(request) { request.path == "/up" }}
 
