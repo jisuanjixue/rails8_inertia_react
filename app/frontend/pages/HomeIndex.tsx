@@ -3,66 +3,129 @@ import DefaultLayout from './DefaultLayout'
 import { WobbleCard } from '@/components/ui/wobble-card'
 import { TypewriterEffectSmooth } from '@/components/ui/typewriter-effect'
 import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
+import { Button } from '@/components/ui/button'
+import { router } from '@inertiajs/react'
+import WorldMap from "@/components/ui/world-map";
+import { motion } from "motion/react";
 
 const HomeIndex = () => {
   const words = [
     {
-      text: 'Build',
+      text: '免费',
       className: 'text-white'  // 添加白色文字
     },
     {
-      text: 'awesome',
+      text: '创建',
       className: 'text-white'
     },
     {
-      text: 'blog',
+      text: '好用',
       className: 'text-white'
     },
     {
-      text: 'with',
+      text: '的',
       className: 'text-white'
     },
     {
-      text: 'free.',
+      text: '博客.',
       className: 'text-blue-500 dark:text-blue-500'
     }
   ]
 
+  const AnimatedMapRender = () => {
+    return (
+      <div className=" py-40 dark:bg-black bg-white w-full">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="font-bold text-xl md:text-4xl dark:text-white text-black">
+            Remote{" "}
+            <span className="text-neutral-400">
+              {"Connectivity".split("").map((word, idx) => (
+                <motion.span
+                  key={idx}
+                  className="inline-block"
+                  initial={{ x: -10, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: idx * 0.04 }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </span>
+          </p>
+          <p className="text-sm md:text-lg text-neutral-500 max-w-2xl mx-auto py-4">
+            Break free from traditional boundaries. Work from anywhere, at the
+            comfort of your own studio apartment. Perfect for Nomads and
+            Travellers.
+          </p>
+        </div>
+        <WorldMap
+          dots={[
+            {
+              start: {
+                lat: 64.2008,
+                lng: -149.4937,
+              }, // Alaska (Fairbanks)
+              end: {
+                lat: 34.0522,
+                lng: -118.2437,
+              }, // Los Angeles
+            },
+            {
+              start: { lat: 64.2008, lng: -149.4937 }, // Alaska (Fairbanks)
+              end: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
+            },
+            {
+              start: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
+              end: { lat: 38.7223, lng: -9.1393 }, // Lisbon
+            },
+            {
+              start: { lat: 51.5074, lng: -0.1278 }, // London
+              end: { lat: 28.6139, lng: 77.209 }, // New Delhi
+            },
+            {
+              start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+              end: { lat: 43.1332, lng: 131.9113 }, // Vladivostok
+            },
+            {
+              start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+              end: { lat: -1.2921, lng: 36.8219 }, // Nairobi
+            },
+          ]}
+        />
+      </div>
+    );
+  }
+
   const AnimatedTestimonialsRender = () => {
     const testimonials = [
       {
-        quote:
-          "The attention to detail and innovative features have completely transformed our workflow. This is exactly what we've been looking for.",
-        name: "Sarah Chen",
-        designation: "Product Manager at TechFlow",
+        quote: "简洁的编辑器让写作变得轻松愉快，再也不用担心排版问题。",
+        name: "张伟",
+        designation: "技术博主",
         src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
       {
-        quote:
-          "Implementation was seamless and the results exceeded our expectations. The platform's flexibility is remarkable.",
-        name: "Michael Rodriguez",
-        designation: "CTO at InnovateSphere",
+        quote: "自动保存功能太棒了，再也不用担心文章丢失。",
+        name: "李娜",
+        designation: "旅行博主",
         src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
       {
-        quote:
-          "This solution has significantly improved our team's productivity. The intuitive interface makes complex tasks simple.",
-        name: "Emily Watson",
-        designation: "Operations Director at CloudScale",
+        quote: "多设备同步功能让我随时随地都能继续写作。",
+        name: "王强",
+        designation: "美食博主",
         src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
       {
-        quote:
-          "Outstanding support and robust features. It's rare to find a product that delivers on all its promises.",
-        name: "James Kim",
-        designation: "Engineering Lead at DataPro",
+        quote: "SEO优化建议功能帮助我的文章获得了更多曝光。",
+        name: "陈静",
+        designation: "时尚博主",
         src: "https://images.unsplash.com/photo-1636041293178-808a6762ab39?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
       {
-        quote:
-          "The scalability and performance have been game-changing for our organization. Highly recommend to any growing business.",
-        name: "Lisa Thompson",
-        designation: "VP of Technology at FutureNet",
+        quote: "数据分析功能让我更了解读者的喜好。",
+        name: "刘洋",
+        designation: "科技博主",
         src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
     ];
@@ -76,59 +139,63 @@ const HomeIndex = () => {
         <div className='max-w-4xl text-center'>
           <TypewriterEffectSmooth words={words} />
           <p className='mt-6 text-lg text-neutral-300'>
-            Modern blogging deserves modern tools. Build, collaborate, and grow with Gippity AI.
+            现代博客需要现代工具,创建属于你自己的博客。
           </p>
           <div className='flex flex-col mt-8 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 sm:justify-center'>
-            <button className='px-8 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700'>
-              开始写作
-            </button>
-            <button className='px-8 py-3 text-sm font-medium text-white border border-white rounded-lg hover:bg-white/10'>
-              立即注册
-            </button>
+            <Button className='px-8 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700' onClick={() => router.get('/posts/new')}>
+              立即创作
+            </Button>
+            <Button className='px-8 py-3 text-sm font-medium text-white border border-white rounded-lg hover:bg-white/10'>
+              查看示例
+            </Button>
           </div>
         </div>
       </div>
 
       {/* Features Section */}
-          <div className='grid w-full grid-cols-1 gap-4 mx-auto mb-10 bg-black lg:grid-cols-3 max-w-7xl'>
-            <WobbleCard
-              containerClassName='col-span-1 lg:col-span-2 h-full bg-pink-800 min-h-[500px] lg:min-h-[300px]'
-            >
-              <div className='max-w-xs'>
-                <h2 className='text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white'>
-                  Gippity AI powers the entire universe
-                </h2>
-                <p className='mt-4 text-left text-base/6 text-neutral-200'>
-                  With over 100,000 mothly active bot users, Gippity AI is the most
-                  popular AI platform for developers.
-                </p>
-              </div>
-            </WobbleCard>
-            <WobbleCard containerClassName='col-span-1 min-h-[300px] bg-black'>
-              <h2 className='max-w-80 text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white'>
-                No shirt, no shoes, no weapons.
-              </h2>
-              <p className='mt-4 max-w-[26rem] text-left text-base/6 text-neutral-200'>
-                If someone yells “stop!”, goes limp, or taps out, the fight is over.
-              </p>
-            </WobbleCard>
-            <WobbleCard containerClassName='col-span-1 lg:col-span-3 bg-blue-900 min-h-[500px] lg:min-h-[600px] xl:min-h-[300px]'>
-              <div className='max-w-sm'>
-                <h2 className='max-w-sm md:max-w-lg text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white'>
-                  Signup for blazing-fast cutting-edge state of the art Gippity AI
-                  wrapper today!
-                </h2>
-                <p className='mt-4 max-w-[26rem] text-left text-base/6 text-neutral-200'>
-                  With over 100,000 mothly active bot users, Gippity AI is the most
-                  popular AI platform for developers.
-                </p>
-              </div>
-            </WobbleCard>
+      <div className='grid w-full grid-cols-1 gap-4 mx-auto mb-10 bg-black lg:grid-cols-3 max-w-7xl'>
+        <WobbleCard
+          containerClassName='col-span-1 lg:col-span-2 h-full bg-pink-800 min-h-[500px] lg:min-h-[300px]'
+        >
+          <div className='max-w-xs'>
+            <h2 className='text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white'>
+              Gippity AI powers the entire universe
+            </h2>
+            <p className='mt-4 text-left text-base/6 text-neutral-200'>
+              With over 100,000 mothly active bot users, Gippity AI is the most
+              popular AI platform for developers.
+            </p>
           </div>
-          <div className='bg-black'>
-            <AnimatedTestimonialsRender />
+        </WobbleCard>
+        <WobbleCard containerClassName='col-span-1 min-h-[300px] bg-black'>
+          <h2 className='max-w-80 text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white'>
+            No shirt, no shoes, no weapons.
+          </h2>
+          <p className='mt-4 max-w-[26rem] text-left text-base/6 text-neutral-200'>
+            If someone yells “stop!”, goes limp, or taps out, the fight is over.
+          </p>
+        </WobbleCard>
+        <WobbleCard containerClassName='col-span-1 lg:col-span-3 bg-blue-900 min-h-[500px] lg:min-h-[600px] xl:min-h-[300px]'>
+          <div className='max-w-sm'>
+            <h2 className='max-w-sm md:max-w-lg text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white'>
+              Signup for blazing-fast cutting-edge state of the art Gippity AI
+              wrapper today!
+            </h2>
+            <p className='mt-4 max-w-[26rem] text-left text-base/6 text-neutral-200'>
+              With over 100,000 mothly active bot users, Gippity AI is the most
+              popular AI platform for developers.
+            </p>
           </div>
-       
+        </WobbleCard>
+      </div>
+
+      <div className='bg-black'>
+        <AnimatedMapRender />
+      </div>
+      <div className='bg-black'>
+        <AnimatedTestimonialsRender />
+      </div>
+
     </>
   )
 }
