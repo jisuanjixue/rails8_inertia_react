@@ -1,5 +1,6 @@
 const Footer = () => {
   return (
+
     <footer className='w-full py-4 mt-auto bg-white border-t border-gray-100'>
       <p className='text-center text-gray-500 text-xs/relaxed'>
         © Company 2024. All rights reserved.

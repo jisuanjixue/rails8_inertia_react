@@ -1,5 +1,6 @@
 import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+// import Footer from '@/components/Footer'
+import { Footer } from "@/components/ui/footer-section";
 import { usePage } from '@inertiajs/react'
 import { ShootingStars } from '@/components/ui/shooting-stars'
 import { StarsBackground } from '@/components/ui/stars-background'
