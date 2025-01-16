@@ -1,5 +1,4 @@
 import { AppSidebar } from '@/components/app-sidebar'
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +14,9 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar'
 import { usePage } from '@inertiajs/react'
-import { AlertCircle } from 'lucide-react'
+import { toast } from '@/hooks/use-toast'
+import { useEffect } from 'react'
+import { Toaster } from '@/components/ui/toaster'
 
 interface Flash {
   alert: string | undefined
@@ -24,25 +25,23 @@ interface Flash {
 
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   const { flash } = usePage().props as unknown as { flash: Flash }
+  useEffect(() => {
+    if (flash.alert) {
+      toast({
+        variant: 'destructive',
+        title: '错误消息',
+        description: flash.alert
+      })
+    }
+    if (flash.notice) {
+      toast({
+        title: '警告消息',
+        description: flash.notice
+      })
+    }
+  }, [flash])
   return (
     <>
-      {flash.alert &&
-        <>
-          <Alert variant='destructive'>
-            <AlertCircle className='w-4 h-4' />
-            <AlertTitle>错误消息</AlertTitle>
-            <AlertDescription>
-              {flash.alert}
-            </AlertDescription>
-          </Alert>
-        </>}
-      {flash.notice && <>
-        <AlertTitle>警告消息</AlertTitle>
-        <AlertDescription>
-          {flash.notice}
-        </AlertDescription>
-                       </>}
-
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
@@ -69,6 +68,7 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
             <div className='min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min'>
               {children}
             </div>
+            <Toaster />
           </div>
         </SidebarInset>
       </SidebarProvider>

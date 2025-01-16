@@ -1,3 +1,3 @@
 class PostResource < ApplicationResource
-  attributes :id, :title, :body, :content, :created_at, :updated_at
+  attributes :id, :title, :status, :body, :content, :created_at, :updated_at
 end
