@@ -16,6 +16,8 @@ import useFormHandler from '@/hooks/useFormHandler'
 import QuickActionsFloatingPanel from './components/QuickActionsFloatingPanel'
 import PostCoverShow from '@/components/pages/post/PostCoverShow'
 import { Deferred } from '@inertiajs/react'
+import TailwindAdvancedEditor from '@/components/editor/advanced-editor'
+import { JSONContent } from 'novel'
 
 export default function Form({ post, categories = [], submitText, post_cover_url, postUrl, patchUrl }: { post: PostType, submitText: string, categories?: CategoryType[], post_cover_url?: string, postUrl?: string, patchUrl?: string, }) {
   const factory = useCreation(
@@ -83,6 +85,9 @@ export default function Form({ post, categories = [], submitText, post_cover_url
       <Input id={id} placeholder={placeholder} type={type} name={id} value={data[id]} onChange={(e) => updateField(id, e.target.value)} error={errors[id]} />
     )
   }
+
+  const [value, setValue] = useSafeState<JSONContent>([]);
+  console.log(value);
 
   return (
     <>
@@ -152,6 +157,11 @@ export default function Form({ post, categories = [], submitText, post_cover_url
               factory.content = newValue
             }}
           />
+        </div>
+        <div className='my-5'>
+          <label htmlFor='body'>正文</label>
+          <TailwindAdvancedEditor initialValue={value} onChange={setValue} />
+
         </div>
 
         <div className='inline'>

@@ -1,4 +1,4 @@
-"use client"
+
 
 // Inspired by react-hot-toast library
 import * as React from "react"
@@ -190,5 +190,48 @@ function useToast() {
     dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
   }
 }
+
+export const usePromiseToast = () => {
+  const toastPromise = <T>(
+    promise: Promise<T>,
+    messages: {
+      loading: string;
+      success: string;
+      error: (error: Error) => string;
+    }
+  ): Promise<T> => {
+    return new Promise((resolve, reject) => {
+      toast.promise(
+        promise.then(async (res) => {
+          if (res instanceof Response) {
+            if (res.status === 200) {
+              const { url } = (await res.json()) as { url: string };
+              const image = new Image();
+              image.src = url;
+              image.onload = () => resolve(url as T);
+            } else if (res.status === 401) {
+              resolve(res as T);
+              throw new Error("`BLOB_READ_WRITE_TOKEN` environment variable not found, reading image locally instead.");
+            } else {
+              throw new Error("Error uploading image. Please try again.");
+            }
+          } else {
+            resolve(res);
+          }
+        }),
+        {
+          loading: messages.loading,
+          success: messages.success,
+          error: (e) => {
+            reject(e);
+            return messages.error(e);
+          },
+        }
+      );
+    });
+  };
+
+  return { toastPromise };
+};
 
 export { useToast, toast }

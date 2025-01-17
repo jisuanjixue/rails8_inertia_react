@@ -1,6 +1,7 @@
 import { Link, Head } from '@inertiajs/react'
 import Post from './Post'
 import DefaultLayout from '../DefaultLayout'
+import TailwindAdvancedEditor from '@/components/editor/advanced-editor'
 
 const Show = ({ post }) => {
   const onDestroy = (e) => {
@@ -12,11 +13,10 @@ const Show = ({ post }) => {
   return (
     <>
       <Head title={`文章 #${post.id}`} />
-
       <div className='w-full px-8 pt-8 mx-auto md:w-2/3'>
         <div className='mx-auto'>
           <Post post={post} />
-
+          <TailwindAdvancedEditor />
           {post.can_edit &&
           <Link
             href={`/posts/${post.id}/edit`}
