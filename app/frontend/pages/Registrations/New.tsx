@@ -1,5 +1,5 @@
 'use client'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useRef } from 'react'
 import { Label } from '@/components/forms/motion-label'
 import { Input } from '@/components/forms/motion-input'
 import { InputWithPasswordStrengthIndicator } from '@/components/forms/input-with-password-strength-indicator'
@@ -9,43 +9,50 @@ import useFormHandler from '@/hooks/useFormHandler'
 import { KeysWithStringValues } from '@/types/utilityTypes'
 import LabelInputContainer from '@/components/ui/label-input-container'
 import BottomGradient from '@/components/ui/bottom-gradient'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 interface SignUpData {
   email: string
   password: string
   password_confirmation: string
+  recaptcha_token: string
 }
 
 const SignUpForm = ({ user }: { user: SignUpData }) => {
-    const {
-      data,
-      processing,
-      updateField,
-      submit,
-      errors
-    } = useFormHandler<SignUpData>({
-      initialData: {
-        email: user.email || '',
-        password: user.password || '',
-        password_confirmation: user.password_confirmation || ''
-      },
-      postUrl: '/sign_up',
-      onSuccess: () => {
-      }
-    })
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
+  const {
+    data,
+    processing,
+    updateField,
+    submit,
+    errors
+  } = useFormHandler<SignUpData>({
+    initialData: {
+      email: user.email || '',
+      password: user.password || '',
+      password_confirmation: user.password_confirmation || '',
+      recaptcha_token: ''
+    },
+    postUrl: '/sign_up',
+    onSuccess: () => {
+    }
+  })
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    submit(e)
-  }
+    data.recaptcha_token = recaptchaRef.current
+      ? await recaptchaRef.current.executeAsync()
+      : ''
+      submit(e)
+    }
 
-  const renderTextInput =  (
+  const renderTextInput = (
     type: string,
     id: KeysWithStringValues<SignUpData>,
     placeholder: string
-  ): ReactElement  => {
+  ): ReactElement => {
     return (
-      <Input id={id} placeholder={placeholder} type={type} name={id} value={data[id]} onChange={(e) => updateField(id, e.target.value)}  error={errors.email}/>
+      <Input id={id} placeholder={placeholder} type={type} name={id} value={data[id]} onChange={(e) => updateField(id, e.target.value)} error={errors.email} />
     )
   }
 
@@ -66,11 +73,11 @@ const SignUpForm = ({ user }: { user: SignUpData }) => {
           </LabelInputContainer>
           <LabelInputContainer className='mb-4'>
             <Label htmlFor='password'>密码</Label>
-            <InputWithPasswordStrengthIndicator id='password' placeholder='••••••••' type='password' name='password' value={data.password} onChange={(value) => updateField('password', value)}   error={errors.password}/>
+            <InputWithPasswordStrengthIndicator id='password' placeholder='••••••••' type='password' name='password' value={data.password} onChange={(value) => updateField('password', value)} error={errors.password} />
           </LabelInputContainer>
           <LabelInputContainer className='mb-4'>
             <Label htmlFor='password_confirmation'>密码确认</Label>
-            <InputWithPasswordStrengthIndicator id='password_confirmation' placeholder='••••••••' type='password' name='password_confirmation' value={data.password_confirmation} onChange={(value) => updateField('password_confirmation', value)} error={errors.password_confirmation} />
+            <InputWithPasswordStrengthIndicator id='password_confirmation' placeholder='••••••••' type='password' name='password_confirmation' value={data.password_confirmation} onChange={(value) => updateField('password_confirmation', value)} error={errors.password_confirmation}  />
           </LabelInputContainer>
 
           <div className='bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full' />
@@ -90,6 +97,14 @@ const SignUpForm = ({ user }: { user: SignUpData }) => {
               </label>
             </div>
           </div>
+
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey='6LfkEYUqAAAAAOacT9yEDlhWHnXbaZ5IJhVFbXIf'
+            size='invisible'
+            hl='zh-CN'  // 添加语言参数
+            async={true}  // 确保异步加载
+          />
 
           <button
             className='bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]'

@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   end
 
   inertia_share auth: lambda {
-    recent_posts = Post.includes(:rich_text_content, :category, :post_cover_attachment, :user).order(created_at: :desc).limit(4).map do |post|
+    recent_posts = Post.with_attachments.with_content.order(created_at: :desc).limit(4).map do |post|
       {
         id: post.id,
         title: post.title,
@@ -37,9 +37,7 @@ class ApplicationController < ActionController::Base
       }
     end
     if Current.user
-      # profile = Current.user.profile
-      # avatar_url = profile&.avatar&.attached? ? polymorphic_url(profile.avatar.variant(resize_to_fill: [64, 64])) : nil
-      profile_picture_url = Current.user&.profile_picture&.attached? ? url_for(Current.user.profile_picture) : nil
+      profile_picture_url = Current.user.profile_picture.attached? ? url_for(Current.user.profile_picture) : nil
       {currentUser: Current.user, session: Current.session, profile_picture_url: profile_picture_url, recent_posts: recent_posts}
     else
       {currentUser: nil, session: nil, profile_picture_url: nil, recent_posts: recent_posts}

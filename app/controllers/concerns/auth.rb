@@ -1,4 +1,4 @@
-require 'active_support/concern'
+require "active_support/concern"
 
 module Auth
   extend ActiveSupport::Concern
@@ -16,6 +16,11 @@ module Auth
     else
       redirect_to sign_in_path
     end
+  end
+
+  # 只允许访客访问（已登录用户不能注册）
+  def only_for_guests
+    redirect_to root_path, info: "你已经登录，请先退出后再进行操作" unless Current.user
   end
 
   def set_current_request_details

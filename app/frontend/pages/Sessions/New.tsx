@@ -69,7 +69,7 @@ const LoginForm = ({ is_developer }: { is_developer: boolean }) => {
           </LabelInputContainer>
           <LabelInputContainer className='mb-4'>
             <Label htmlFor='password'>密码</Label>
-            <InputWithPasswordStrengthIndicator id='password' placeholder='••••••••' type='password' name='login_password' value={data.password} onChange={(value) => updateField('password', value)} error={errors.password}/>
+            <InputWithPasswordStrengthIndicator id='password' placeholder='••••••••' type='password' name='login_password' value={data.password} onChange={(value) => updateField('password', value)} error={errors.password} autoComplete='new-password' />
           </LabelInputContainer>
 
           <button
