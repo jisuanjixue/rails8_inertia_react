@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   end
 
   inertia_share auth: lambda {
-    recent_posts = Post.with_content.with_attachments.order(created_at: :desc).limit(4).map do |post|
+    recent_posts = Post.includes(:rich_text_content, :category, :post_cover_attachment, :user).order(created_at: :desc).limit(4).map do |post|
       {
         id: post.id,
         title: post.title,

@@ -36,7 +36,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
       <ShootingStars />
       <StarsBackground />
       <Header />
-      <main className='flex flex-col flex-grow overflow-y-auto'>
+      <main className='flex flex-col flex-grow overflow-y-auto mt-8'>
         <div className='container flex items-center justify-center flex-grow mx-auto'>
           <div className='relative flex-grow w-full max-w-full px-4 py-8 mx-auto md:px-6 lg:px-8'>
             {children}
