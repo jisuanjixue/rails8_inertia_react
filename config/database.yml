@@ -40,6 +40,10 @@ development:
     <<: *default
     database: storage/development_cable.sqlite3
     migrations_paths: db/cable_migrate
+  errors:
+    <<: *default
+    database: storage/development_errors.sqlite3
+    migrations_paths: db/errors_migrate
 
 
 # Warning: The database defined as "test" will be erased and
@@ -68,3 +72,7 @@ production:
     <<: *default
     database: storage/production_cable.sqlite3
     migrations_paths: db/cable_migrate
+  errors:
+    <<: *default
+    database: storage/production_errors.sqlite3
+    migrations_paths: db/errors_migrate

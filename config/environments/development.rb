@@ -112,6 +112,13 @@ Rails.application.configure do
   config.solid_queue.connects_to = {database: {writing: :queue}}
   config.solid_queue.logger = ActiveSupport::Logger.new(STDOUT)
 
+  config.solid_errors.connects_to = {database: {writing: :errors}}
+  config.solid_errors.send_emails = true
+  config.solid_errors.email_from = ""
+  config.solid_errors.email_to = ""
+  config.solid_errors.username = Rails.application.credentials.dig(:solid_errors, :username)
+  config.solid_errors.password = Rails.application.credentials.dig(:solid_errors, :password)
+
   config.after_initialize do
     ActiveRecord::Tasks::DatabaseTasks.prepare_all
   end

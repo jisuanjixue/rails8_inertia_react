@@ -1,14 +1,10 @@
 import { createInertiaApp } from '@inertiajs/react'
-import { createElement, ReactNode } from 'react'
+import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { getTitle, resolvePage } from '@/lib/inertiaConfig'
 
+if (document.querySelector('[data-page]')) {
 createInertiaApp({
-  // Set default page title
-  // see https://inertia-rails.netlify.app/guide/title-and-meta
-  //
-  // title: title => title ? `${title} - App` : 'App',
-
   // Disable progress bar
   //
   // see https://inertia-rails.netlify.app/guide/progress-indicators
@@ -22,7 +18,8 @@ createInertiaApp({
   //   }
   //   return page
   // },
-
+  // Set default page title
+  // see https://inertia-rails.netlify.app/guide/title-and-meta
   title: getTitle,
   progress: {
     // The delay after which the progress bar will appear, in milliseconds...
@@ -46,3 +43,4 @@ createInertiaApp({
     }
   }
 })
+}

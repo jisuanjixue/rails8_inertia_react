@@ -105,3 +105,5 @@ gem 'jwt', '~> 2.9'
 gem 'apicraft-rails', '~> 1.0'
 
 gem "meilisearch-rails", "~> 0.14.1"
+
+gem "solid_errors", "~> 0.6.1"
