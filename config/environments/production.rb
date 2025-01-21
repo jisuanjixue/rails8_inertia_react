@@ -55,6 +55,8 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  config.session_store :cookie_store, key: "__Secure-#{Rails.application.class.module_parent.name.underscore}-#{Rails.env}"
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
@@ -93,7 +95,7 @@ Rails.application.configure do
 
   config.active_record.action_on_strict_loading_violation = :log
   # Configure Solid Errors
-  config.solid_errors.connects_to = { database: { writing: :errors } }
+  config.solid_errors.connects_to = {database: {writing: :errors}}
   config.solid_errors.send_emails = true
   config.solid_errors.email_from = ""
   config.solid_errors.email_to = ""

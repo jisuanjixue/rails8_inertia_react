@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  before_action :permissions_policy_header
   inertia_config(encrypt_history: true)
 
   include Pagy::Backend
@@ -45,6 +46,18 @@ class ApplicationController < ActionController::Base
   }
 
   private
+
+  def permissions_policy_header
+    response.headers["Permissions-Policy"] = Rails.application.config.permissions_policy.directives.map do |directive, sources|
+      if sources.include? "'none'"
+        "#{directive}=()"
+      elsif sources.include? "'self'"
+        "#{directive}=(#{sources.join(" ")})"
+      elsif sources.include? "'all'"
+        "#{directive}=(*)"
+      end
+    end.compact.join(", ")
+  end
 
   def inertia_error_page(exception)
     raise exception if Rails.env.local?

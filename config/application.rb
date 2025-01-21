@@ -38,6 +38,7 @@ module BlogDemo
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.action_dispatch.cookies_same_site_protection = :strict
 
     config.active_record.encryption.support_unencrypted_data = true
     config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]

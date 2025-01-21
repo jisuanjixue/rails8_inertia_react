@@ -1,8 +1,8 @@
 import react from '@vitejs/plugin-react'
-import reactRefresh from '@vitejs/plugin-react-refresh'
 import { defineConfig } from 'vite'
 import mkcert from 'vite-plugin-mkcert'
 import ViteRails from 'vite-plugin-rails'
+import reloadOnChange from "vite-plugin-full-reload";
 
 export default defineConfig({
   optimizeDeps: {
@@ -18,19 +18,14 @@ export default defineConfig({
         ]
       }
     }),
-    reactRefresh({
-      parserPlugins: ['classProperties', 'classPrivateProperties'],
-      // Exclude storybook stories and node_modules
-      exclude: [/\.stories\.(t|j)sx?$/, /node_modules/],
-      // Only .tsx files
-      include: '**/*.tsx'
-    }),
     react({
       // 确保热更新配置正确
       include: '**/*.tsx',
-      exclude: /node_modules/
+      exclude: /node_modules/,
+      jsxRuntime: "classic"
     }),
-    mkcert()
+    mkcert(),
+    reloadOnChange(["config/routes.rb", "app/views/**/*", "app/resources/**/*.rb", "app/frontend/**/**/.tsx"], { delay: 200 }),
   ],
   server: {
     cors: {
@@ -41,10 +36,8 @@ export default defineConfig({
     },
     hmr: {
       host: 'localhost',
-      port: 3036,  // 添加port配置
-      protocol: 'ws',  // 明确协议
       overlay: true,
-      clientPort: 3100
+      clientPort: 443
     }
   },
   build: {

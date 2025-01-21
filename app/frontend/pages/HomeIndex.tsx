@@ -11,7 +11,7 @@ import { motion } from "motion/react";
 const HomeIndex = () => {
   const words = [
     {
-      text: '免费',
+      text: '免费112',
       className: 'text-white'  // 添加白色文字
     },
     {
@@ -34,9 +34,9 @@ const HomeIndex = () => {
 
   const AnimatedMapRender = () => {
     return (
-      <div className=" py-40 dark:bg-black bg-white w-full">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="font-bold text-xl md:text-4xl dark:text-white text-black">
+      <div className="w-full py-40 bg-white dark:bg-black">
+        <div className="mx-auto text-center max-w-7xl">
+          <p className="text-xl font-bold text-black md:text-4xl dark:text-white">
             Remote{" "}
             <span className="text-neutral-400">
               {"Connectivity".split("").map((word, idx) => (
@@ -52,7 +52,7 @@ const HomeIndex = () => {
               ))}
             </span>
           </p>
-          <p className="text-sm md:text-lg text-neutral-500 max-w-2xl mx-auto py-4">
+          <p className="max-w-2xl py-4 mx-auto text-sm md:text-lg text-neutral-500">
             Break free from traditional boundaries. Work from anywhere, at the
             comfort of your own studio apartment. Perfect for Nomads and
             Travellers.
@@ -143,7 +143,7 @@ const HomeIndex = () => {
           </p>
           <div className='flex flex-col mt-8 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 sm:justify-center'>
             <Button className='px-8 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700' onClick={() => router.get('/posts/new')}>
-              立即创作
+              立即创作121
             </Button>
             <Button className='px-8 py-3 text-sm font-medium text-white border border-white rounded-lg hover:bg-white/10'>
               查看示例

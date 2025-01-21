@@ -54,6 +54,7 @@ Rails.application.configure do
   config.solid_queue.connects_to = {database: {writing: :queue, reading: :queue}}
 
   config.action_mailer.perform_caching = false
+  config.session_store :cookie_store, key: "__Secure-#{Rails.application.class.module_parent.name.underscore}-#{Rails.env}"
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
