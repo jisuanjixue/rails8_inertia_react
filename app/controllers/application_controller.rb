@@ -48,15 +48,19 @@ class ApplicationController < ActionController::Base
   private
 
   def permissions_policy_header
-    response.headers["Permissions-Policy"] = Rails.application.config.permissions_policy.directives.map do |directive, sources|
-      if sources.include? "'none'"
+    directives = Rails.application.config.permissions_policy.directives.map do |directive, sources|
+      if sources.include?("'none'")
         "#{directive}=()"
-      elsif sources.include? "'self'"
-        "#{directive}=(#{sources.join(" ")})"
-      elsif sources.include? "'all'"
+      elsif sources.include?("'self'")
+        "#{directive}=(self)"
+      elsif sources.include?("'all'")
         "#{directive}=(*)"
+      else
+        "#{directive}=(#{sources.join(" ")})"
       end
     end.compact.join(", ")
+
+    response.headers["Permissions-Policy"] = directives
   end
 
   def inertia_error_page(exception)

@@ -1,3 +1,4 @@
+import { scan } from 'react-scan';
 // To see this message, add the following to the `<head>` section in your
 // views/layouts/application.html.erb
 //
@@ -19,6 +20,17 @@
 
 import 'trix'
 import '@rails/actiontext'
+
+scan({
+    enabled: true,
+    // report: true,
+    // log: true,
+    // clearLog: true,
+    // playSound: true,
+    // renderCountThreshold: 100,
+    alwaysShowLabels: true,
+    runInProduction: true,
+  });
 
 // If using a TypeScript entrypoint file:
 //     <%= vite_typescript_tag 'application' %>
