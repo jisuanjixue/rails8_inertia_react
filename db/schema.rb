@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_22_031028) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -55,6 +55,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.integer "user_id", null: false
+    t.integer "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_comments_on_post_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "connected_accounts", force: :cascade do |t|
     t.string "uid"
     t.string "provider"
@@ -67,6 +77,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
     t.index ["provider", "uid"], name: "index_connected_accounts_on_provider_and_uid", unique: true
     t.index ["provider", "username"], name: "index_connected_accounts_on_provider_and_username", unique: true
     t.index ["user_id"], name: "index_connected_accounts_on_user_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "likeable_type", null: false
+    t.integer "likeable_id", null: false
+    t.integer "rating", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable"
+    t.index ["user_id", "likeable_type", "likeable_id"], name: "index_likes_on_user_id_and_likeable_type_and_likeable_id", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -121,7 +143,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_18_023449) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users"
   add_foreign_key "connected_accounts", "users"
+  add_foreign_key "likes", "users"
   add_foreign_key "posts", "categories"
   add_foreign_key "profiles", "users"
   add_foreign_key "sessions", "users"

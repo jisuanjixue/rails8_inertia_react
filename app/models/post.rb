@@ -49,6 +49,9 @@ class Post < ApplicationRecord
   belongs_to :user
   belongs_to :category
 
+  has_many :likes, as: :likeable, dependent: :destroy
+  has_many :likers, through: :likes, source: :user
+
   # 确保默认状态为 draft
   after_initialize :set_default_status, if: :new_record?
 

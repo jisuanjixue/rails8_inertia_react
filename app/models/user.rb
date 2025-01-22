@@ -17,6 +17,13 @@
 class User < ApplicationRecord
   include User::ProfilePicture
   has_secure_password
+  # has_many :likes, dependent: :destroy
+  has_many :liked_posts, through: :likes, source: :likeable, source_type: "Post"
+  has_many :liked_comments, through: :likes, source: :likeable, source_type: "Comment"
+  # alias association for user who submitted the like
+  # has_many :submitted_likes, class_name: "Like", foreign_key: :user_id
+  # association for user, instrument_post and comment that has the review
+  has_many :likes, as: :likeable, dependent: :destroy
   has_one :profile, dependent: :destroy
 
   generates_token_for :email_verification, expires_in: 2.days do
@@ -34,8 +41,8 @@ class User < ApplicationRecord
 
   encrypts :email, deterministic: true
 
-  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :password, allow_nil: true, length: { minimum: 6 }
+  validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
+  validates :password, allow_nil: true, length: {minimum: 6}
 
   normalizes :email, with: -> { _1.strip.downcase }
 

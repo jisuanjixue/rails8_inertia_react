@@ -8,6 +8,7 @@ import { StarsBackground } from '@/components/ui/stars-background'
 import { Toaster } from '@/components/ui/toaster'
 import { useEffect } from 'react'
 import { toast } from '@/hooks/use-toast'
+import { ThemeProvider } from 'next-themes';
 
 interface Flash {
   alert: string | undefined
@@ -36,6 +37,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
   }, [flash])
 
   return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
     <div className='inset-0 z-auto flex flex-col w-full h-full min-h-screen overflow-hidden bg-black'>
       {/* <Monitoring
       apiKey="PQBd090OzFRS5RVY6I-vwPEW3hmh9Iqy" // Safe to expose publically
@@ -58,5 +60,6 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
       </main>
       <Footer />
     </div>
+    </ThemeProvider>
   )
 }

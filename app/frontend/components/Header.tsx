@@ -14,6 +14,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import Logo from './Logo'
 import { MenuItem, HoveredLink, ProductItem, Menu } from './ui/navbar-menu'
 import { Separator } from './ui/separator'
+import { Button } from './ui/button'
+import { useTheme } from 'next-themes'
+import { Moon, Sun } from 'lucide-react'
 
 export default function Header() {
   const [active, setActive] = useSafeState<string | null>(null);
@@ -47,6 +50,7 @@ export default function Header() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   }
+  const { theme, setTheme } = useTheme()
 
   return (
     <>
@@ -133,6 +137,18 @@ export default function Header() {
             </div>
 
             <div className='md:flex md:items-center md:gap-16'>
+            <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="mr-4"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="w-5 h-5" />
+                ) : (
+                  <Moon className="w-5 h-5" />
+                )}
+              </Button>
               <Modal>
                 <ModalTrigger className='flex justify-center text-white '>
                   <PlaceholdersAndVanishInput

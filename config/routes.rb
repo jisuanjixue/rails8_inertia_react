@@ -29,6 +29,11 @@ Rails.application.routes.draw do
 
   # post
   resources :posts do
+    resources :comments, only: [:create, :destroy] do
+      resources :likes, only: [:create, :destroy], controller: "posts/likes"
+    end
+
+    resources :likes, only: [:create, :destroy], controller: "posts/likes"
     resource :post_cover, only: [:update, :destroy], module: :posts
     member do
       post "publish"
