@@ -31,9 +31,20 @@ createInertiaApp({
   },
 
   setup ({ el, App, props }) {
+    // if (typeof window !== 'undefined') {
+    //   scan({
+    //     enabled: true,
+    //     log: true, // logs render info to console (default: false)
+    //   });
+    // }
+   
     if (el !== null && el !== undefined) {
-      const root = createRoot(el)
+      if (el.dataset.serverRendered === 'true') {
+        console.log('server rendered')
+      } else {
+        const root = createRoot(el)
         root.render(createElement(App, props))
+      }
     } else {
       console.error(
         'Missing root element.\n\n' +
