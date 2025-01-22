@@ -6,6 +6,7 @@ import React, {
   RefObject,
   useCallback,
 } from "react";
+// import { useTheme } from "next-themes";
 
 interface StarProps {
   x: number;
@@ -32,6 +33,7 @@ export const StarsBackground: React.FC<StarBackgroundProps> = ({
   maxTwinkleSpeed = 1,
   className,
 }) => {
+    // const { theme } = useTheme();
   const [stars, setStars] = useState<StarProps[]>([]);
   const canvasRef: RefObject<HTMLCanvasElement> =
     useRef<HTMLCanvasElement>(null);
@@ -114,6 +116,10 @@ export const StarsBackground: React.FC<StarBackgroundProps> = ({
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+        // // 根据next-themes的主题调整星星颜色
+          // ctx.fillStyle = theme === 'dark' 
+          // ? `rgba(255, 255, 255, ${star.opacity})`  // dark主题用白色星星
+          // : `rgba(0, 0, 0, ${star.opacity})`;      // light主题用黑色星星
         ctx.fill();
 
         if (star.twinkleSpeed !== null) {

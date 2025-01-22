@@ -11,7 +11,7 @@ import { motion } from "motion/react";
 const HomeIndex = () => {
   const words = [
     {
-      text: '免费112',
+      text: '免费',
       className: 'text-white'  // 添加白色文字
     },
     {
