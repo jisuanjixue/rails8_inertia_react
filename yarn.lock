@@ -3689,15 +3689,6 @@ fraction.js@^4.3.7:
   resolved "https://registry.npmmirror.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
-framer-motion@^11.17.0:
-  version "11.17.0"
-  resolved "https://registry.npmmirror.com/framer-motion/-/framer-motion-11.17.0.tgz#2c8fe7e008b3c5301efc6288a990cd5e73805353"
-  integrity sha512-uTNLH9JPMD3ad14WBt3KYRTR+If4tGPLgKTKTIIPaEBMkvazs6EkWNcmCh65qA/tyinOqIbQiuCorXX0qQsNoQ==
-  dependencies:
-    motion-dom "^11.16.4"
-    motion-utils "^11.16.0"
-    tslib "^2.4.0"
-
 framer-motion@^11.18.0:
   version "11.18.0"
   resolved "https://registry.npmmirror.com/framer-motion/-/framer-motion-11.18.0.tgz#574f311dd91333fad59214cc8e2dee0f5bab99c4"
@@ -3705,6 +3696,15 @@ framer-motion@^11.18.0:
   dependencies:
     motion-dom "^11.16.4"
     motion-utils "^11.16.0"
+    tslib "^2.4.0"
+
+framer-motion@^12.0.1:
+  version "12.0.1"
+  resolved "https://registry.npmmirror.com/framer-motion/-/framer-motion-12.0.1.tgz#916cce32c8036765e5725d315a874efdea976ade"
+  integrity sha512-u6p0Qc4cY/AEQAtrC7qiYlXla39qnWoI4JXY7OCNBDXwJ5yRBD8HU+RhaOqqziw2m/b0BDh32f44W94+wXonMQ==
+  dependencies:
+    motion-dom "^12.0.0"
+    motion-utils "^12.0.0"
     tslib "^2.4.0"
 
 framework-utils@^1.1.0:
@@ -4967,10 +4967,22 @@ motion-dom@^11.16.4:
   dependencies:
     motion-utils "^11.16.0"
 
+motion-dom@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.npmmirror.com/motion-dom/-/motion-dom-12.0.0.tgz#7045c63642eecbcc04c40b4457ebb07b3c2b3d0c"
+  integrity sha512-CvYd15OeIR6kHgMdonCc1ihsaUG4MYh/wrkz8gZ3hBX/uamyZCXN9S9qJoYF03GqfTt7thTV/dxnHYX4+55vDg==
+  dependencies:
+    motion-utils "^12.0.0"
+
 motion-utils@^11.16.0:
   version "11.16.0"
   resolved "https://registry.npmmirror.com/motion-utils/-/motion-utils-11.16.0.tgz#e75865442278be49e411ca9105c9139edc572811"
   integrity sha512-ngdWPjg31rD4WGXFi0eZ00DQQqKKu04QExyv/ymlC+3k+WIgYVFbt6gS5JsFPbJODTF/r8XiE/X+SsoT9c0ocw==
+
+motion-utils@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.npmmirror.com/motion-utils/-/motion-utils-12.0.0.tgz#fabf79f4f1c818720a1b70f615e2a1768f396ac0"
+  integrity sha512-MNFiBKbbqnmvOjkPyOKgHUp3Q6oiokLkI1bEwm5QA28cxMZrv0CbbBGDNmhF6DIXsi1pCQBSs0dX8xjeER1tmA==
 
 motion@^11.18.0:
   version "11.18.0"

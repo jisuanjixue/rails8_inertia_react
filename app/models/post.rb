@@ -56,11 +56,13 @@ class Post < ApplicationRecord
   after_initialize :set_default_status, if: :new_record?
 
   def likers_info
-    likers.joins(:profile).select("users.id, profiles.name").limit(10).map do |user|
+    likers.joins(:profile).select("users.id, profiles.name, profiles.profile_tagline").limit(10).map do |user|
       {
         id: user.id,
-        name: user.profile.name
-        # avatar_url: user.profile_picture.attached? ? Rails.application.routes.url_helpers.url_for(user.profile_picture.variant(resize: "100x100").processed, only_path: true) : nil
+        name: user.profile.name,
+        profile_tagline: user.profile.profile_tagline,
+        # avatar_url: user.profile_picture.attached? ? Rails.application.routes.url_helpers.url_for(user.profile_picture) : nil
+        avatar_url: user.profile_picture.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.profile_picture.variant(resize_to_limit: [100, 100]).processed, only_path: true) : nil
       }
     end
   end

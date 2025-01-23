@@ -2,8 +2,12 @@ import { Link, Head, router } from '@inertiajs/react'
 import Post from './Post'
 import DefaultLayout from '../DefaultLayout'
 import { HeartIcon } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
 
 const Show = ({ post }) => {
+  const showProfile = post.likers_info.map(m => ({id: m.id, name: m.name, designation: m.profile_tagline, image: m.avatar_url}))
+  console.log("🚀 ~ Show ~ post:", post)
   const onDestroy = (e) => {
     if (!confirm('Are you sure you want to delete this post?')) {
       e.preventDefault()
@@ -25,23 +29,32 @@ const Show = ({ post }) => {
         <div className='space-y-4'>
           <Post post={post} />
           <div className='flex items-center gap-4'>
-            {post.current_user_like_id ? (
-              <button 
-                onClick={handleUnlike}
-                className='flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors'
-              >
-                <HeartIcon className='w-5 h-5 fill-current' />
-                <span className='text-sm'>{post.likes_count}</span>
-              </button>
-            ) : (
-              <button 
-                onClick={handleLike}
-                className='flex items-center gap-1.5 text-gray-400 hover:text-gray-500 transition-colors'
-              >
-                <HeartIcon className='w-5 h-5 fill-current' />
-                <span className='text-sm'>{post.likes_count}</span>
-              </button>
-            )}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {post.current_user_like_id ? (
+                    <button
+                      onClick={handleUnlike}
+                      className='flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors'
+                    >
+                      <HeartIcon className='w-5 h-5 fill-current' />
+                      <span className='text-base'>{post.likes_count}个赞</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleLike}
+                      className='flex items-center gap-1.5 text-gray-400 hover:text-gray-500 transition-colors'
+                    >
+                      <HeartIcon className='w-5 h-5 fill-current' />
+                      <span className='text-base'>{post.likes_count}个赞</span>
+                    </button>
+                  )}
+                </TooltipTrigger>
+                <TooltipContent  className="p-4">
+                  <AnimatedTooltip items={showProfile} avatarSize={32} />
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           <div className='flex flex-wrap gap-2'>
             {post.can_edit &&
