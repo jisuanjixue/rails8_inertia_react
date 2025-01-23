@@ -1,7 +1,7 @@
 import { Link, Head, router } from '@inertiajs/react'
 import Post from './Post'
 import DefaultLayout from '../DefaultLayout'
-import { HeartIcon } from 'lucide-react'
+import { BookmarkIcon, HeartIcon } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
 
@@ -20,6 +20,15 @@ const Show = ({ post }) => {
 
   const handleUnlike = () => {
     router.delete(`/posts/${post.id}/likes/${post.current_user_like_id}`)
+  }
+
+
+  const handleBookmark = () => {
+    router.post(`/posts/${post.id}/book_marks`)
+  }
+
+  const handleUnbookmark = () => {
+    router.delete(`/posts/${post.id}/book_marks/${post.current_user_bookmark_id}`)
   }
 
   return (
@@ -56,6 +65,23 @@ const Show = ({ post }) => {
               </Tooltip>
             </TooltipProvider>
           </div>
+          {post.current_user_bookmark_id ? (
+          <button
+            onClick={handleUnbookmark}
+            className='flex items-center gap-1.5 text-yellow-500 hover:text-yellow-600 transition-colors'
+          >
+            <BookmarkIcon className='w-5 h-5 fill-current' />
+            <span className='text-base'>{post.bookmarks_count}收藏</span>
+          </button>
+        ) : (
+          <button
+            onClick={handleBookmark}
+            className='flex items-center gap-1.5 text-gray-400 hover:text-gray-500 transition-colors'
+          >
+            <BookmarkIcon className='w-5 h-5 fill-current' />
+            <span className='text-base'>{post.bookmarks_count}收藏</span>
+          </button>
+        )}
           <div className='flex flex-wrap gap-2'>
             {post.can_edit &&
               <Link

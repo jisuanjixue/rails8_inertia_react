@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
   # post
   resources :posts do
+    resources :book_marks, only: [:create, :destroy], controller: "posts/book_marks"
     resources :comments, only: [:create, :destroy] do
       resources :likes, only: [:create, :destroy], controller: "posts/likes"
     end

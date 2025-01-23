@@ -52,6 +52,9 @@ class Post < ApplicationRecord
   has_many :likes, as: :likeable, dependent: :destroy
   has_many :likers, through: :likes, source: :user
 
+  has_many :bookmarks, dependent: :destroy
+  has_many :bookmarkers, through: :bookmarks, source: :user
+
   # 确保默认状态为 draft
   after_initialize :set_default_status, if: :new_record?
 
