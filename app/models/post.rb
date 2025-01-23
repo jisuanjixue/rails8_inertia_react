@@ -55,6 +55,16 @@ class Post < ApplicationRecord
   # 确保默认状态为 draft
   after_initialize :set_default_status, if: :new_record?
 
+  def likers_info
+    likers.joins(:profile).select("users.id, profiles.name").limit(10).map do |user|
+      {
+        id: user.id,
+        name: user.profile.name
+        # avatar_url: user.profile_picture.attached? ? Rails.application.routes.url_helpers.url_for(user.profile_picture.variant(resize: "100x100").processed, only_path: true) : nil
+      }
+    end
+  end
+
   private
 
   def set_default_status

@@ -64,7 +64,10 @@ class PostsController < ApplicationController
       post: serialize_post(@post).merge(
         user_id: Current.user.id,
         can_edit: can?(:edit, @post),
-        can_destroy: can?(:destroy, @post)
+        can_destroy: can?(:destroy, @post),
+        likes_count: @post.likes.count,
+        likers_info: @post.likers_info,
+        current_user_like_id: @post.likes.find_by(user_id: Current.user.id)&.id
       )
     }
   end
@@ -145,9 +148,10 @@ class PostsController < ApplicationController
 
   def serialize_post(post)
     post.as_json(only: %i[
-      id title body content sub_title created_at updated_at category_id status
+      id title body content sub_title created_at updated_at category_id status likes_count
     ]).merge(
-      user_id: post.user_id
+      user_id: post.user_id,
+      likers_info: post.likers_info.as_json
     )
   end
 end

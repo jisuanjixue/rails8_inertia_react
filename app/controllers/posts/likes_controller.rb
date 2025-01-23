@@ -2,6 +2,7 @@ module Posts
   class LikesController < ApplicationController
     def create
       @likeable = find_likeable
+      return redirect_to post_path(@likeable), alert: "Already liked" if @likeable.likes.exists?(user: Current.user)
       @like = @likeable.likes.new(user: Current.user)
 
       if @like.save
@@ -12,13 +13,14 @@ module Posts
     end
 
     def destroy
-      @like = current_user.likes.find(params[:id])
-      @likeable = @like.likeable
+      @likeable = find_likeable
+      @like = @likeable.likes.find_by(user: Current.user)
 
-      if @like.destroy
+      if @like
+        @like.destroy
         redirect_to post_path(@likeable), notice: "Unliked successfully"
       else
-        redirect_to post_path(@likeable), alert: @like.errors.full_messages.to_sentence
+        redirect_to post_path(@likeable), alert: "You haven't liked this yet"
       end
     end
 
