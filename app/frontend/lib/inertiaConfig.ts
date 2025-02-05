@@ -5,7 +5,7 @@ import {  ReactNode } from 'react'
 
 interface ResolvedComponent { default: ReactNode, layout?: (page: ReactNode) => ReactNode }
 export const getTitle = (title: string | null): string =>
-  title ? `${title} | blog` : 'blog'
+  title !== null ? `${title} | blog` : 'blog'
 
 export const resolvePage = (name: string): ResolvedComponent => {
   const pages = import.meta.glob<ResolvedComponent>(

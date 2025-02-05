@@ -6,18 +6,9 @@ import { getTitle, resolvePage } from '@/lib/inertiaConfig'
 if (document.querySelector('[data-page]')) {
 createInertiaApp({
   // Disable progress bar
-  //
   // see https://inertia-rails.netlify.app/guide/progress-indicators
   // progress: false,
  resolve: resolvePage,
-  // resolve: (name) => {
-  //   const pages = import.meta.glob<ResolvedComponent>('../pages/**/*.tsx', { eager: true })
-  //   const page = pages[`../pages/${name}.tsx`]
-  //   if (!page) {
-  //     console.error(`Missing Inertia page component: '${name}.tsx'`)
-  //   }
-  //   return page
-  // },
   // Set default page title
   // see https://inertia-rails.netlify.app/guide/title-and-meta
   title: getTitle,
@@ -31,12 +22,6 @@ createInertiaApp({
   },
 
   setup ({ el, App, props }) {
-    // if (typeof window !== 'undefined') {
-    //   scan({
-    //     enabled: true,
-    //     log: true, // logs render info to console (default: false)
-    //   });
-    // }
    
     if (el !== null && el !== undefined) {
       if (el.dataset.serverRendered === 'true') {
