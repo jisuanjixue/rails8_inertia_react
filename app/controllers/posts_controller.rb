@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   # before_action do
   #   Debugbar.msg('before_action', { params: params.permit!.to_h, callee: __callee__ })
   # end
-  load_and_authorize_resource except: :all_posts # 保留其他方法的权限检查
+  load_and_authorize_resource except: [:all_posts, :collections] # 保留其他方法的权限检查
   before_action :set_post, only: %i[show edit update destroy publish]
   before_action :set_categories, only: [:new, :edit]
 
@@ -130,6 +130,24 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy!
     redirect_to posts_url, notice: "Post was successfully destroyed."
+  end
+
+  def collections
+    @posts = Current.user.bookmarked_posts.includes(:user).order(created_at: :desc)
+    render inertia: "User/Collections", props: {
+      posts: @posts.map do |post|
+        serialize_post(post).merge(
+          category_name: post.category.name,
+          post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil,
+          user: {
+            id: post.user.id,
+            name: post.user.profile&.name,
+            profile_tagline: post.user.profile&.profile_tagline,
+            avatar_url: post.user.profile_picture&.attached? ? url_for(post.user.profile_picture) : nil
+          }
+        )
+      end
+    }
   end
 
   private

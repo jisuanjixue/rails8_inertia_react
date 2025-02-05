@@ -14,7 +14,7 @@ export const resolvePage = (name: string): ResolvedComponent => {
   )
   const page = pages[`../pages/${name}.tsx`] 
   if (!page) {
-    console.error(`Missing Inertia page component: '${name}.tsx'`)
+    throw new Error(`页面 ${name}.tsx 找不到`)
   }
   return page
 }

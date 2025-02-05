@@ -226,6 +226,10 @@ export default function Header() {
                       <DropdownMenuItem onSelect={() => router.visit('/posts')}>
                         我的文章
                       </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => router.visit('/my_collections')}>
+                        我的收藏
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
                       <DropdownMenuItem onSelect={() => router.visit('/user_setting')}>
                         个人设置
                       </DropdownMenuItem>

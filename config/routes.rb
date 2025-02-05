@@ -41,6 +41,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "my_collections", to: "posts#collections"
+
   post "upload_cover", to: "posts/post_covers#create"
   get "all_posts", to: "posts#all_posts"
 

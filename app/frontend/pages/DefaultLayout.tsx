@@ -14,11 +14,8 @@ interface Flash {
   alert: string | undefined
   notice: string | undefined
 }
-// import { useParams, usePathname } from 'next/navigation'
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
-  // const { url, props } = usePage()
-  // const params = props // 或者根据你的实际路由参数结构提取
   const { flash } = usePage().props as unknown as { flash: Flash }
   useEffect(() => {
     if (flash.alert) {
@@ -39,14 +36,6 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
     <div className='inset-0 z-auto flex flex-col w-full h-full min-h-screen overflow-hidden bg-black'>
-      {/* <Monitoring
-      apiKey="PQBd090OzFRS5RVY6I-vwPEW3hmh9Iqy" // Safe to expose publically
-      url="https://monitoring.react-scan.com/api/v1/ingest"
-      commit={process.env.GIT_COMMIT_HASH} // optional but recommended
-      branch={process.env.GIT_BRANCH} // optional but recommended
-      params={params}
-      path={url}
-    /> */}
       <StarsBackground />
       <ShootingStars />
       <Header />
