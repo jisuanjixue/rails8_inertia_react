@@ -127,16 +127,6 @@ const Show = ({ post }) => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>}
-            {/* {post.can_destroy &&
-              <Link
-                href={`/posts/${post.id}`}
-                onClick={onDestroy}
-                as='button'
-                method='delete'
-                className='px-4 py-2 text-sm font-medium text-red-600 transition-colors bg-white border border-red-200 rounded-lg hover:bg-red-50'
-              >
-                删除
-              </Link>} */}
           </div>
         </div>
       </div>

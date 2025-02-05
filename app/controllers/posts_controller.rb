@@ -62,6 +62,8 @@ class PostsController < ApplicationController
   def show
     render inertia: "Post/Show", props: {
       post: serialize_post(@post).merge(
+        category_name: @post.category.name,
+        post_cover_url: @post&.post_cover&.attached? ? url_for(@post&.post_cover) : nil,
         user_id: Current.user.id,
         can_edit: can?(:edit, @post),
         can_destroy: can?(:destroy, @post),
