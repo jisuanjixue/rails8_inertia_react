@@ -33,7 +33,6 @@ export default function useFormHandler<T extends object> ({ initialData, postUrl
 
     if (validation !== undefined) {
       const result = validation.safeParse(data)
-      console.log("🚀 ~ submit ~ result:", result)
       if (!result.success) {
         const issues = result.error.issues
         issues.forEach(issue => {
