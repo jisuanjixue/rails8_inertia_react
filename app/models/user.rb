@@ -27,6 +27,7 @@ class User < ApplicationRecord
   has_one :profile, dependent: :destroy
 
   has_many :bookmarks, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :bookmarked_posts, through: :bookmarks, source: :post
 
   generates_token_for :email_verification, expires_in: 2.days do

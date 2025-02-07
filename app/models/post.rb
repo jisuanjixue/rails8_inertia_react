@@ -54,6 +54,7 @@ class Post < ApplicationRecord
 
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarkers, through: :bookmarks, source: :user
+  has_many :comments, dependent: :destroy
 
   # 确保默认状态为 draft
   after_initialize :set_default_status, if: :new_record?

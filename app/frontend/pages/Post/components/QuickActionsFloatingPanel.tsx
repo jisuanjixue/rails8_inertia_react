@@ -42,7 +42,7 @@ const QuickActionsFloatingPanel = ({ postId, postCoverUrl }: { postId: string, p
       <FloatingPanelRoot>
         <FloatingPanelTrigger
           title='添加封面图'
-          className='flex items-center px-4 py-2 space-x-2 transition-colors rounded-md bg-accent text-accent-foreground hover:bg-accent/90'
+          className='flex items-center px-4 py-2 space-x-4 transition-colors rounded-md bg-accent text-accent-foreground hover:bg-accent/90'
         >
           <ImageIcon className='w-6 h-6' />
           <span>添加封面图</span>

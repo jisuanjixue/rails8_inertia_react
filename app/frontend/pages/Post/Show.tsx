@@ -6,13 +6,15 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { useSafeState } from 'ahooks'
 interface Flash {
   alert: string | undefined
   notice: string | undefined
 }
 
 const Show = ({ post }) => {
-  const { flash } = usePage().props as unknown as { flash: Flash }
+  console.log("🚀 ~ Show ~ post:", post)
+  const { auth: { currentUser }, flash } = usePage().props as unknown as { auth: { currentUser: any }, flash: Flash }
   const showProfile = post.likers_info.map(m => ({ id: m.id, name: m.name, designation: m.profile_tagline, image: m.avatar_url }))
 
   const handleLike = () => {
@@ -30,6 +32,20 @@ const Show = ({ post }) => {
 
   const handleUnbookmark = () => {
     router.delete(`/posts/${post.id}/book_marks/${post.current_user_bookmark_id}`)
+  }
+
+  const [newComment, setNewComment] = useSafeState('')
+
+  const handleCommentSubmit =  () => {
+    if (!newComment.trim()) return
+    router.post(`/posts/${post.id}/comments`, {
+      content: newComment
+    })
+
+  }
+
+  const handleCommentDelete = async (commentId: number) => {
+    router.delete(`/posts/${post.id}/comments/${commentId}`)
   }
 
   return (
@@ -145,6 +161,65 @@ const Show = ({ post }) => {
             </TooltipProvider>
 
           </div>
+        </div>
+      </div>
+      <div className="mt-8">
+        <h3 className="mb-4 text-lg font-semibold">评论 ({post.comments.length})</h3>
+        
+        {/* Comment form */}
+        <div className="mb-6">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="写下你的评论..."
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={3}
+          />
+          <button
+            onClick={handleCommentSubmit}
+            disabled={!newComment.trim()}
+            className="px-4 py-2 mt-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:bg-gray-300"
+          >
+            提交评论
+          </button>
+        </div>
+
+        {/* Comments list */}
+        <div className="space-y-4">
+          {post?.comments?.map(comment => (
+            <div key={comment.id} className="p-4 border rounded-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {comment.user.avatar_url ? (
+                    <img 
+                      src={comment.user.avatar_url}
+                      alt={comment.user.name}
+                      className="w-8 h-8 rounded-full"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
+                      {comment.user.name[0]}
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-medium">{comment.user.name}</p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(comment.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                {comment.user.id === currentUser.id && (
+                  <button
+                    onClick={() => handleCommentDelete(comment.id)}
+                    className="text-red-500 hover:text-red-600"
+                  >
+                    删除
+                  </button>
+                )}
+              </div>
+              <p className="mt-2 text-gray-700">{comment.content}</p>
+            </div>
+          ))}
         </div>
       </div>
     </>
