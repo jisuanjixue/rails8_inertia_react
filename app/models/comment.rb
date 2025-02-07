@@ -27,4 +27,15 @@ class Comment < ApplicationRecord
   has_many :likers, through: :likes, source: :user
 
   validates :content, presence: true
+
+  def likers_info
+    likers.joins(:profile).select("users.id, profiles.name, profiles.profile_tagline").limit(10).map do |user|
+      {
+        id: user.id,
+        name: user.profile.name,
+        profile_tagline: user.profile.profile_tagline,
+        avatar_url: user.profile_picture.attached? ? Rails.application.routes.url_helpers.rails_representation_url(user.profile_picture.variant(resize_to_limit: [100, 100]).processed, only_path: true) : nil
+      }
+    end
+  end
 end

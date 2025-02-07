@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   resources :posts do
     resources :book_marks, only: [:create, :destroy], controller: "posts/book_marks"
     resources :comments, only: [:create, :destroy], module: :posts do
-      resources :likes, only: [:create, :destroy], controller: "posts/likes"
+      resources :likes, only: [:create, :destroy], controller: "comments/likes"
     end
 
     resources :likes, only: [:create, :destroy], controller: "posts/likes"

@@ -77,6 +77,7 @@ class PostsController < ApplicationController
             id: comment.id,
             content: comment.content,
             created_at: comment.created_at,
+            current_user_like_id: comment.likes.find_by(user_id: Current.user.id)&.id,
             user: {
               id: comment.user.id,
               name: comment.user.profile&.name,

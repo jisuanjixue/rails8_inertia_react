@@ -36,7 +36,7 @@ const Show = ({ post }) => {
 
   const [newComment, setNewComment] = useSafeState('')
 
-  const handleCommentSubmit =  () => {
+  const handleCommentSubmit = () => {
     if (!newComment.trim()) return
     router.post(`/posts/${post.id}/comments`, {
       content: newComment
@@ -46,6 +46,14 @@ const Show = ({ post }) => {
 
   const handleCommentDelete = async (commentId: number) => {
     router.delete(`/posts/${post.id}/comments/${commentId}`)
+  }
+
+  const handleCommentLike = (commentId: number) => {
+    router.post(`/posts/${post.id}/comments/${commentId}/likes`)
+  }
+  
+  const handleCommentUnlike = (commentId: number, likeId: number) => {
+    router.delete(`/posts/${post.id}/comments/${commentId}/likes/${likeId}`)
   }
 
   return (
@@ -165,25 +173,6 @@ const Show = ({ post }) => {
       </div>
       <div className="mt-8">
         <h3 className="mb-4 text-lg font-semibold">评论 ({post.comments.length})</h3>
-        
-        {/* Comment form */}
-        <div className="mb-6">
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="写下你的评论..."
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={3}
-          />
-          <button
-            onClick={handleCommentSubmit}
-            disabled={!newComment.trim()}
-            className="px-4 py-2 mt-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:bg-gray-300"
-          >
-            提交评论
-          </button>
-        </div>
-
         {/* Comments list */}
         <div className="space-y-4">
           {post?.comments?.map(comment => (
@@ -191,7 +180,7 @@ const Show = ({ post }) => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   {comment.user.avatar_url ? (
-                    <img 
+                    <img
                       src={comment.user.avatar_url}
                       alt={comment.user.name}
                       className="w-8 h-8 rounded-full"
@@ -218,8 +207,45 @@ const Show = ({ post }) => {
                 )}
               </div>
               <p className="mt-2 text-gray-700">{comment.content}</p>
+              <div className="flex items-center gap-4 mt-2">
+                {comment.current_user_like_id ? (
+                  <button
+                    onClick={() => handleCommentUnlike(comment.id, comment.current_user_like_id)}
+                    className="flex items-center gap-1 text-red-500 hover:text-red-600"
+                  >
+                    <HeartIcon className="w-4 h-4 fill-current" />
+                    <span>{comment.likes_count}</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleCommentLike(comment.id)}
+                    className="flex items-center gap-1 text-gray-500 hover:text-gray-600"
+                  >
+                    <HeartIcon className="w-4 h-4" />
+                    <span>{comment.likes_count}</span>
+                  </button>
+                )}
+              </div>
             </div>
           ))}
+        </div>
+
+          {/* Comment form */}
+          <div className="mb-6">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="写下你的评论..."
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={3}
+          />
+          <button
+            onClick={handleCommentSubmit}
+            disabled={!newComment.trim()}
+            className="px-4 py-2 mt-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:bg-gray-300"
+          >
+            提交评论
+          </button>
         </div>
       </div>
     </>

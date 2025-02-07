@@ -8,15 +8,16 @@ module Posts
       @comment.user = Current.user
 
       if @comment.save
-        redirect_to @post, notice: "评论发布成功!"
+        redirect_to @post, notice: "Post was successfully created."
+
       else
-        redirect_to @post, notice: "评论发布失败."
+        redirect_to @post, notice: "Post was not successfully ."
       end
     end
 
     def destroy
       @comment.destroy!
-      redirect_to @post, notice: "评论删除成功!"
+      redirect_to @post, notice: "comment was successfully destroyed."
     end
 
     private
