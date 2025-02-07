@@ -4,15 +4,18 @@
 #
 #  id         :integer          not null, primary key
 #  content    :text
+#  depth      :integer          default(0)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  parent_id  :integer
 #  post_id    :integer          not null
 #  user_id    :integer          not null
 #
 # Indexes
 #
-#  index_comments_on_post_id  (post_id)
-#  index_comments_on_user_id  (user_id)
+#  index_comments_on_parent_id  (parent_id)
+#  index_comments_on_post_id    (post_id)
+#  index_comments_on_user_id    (user_id)
 #
 # Foreign Keys
 #
@@ -25,6 +28,8 @@ class Comment < ApplicationRecord
 
   has_many :likes, as: :likeable, dependent: :destroy
   has_many :likers, through: :likes, source: :user
+  belongs_to :parent, class_name: "Comment", optional: true
+  has_many :replies, class_name: "Comment", foreign_key: :parent_id, dependent: :destroy
 
   validates :content, presence: true
 

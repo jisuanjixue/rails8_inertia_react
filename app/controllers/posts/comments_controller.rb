@@ -6,6 +6,7 @@ module Posts
     def create
       @comment = @post.comments.new(comment_params)
       @comment.user = Current.user
+      @comment.parent_id = params[:parent_id] if params[:parent_id].present?
 
       if @comment.save
         redirect_to @post, notice: "评论发布成功!"

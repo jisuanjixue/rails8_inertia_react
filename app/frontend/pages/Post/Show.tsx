@@ -7,15 +7,126 @@ import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { useSafeState } from 'ahooks'
+import { TextareaInput } from '@/components/ui/textarea-with-characters-left'
 interface Flash {
   alert: string | undefined
   notice: string | undefined
 }
 
+
+
 const Show = ({ post }) => {
   console.log("🚀 ~ Show ~ post:", post)
   const { auth: { currentUser }, flash } = usePage().props as unknown as { auth: { currentUser: any }, flash: Flash }
   const showProfile = post.likers_info.map(m => ({ id: m.id, name: m.name, designation: m.profile_tagline, image: m.avatar_url }))
+
+  const CommentItem = ({ comment, currentUser, handleCommentSubmit, handleCommentDelete }) => {
+    const [showReply, setShowReply] = useSafeState(false)
+    const [replyContent, setReplyContent] = useSafeState('')
+
+    const handleReplySubmit = () => {
+      handleCommentSubmit(replyContent, comment.id)
+      setReplyContent('')
+      setShowReply(false)
+    }
+
+    return (
+      <div key={comment.id} className="p-4 ml-4 border rounded-lg" style={{ marginLeft: `${comment.depth * 20}px` }}>
+        {/* ... existing comment content ... */}
+        <div key={comment.id} className="p-4 border rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {comment.user.avatar_url ? (
+                <img
+                  src={comment.user.avatar_url}
+                  alt={comment.user.name}
+                  className="w-8 h-8 rounded-full"
+                />
+              ) : (
+                <div className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
+                  {comment.user.name[0]}
+                </div>
+              )}
+              <div>
+                <p className="font-medium">{comment.user.name}</p>
+                <p className="text-sm text-gray-500">
+                  {new Date(comment.created_at).toLocaleString()}
+                </p>
+              </div>
+            </div>
+            {comment.user.id === currentUser.id && (
+              <button
+                onClick={() => handleCommentDelete(comment.id)}
+                className="text-red-500 hover:text-red-600"
+              >
+                删除
+              </button>
+            )}
+          </div>
+          <p className="mt-2 text-gray-700">{comment.content}</p>
+          <div className="flex items-center gap-4 mt-2">
+            {comment.current_user_like_id ? (
+              <button
+                onClick={() => handleCommentUnlike(comment.id, comment.current_user_like_id)}
+                className="flex items-center gap-1 text-red-500 hover:text-red-600"
+              >
+                <HeartIcon className="w-4 h-4 fill-current" />
+                <span>{comment.likes_count}</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => handleCommentLike(comment.id)}
+                className="flex items-center gap-1 text-gray-500 hover:text-gray-600"
+              >
+                <HeartIcon className="w-4 h-4" />
+                <span>{comment.likes_count}</span>
+              </button>
+            )}
+          </div>
+        </div>
+        {comment.user.id !== currentUser.id && (
+          <button
+            onClick={() => setShowReply(!showReply)}
+            className="mt-2 text-blue-500 hover:text-blue-600"
+          >
+            回复
+          </button>
+        )}
+
+        {showReply && (
+          <div className="mt-2">
+            <TextareaInput
+              id=''
+              name=''
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              rows={1}
+              maxLength={180}
+              className="w-full"
+            />
+            <button
+              onClick={handleReplySubmit}
+              disabled={!replyContent.trim()}
+              className="px-2 py-1 mt-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+            >
+              提交回复
+            </button>
+          </div>
+        )}
+
+        {/* Render replies */}
+        {comment.replies?.map(reply => (
+          <CommentItem
+            key={reply.id}
+            comment={reply}
+            currentUser={currentUser}
+            handleCommentSubmit={handleCommentSubmit}
+            handleCommentDelete={handleCommentDelete}
+          />
+        ))}
+      </div>
+    )
+  }
 
   const handleLike = () => {
     router.post(`/posts/${post.id}/likes`)
@@ -51,7 +162,7 @@ const Show = ({ post }) => {
   const handleCommentLike = (commentId: number) => {
     router.post(`/posts/${post.id}/comments/${commentId}/likes`)
   }
-  
+
   const handleCommentUnlike = (commentId: number, likeId: number) => {
     router.delete(`/posts/${post.id}/comments/${commentId}/likes/${likeId}`)
   }
@@ -175,69 +286,27 @@ const Show = ({ post }) => {
         <h3 className="mb-4 text-lg font-semibold">评论 ({post.comments.length})</h3>
         {/* Comments list */}
         <div className="space-y-4">
-          {post?.comments?.map(comment => (
-            <div key={comment.id} className="p-4 border rounded-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {comment.user.avatar_url ? (
-                    <img
-                      src={comment.user.avatar_url}
-                      alt={comment.user.name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
-                      {comment.user.name[0]}
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-medium">{comment.user.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(comment.created_at).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-                {comment.user.id === currentUser.id && (
-                  <button
-                    onClick={() => handleCommentDelete(comment.id)}
-                    className="text-red-500 hover:text-red-600"
-                  >
-                    删除
-                  </button>
-                )}
-              </div>
-              <p className="mt-2 text-gray-700">{comment.content}</p>
-              <div className="flex items-center gap-4 mt-2">
-                {comment.current_user_like_id ? (
-                  <button
-                    onClick={() => handleCommentUnlike(comment.id, comment.current_user_like_id)}
-                    className="flex items-center gap-1 text-red-500 hover:text-red-600"
-                  >
-                    <HeartIcon className="w-4 h-4 fill-current" />
-                    <span>{comment.likes_count}</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => handleCommentLike(comment.id)}
-                    className="flex items-center gap-1 text-gray-500 hover:text-gray-600"
-                  >
-                    <HeartIcon className="w-4 h-4" />
-                    <span>{comment.likes_count}</span>
-                  </button>
-                )}
-              </div>
-            </div>
+          {post?.comments?.filter(comment => !comment.parent_id)?.map(comment => (
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              currentUser={currentUser}
+              handleCommentSubmit={handleCommentSubmit}
+              handleCommentDelete={handleCommentDelete}
+            />
           ))}
         </div>
 
-          {/* Comment form */}
-          <div className="mb-6">
-          <textarea
+        {/* Comment form */}
+        <div className="mb-6">
+          <TextareaInput
+            name=''
+            id=''
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="写下你的评论..."
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={3}
+            rows={1}
+            maxLength={180}
+            className='block w-full px-3 py-2 mt-2 border border-gray-400 rounded-md shadow outline-none'
+            onChange={(e) => setNewComment?.(e.target.value)}
           />
           <button
             onClick={handleCommentSubmit}
