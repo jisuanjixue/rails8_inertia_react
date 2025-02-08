@@ -82,7 +82,21 @@ class PostsController < ApplicationController
               id: comment.user.id,
               name: comment.user.profile&.name,
               avatar_url: comment.user.profile_picture&.attached? ? url_for(comment.user.profile_picture) : nil
-            }
+            },
+            replies: comment.replies.order(created_at: :asc).map do |reply|
+              {
+                id: reply.id,
+                content: reply.content,
+                created_at: reply.created_at,
+                depth: reply.depth,
+                current_user_like_id: reply.likes.find_by(user_id: Current.user.id)&.id,
+                user: {
+                  id: reply.user.id,
+                  name: reply.user.profile&.name,
+                  avatar_url: reply.user.profile_picture&.attached? ? url_for(reply.user.profile_picture) : nil
+                }
+              }
+            end
           }
         end
       )

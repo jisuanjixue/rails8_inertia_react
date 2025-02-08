@@ -8,6 +8,14 @@ module Posts
       @comment.user = Current.user
       @comment.parent_id = params[:parent_id] if params[:parent_id].present?
 
+      # 计算评论深度
+      if @comment.parent_id.present?
+        parent_comment = @post.comments.find(@comment.parent_id)
+        @comment.depth = parent_comment.depth + 1
+      else
+        @comment.depth = 0
+      end
+
       if @comment.save
         redirect_to @post, notice: "评论发布成功!"
       else

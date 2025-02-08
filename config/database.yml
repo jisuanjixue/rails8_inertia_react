@@ -17,6 +17,7 @@ default: &default
     # Journal mode WAL allows for greater concurrency (many readers + one writer)
     # https://www.sqlite.org/pragma.html#pragma_journal_mode
     journal_mode: "WAL"
+    busy_timeout: 3000
     # impose a limit on the WAL file to prevent unlimited growth (with a negative impact on read performance as well)
     # https://www.sqlite.org/pragma.html#pragma_journal_size_limit
     journal_size_limit: <%= 64.megabytes %>

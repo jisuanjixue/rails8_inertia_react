@@ -32,6 +32,8 @@ Rails.application.routes.draw do
     resources :book_marks, only: [:create, :destroy], controller: "posts/book_marks"
     resources :comments, only: [:create, :destroy], module: :posts do
       resources :likes, only: [:create, :destroy], controller: "comments/likes"
+      # 添加嵌套评论路由
+      resources :replies, only: [:create, :destroy], controller: "comments/replies"
     end
 
     resources :likes, only: [:create, :destroy], controller: "posts/likes"

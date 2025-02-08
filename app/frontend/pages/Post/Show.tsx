@@ -20,14 +20,21 @@ const Show = ({ post }) => {
   const { auth: { currentUser }, flash } = usePage().props as unknown as { auth: { currentUser: any }, flash: Flash }
   const showProfile = post.likers_info.map(m => ({ id: m.id, name: m.name, designation: m.profile_tagline, image: m.avatar_url }))
 
-  const CommentItem = ({ comment, currentUser, handleCommentSubmit, handleCommentDelete }) => {
+  const CommentItem = ({ comment, currentUser }) => {
+    console.log("🚀 ~ CommentItem ~ comment:", comment)
     const [showReply, setShowReply] = useSafeState(false)
     const [replyContent, setReplyContent] = useSafeState('')
 
-    const handleReplySubmit = () => {
-      handleCommentSubmit(replyContent, comment.id)
-      setReplyContent('')
-      setShowReply(false)
+    const handleCommentDelete = async (commentId: number) => {
+      router.delete(`/posts/${post.id}/comments/${commentId}`)
+    }
+    
+    const replyCommentSubmit = (content: string, parentId?: number) => {
+      router.post(`/posts/${post.id}/comments/${parentId}/replies`, {
+        reply: {
+          content: content
+        }
+      });
     }
 
     return (
@@ -105,7 +112,7 @@ const Show = ({ post }) => {
               className="w-full"
             />
             <button
-              onClick={handleReplySubmit}
+              onClick={() => replyCommentSubmit(replyContent, comment.id)}
               disabled={!replyContent.trim()}
               className="px-2 py-1 mt-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
             >
@@ -120,8 +127,6 @@ const Show = ({ post }) => {
             key={reply.id}
             comment={reply}
             currentUser={currentUser}
-            handleCommentSubmit={handleCommentSubmit}
-            handleCommentDelete={handleCommentDelete}
           />
         ))}
       </div>
@@ -147,16 +152,10 @@ const Show = ({ post }) => {
 
   const [newComment, setNewComment] = useSafeState('')
 
-  const handleCommentSubmit = () => {
-    if (!newComment.trim()) return
+  const handleCommentSubmit = (content: string) => {
     router.post(`/posts/${post.id}/comments`, {
-      content: newComment
-    })
-
-  }
-
-  const handleCommentDelete = async (commentId: number) => {
-    router.delete(`/posts/${post.id}/comments/${commentId}`)
+      content: content
+    });
   }
 
   const handleCommentLike = (commentId: number) => {
@@ -291,8 +290,6 @@ const Show = ({ post }) => {
               key={comment.id}
               comment={comment}
               currentUser={currentUser}
-              handleCommentSubmit={handleCommentSubmit}
-              handleCommentDelete={handleCommentDelete}
             />
           ))}
         </div>
@@ -309,7 +306,7 @@ const Show = ({ post }) => {
             onChange={(e) => setNewComment?.(e.target.value)}
           />
           <button
-            onClick={handleCommentSubmit}
+            onClick={() => handleCommentSubmit(newComment)}
             disabled={!newComment.trim()}
             className="px-4 py-2 mt-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:bg-gray-300"
           >
