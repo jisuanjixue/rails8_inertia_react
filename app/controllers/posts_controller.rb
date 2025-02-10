@@ -72,6 +72,13 @@ class PostsController < ApplicationController
         current_user_like_id: @post.likes.find_by(user_id: Current.user.id)&.id,
         bookmarks_count: @post.bookmarks.count,
         current_user_bookmark_id: @post.bookmarks.find_by(user_id: Current.user.id)&.id,
+        user: {
+          posts_count: @post.user.posts.count,
+          followers_count: @post.user.followers.count,
+          id: @post.user.id,
+          name: @post.user.profile&.name,
+          avatar_url: @post.user.profile_picture&.attached? ? url_for(@post.user.profile_picture) : nil
+        },
         comments: @post.comments.includes(:user).order(created_at: :desc).map do |comment|
           {
             id: comment.id,

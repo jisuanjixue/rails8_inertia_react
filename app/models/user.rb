@@ -29,6 +29,16 @@ class User < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :bookmarked_posts, through: :bookmarks, source: :post
+  # 我关注的用户
+  has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
+  has_many :following, through: :active_relationships, source: :followed
+
+  # 关注我的人
+  has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
+  has_many :followers, through: :passive_relationships, source: :follower
+
+  # has_many :followers
+  # has_many :following
 
   generates_token_for :email_verification, expires_in: 2.days do
     email
@@ -56,5 +66,20 @@ class User < ApplicationRecord
 
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
+  end
+
+  # 关注另一个用户
+  def follow(other_user)
+    active_relationships.create(followed_id: other_user.id)
+  end
+
+  # 取消关注另一个用户
+  def unfollow(other_user)
+    active_relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  # 如果当前用户关注了指定的用户，返回 true
+  def following?(other_user)
+    following.include?(other_user)
   end
 end

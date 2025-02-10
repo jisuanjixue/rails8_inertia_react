@@ -48,6 +48,9 @@ Rails.application.routes.draw do
   post "upload_cover", to: "posts/post_covers#create"
   get "all_posts", to: "posts#all_posts"
 
+  # my home
+  get "my_home", to: "users/my_home#index"
+
   # user setting
   get "user_setting", to: "users/setting#index"
   # namespace :users do
@@ -55,8 +58,13 @@ Rails.application.routes.draw do
   # end
 
   resources :users, only: [:update] do
+    member do
+      get :following, :followers
+    end
     resource :profile_picture, only: [:update, :destroy], module: :users
   end
+
+  resources :relationships, only: [:create, :destroy]
 
   patch "update_profile", to: "users/profile#update"
 

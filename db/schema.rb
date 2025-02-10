@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_07_090958) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_10_085958) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -133,6 +133,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_07_090958) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
     t.check_constraint "JSON_TYPE(social_profiles) = 'array'", name: "profiles_social_profiles_is_array"
     t.check_constraint "JSON_TYPE(tech_stacks) = 'array'", name: "profiles_tech_stacks_is_array"
+  end
+
+  create_table "relationships", force: :cascade do |t|
+    t.integer "follower_id"
+    t.integer "followed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["followed_id"], name: "index_relationships_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_relationships_on_follower_id"
   end
 
   create_table "sessions", force: :cascade do |t|

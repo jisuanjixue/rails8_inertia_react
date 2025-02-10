@@ -40,6 +40,8 @@ export default function Header() {
     global_search_results,
   } = usePage().props as any
 
+  console.log("🚀 ~ Header ~ currentUser:", currentUser)
+
   const placeholders = [
     '输入文章标题关键字查询',
     '输入文章标题关键字查询'
@@ -65,14 +67,6 @@ export default function Header() {
                 </Link>
               </div>
               <Menu setActive={setActive}>
-                {/* <MenuItem setActive={setActive} active={active} item="Services">
-                  <div className="flex flex-col space-y-4 text-sm">
-                    <HoveredLink href="/web-dev">默认</HoveredLink>
-                    <HoveredLink href="/interface-design">最新</HoveredLink>
-                    <HoveredLink href="/seo">精华帖 </HoveredLink>
-                    <HoveredLink href="/branding">优质讨论</HoveredLink>
-                  </div>
-                </MenuItem> */}
                 <MenuItem setActive={setActive} active={active} item="文章">
                   <div className="grid grid-cols-2 gap-10 p-4 text-sm">
                     {recent_posts?.map((post) => (
@@ -223,9 +217,14 @@ export default function Header() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className='w-56'>
                     <DropdownMenuGroup>
+                      <DropdownMenuItem onSelect={() => router.visit('/my_home')}>
+                        {currentUser.email}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
                       <DropdownMenuItem onSelect={() => router.visit('/posts')}>
                         我的文章
                       </DropdownMenuItem>
+                      <DropdownMenuSeparator />
                       <DropdownMenuItem onSelect={() => router.visit('/my_collections')}>
                         我的收藏
                       </DropdownMenuItem>

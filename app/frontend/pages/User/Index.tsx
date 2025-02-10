@@ -7,7 +7,6 @@ import EditInfo from './edit-info'
 // import { usePage } from "@inertiajs/react";
 
 const UserSetting = ({ user, user_profile }) => {
-  console.log('🚀 ~ UserSetting ~ user_profile:', user_profile)
 
   const tabs = [
     {
@@ -41,26 +40,26 @@ const UserSetting = ({ user, user_profile }) => {
     //         </div>
     //     ),
     // },
-    {
-      title: 'Content',
-      value: 'content',
-      content: (
-        <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
-          <p>Content tab</p>
-          <DummyContent />
-        </div>
-      )
-    },
-    {
-      title: 'Random',
-      value: 'random',
-      content: (
-        <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
-          <p>Random tab</p>
-          <DummyContent />
-        </div>
-      )
-    }
+    // {
+    //   title: 'Content',
+    //   value: 'content',
+    //   content: (
+    //     <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
+    //       <p>Content tab</p>
+    //       <DummyContent />
+    //     </div>
+    //   )
+    // },
+    // {
+    //   title: 'Random',
+    //   value: 'random',
+    //   content: (
+    //     <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
+    //       <p>Random tab</p>
+    //       <DummyContent />
+    //     </div>
+    //   )
+    // }
   ]
 
   return (
@@ -73,10 +72,10 @@ const UserSetting = ({ user, user_profile }) => {
 UserSetting.layout = (page: any) => <DefaultLayout children={page} />
 export default UserSetting
 
-const DummyContent = () => {
-  return (
-    <div
-      className='object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto'
-    />
-  )
-}
+// const DummyContent = () => {
+//   return (
+//     <div
+//       className='object-cover object-left-top h-[60%]  md:h-[90%] absolute -bottom-10 inset-x-0 w-[90%] rounded-xl mx-auto'
+//     />
+//   )
+// }
