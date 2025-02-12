@@ -10,6 +10,31 @@ type Post = {
   content: string | null;
   created_at: string;
   updated_at: string;
+  published_at: string | null;
+  sub_title: string | null;
+  post_cover_url: string | null;
+  user_id: number;
+  user: User;
+  comments_count: number | null;
+  likes_count: number | null;
+  collections_count: number | null;
+  tags: Tag[];
+  tag_ids: number[];
+  comment_ids: number[];
+  like_ids: number[];
+  collection_ids: number[];
+};
+
+type User = {
+  id: number;
+  name: string | null;
+  profile_tagline: string | null;
+  avatar_url: string | null;
+};
+
+type Tag = {
+  id: number;
+  name: string | null;  
 }
 
 export default Post;

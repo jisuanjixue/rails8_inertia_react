@@ -49,7 +49,7 @@ Rails.application.routes.draw do
   get "all_posts", to: "posts#all_posts"
 
   # my home
-  get "my_home", to: "users/my_home#index"
+  get "my_tabs", to: "users/tabs#index"
 
   # user setting
   get "user_setting", to: "users/setting#index"
@@ -61,8 +61,12 @@ Rails.application.routes.draw do
     member do
       get :following, :followers
     end
+
     resource :profile_picture, only: [:update, :destroy], module: :users
   end
+
+  post :follow, to: "users/relationships#follow"
+  delete "unfollow/:id", to: "users/relationships#unfollow"
 
   resources :relationships, only: [:create, :destroy]
 

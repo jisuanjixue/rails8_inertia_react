@@ -1,11 +1,10 @@
 import { Link, Head, router } from '@inertiajs/react'
-import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import DefaultLayout from '../DefaultLayout'
 import PostType from '../../types/serializers/Post'
 import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card'
 
-const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
+const PostIndex = ({ posts }: { posts: PostType[] }) => {
   const renderCards = posts.map((post, index) => {
     return (
       <div onClick={() => router.get(`/posts/${post.id}`)} key={index}>
@@ -56,11 +55,6 @@ const PostIndex = ({ posts, flash }: { posts: PostType[], flash: any }) => {
     <div className="relative flex flex-col items-start justify-start w-full min-h-screen mt-8 bg-black">
       <Head title="Posts" />
       <div className="w-full px-8 pt-8 mx-auto">
-        {flash.notice && (
-          <Card className="p-3 mb-4 rounded-lg bg-green-50">
-            <p className="text-sm">{flash.notice}</p>
-          </Card>
-        )}
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-4xl font-bold text-white">文章</h1>
           <Link href="/posts/new" className="px-5 py-3">

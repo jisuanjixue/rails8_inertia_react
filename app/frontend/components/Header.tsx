@@ -217,7 +217,7 @@ export default function Header() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className='w-56'>
                     <DropdownMenuGroup>
-                      <DropdownMenuItem onSelect={() => router.visit('/my_home')}>
+                      <DropdownMenuItem onSelect={() => router.visit('/my_tabs')}>
                         {currentUser.email}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />

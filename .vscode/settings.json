@@ -1,3 +1,4 @@
 {
-    "supermaven.allowGitignore": true
+    "supermaven.allowGitignore": true,
+    "cursor.aipreview.enabled": true
 }

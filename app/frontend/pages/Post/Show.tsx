@@ -8,12 +8,15 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from '@/components/ui/button'
 import { useSafeState } from 'ahooks'
 import { TextareaInput } from '@/components/ui/textarea-with-characters-left'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import NoProfilePicture from '../../assets/user/no-profile-picture.svg'
+import { GlowingEffect } from '@/components/ui/glowing-effect'
+import { RainbowButton } from '@/components/ui/rainbow-button'
+
 interface Flash {
   alert: string | undefined
   notice: string | undefined
 }
-
-
 
 const Show = ({ post }) => {
   console.log("🚀 ~ Show ~ post:", post)
@@ -25,7 +28,7 @@ const Show = ({ post }) => {
     const [replyContent, setReplyContent] = useSafeState('')
 
     const handleCommentDelete = async (commentId: number) => {
-      router.delete(`/posts/${post.id}/comments/${commentId}`)
+      router.delete(`/posts/${post.id}/comments/${commentId}`, { preserveScroll: false })
     }
 
     const replyCommentSubmit = (content: string, parentId?: number) => {
@@ -33,7 +36,9 @@ const Show = ({ post }) => {
         reply: {
           content: content
         }
-      });
+      },
+      { preserveScroll: false }
+    );
     }
 
     return (
@@ -133,20 +138,19 @@ const Show = ({ post }) => {
   }
 
   const handleLike = () => {
-    router.post(`/posts/${post.id}/likes`)
+    router.post(`/posts/${post.id}/likes`, { preserveScroll: false })
   }
 
   const handleUnlike = () => {
-    router.delete(`/posts/${post.id}/likes/${post.current_user_like_id}`)
+    router.delete(`/posts/${post.id}/likes/${post.current_user_like_id}`, { preserveScroll: false })
   }
 
-
   const handleBookmark = () => {
-    router.post(`/posts/${post.id}/book_marks`)
+    router.post(`/posts/${post.id}/book_marks`, { preserveScroll: false })
   }
 
   const handleUnbookmark = () => {
-    router.delete(`/posts/${post.id}/book_marks/${post.current_user_bookmark_id}`)
+    router.delete(`/posts/${post.id}/book_marks/${post.current_user_bookmark_id}`, { preserveScroll: false })
   }
 
   const [newComment, setNewComment] = useSafeState('')
@@ -154,199 +158,233 @@ const Show = ({ post }) => {
   const handleCommentSubmit = (content: string) => {
     router.post(`/posts/${post.id}/comments`, {
       content: content
-    });
+    }, { preserveScroll: false });
   }
 
   const handleCommentLike = (commentId: number) => {
-    router.post(`/posts/${post.id}/comments/${commentId}/likes`)
+    router.post(`/posts/${post.id}/comments/${commentId}/likes`, { preserveScroll: false })
   }
 
   const handleCommentUnlike = (commentId: number, likeId: number) => {
-    router.delete(`/posts/${post.id}/comments/${commentId}/likes/${likeId}`)
+    router.delete(`/posts/${post.id}/comments/${commentId}/likes/${likeId}`, { preserveScroll: false })
+  }
+
+  const handleFollow = (userId: number, isFollowing: boolean) => {
+    if (isFollowing) {
+      router.delete(`/unfollow/${userId}`, { preserveScroll: false })
+    } else {
+      router.post(`/follow`, {
+        followed_id: userId
+      }, { preserveScroll: false })
+    }
   }
 
   return (
     <div className="flex flex-col gap-8 px-4 py-8 mx-auto max-w-7xl">
       <div className="flex gap-8">
-        {/* 文章内容区域 */}
-        <div className="flex-1 max-w-full">
+        {/* 左侧内容区域 */}
+        <div className="flex-1">
           <Head title={`文章 #${post.id}`} />
-          <div className="space-y-4">
-            <Post post={post} />
-            <div className='flex justify-between'>
-              <div className='flex items-center gap-6'>
+          <div className="space-y-8">
+            {/* 文章内容 */}
+            <div className="space-y-4">
+              <Post post={post} />
+              <div className='flex justify-between'>
+                <div className='flex items-center gap-6'>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        {post.current_user_like_id ? (
+                          <button
+                            onClick={handleUnlike}
+                            className='flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors'
+                          >
+                            <HeartIcon className='w-5 h-5 fill-current' />
+                            <span className='text-base'>{post.likes_count}个赞</span>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={handleLike}
+                            className='flex items-center gap-1.5 text-gray-400 hover:text-gray-500 transition-colors'
+                          >
+                            <HeartIcon className='w-5 h-5 fill-current' />
+                            <span className='text-base'>{post.likes_count}个赞</span>
+                          </button>
+                        )}
+                      </TooltipTrigger>
+                      <TooltipContent className="p-4">
+                        <AnimatedTooltip items={showProfile} avatarSize={32} />
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  {post.current_user_bookmark_id ? (
+                    <button
+                      onClick={handleUnbookmark}
+                      className='flex items-center gap-1.5 text-yellow-500 hover:text-yellow-600 transition-colors'
+                    >
+                      <BookmarkIcon className='w-5 h-5 fill-current' />
+                      <span className='text-base'>{post.bookmarks_count}收藏</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleBookmark}
+                      className='flex items-center gap-1.5 text-gray-400 hover:text-gray-500 transition-colors'
+                    >
+                      <BookmarkIcon className='w-5 h-5 fill-current' />
+                      <span className='text-base'>{post.bookmarks_count}收藏</span>
+                    </button>
+                  )}
+                </div>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      {post.current_user_like_id ? (
-                        <button
-                          onClick={handleUnlike}
-                          className='flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors'
-                        >
-                          <HeartIcon className='w-5 h-5 fill-current' />
-                          <span className='text-base'>{post.likes_count}个赞</span>
-                        </button>
-                      ) : (
-                        <button
-                          onClick={handleLike}
-                          className='flex items-center gap-1.5 text-gray-400 hover:text-gray-500 transition-colors'
-                        >
-                          <HeartIcon className='w-5 h-5 fill-current' />
-                          <span className='text-base'>{post.likes_count}个赞</span>
-                        </button>
-                      )}
+                      <button
+                        className='flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors'
+                      >
+                        <EllipsisVertical className='w-5 h-5 fill-current' />
+                      </button>
                     </TooltipTrigger>
                     <TooltipContent className="p-4">
-                      <AnimatedTooltip items={showProfile} avatarSize={32} />
+                      <div className='flex flex-wrap gap-2'>
+                        {post.can_edit &&
+                          <Link
+                            href={`/posts/${post.id}/edit`}
+                            className='inline-block px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-200 rounded-lg hover:bg-gray-50'
+                          >
+                            编辑
+                          </Link>}
+                        <Link
+                          href='/posts'
+                          className='inline-block px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-200 rounded-lg hover:bg-gray-50'
+                        >
+                          返回列表
+                        </Link>
+                        {post.can_destroy && <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant='destructive' className='px-5 py-3'>删除</Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>您确定要删除吗？</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                删除这篇文章后其他人无法查看。
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>取消</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => router.delete(`/posts/${post.id}`, {
+                                preserveScroll: true,
+                                preserveState: true,
+                                onSuccess: () => {
+                                  router.reload({ only: ['posts'] })
+                                  flash.notice = '分类删除成功'
+                                },
+                                onError: () => {
+                                  flash.alert = '分类删除失败'
+                                }
+                              })}
+                              >确定
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>}
+                      </div>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-
-                {post.current_user_bookmark_id ? (
-                  <button
-                    onClick={handleUnbookmark}
-                    className='flex items-center gap-1.5 text-yellow-500 hover:text-yellow-600 transition-colors'
-                  >
-                    <BookmarkIcon className='w-5 h-5 fill-current' />
-                    <span className='text-base'>{post.bookmarks_count}收藏</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleBookmark}
-                    className='flex items-center gap-1.5 text-gray-400 hover:text-gray-500 transition-colors'
-                  >
-                    <BookmarkIcon className='w-5 h-5 fill-current' />
-                    <span className='text-base'>{post.bookmarks_count}收藏</span>
-                  </button>
-                )}
               </div>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      className='flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors'
-                    >
-                      <EllipsisVertical className='w-5 h-5 fill-current' />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent className="p-4">
-                    <div className='flex flex-wrap gap-2'>
-                      {post.can_edit &&
-                        <Link
-                          href={`/posts/${post.id}/edit`}
-                          className='inline-block px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-200 rounded-lg hover:bg-gray-50'
-                        >
-                          编辑
-                        </Link>}
-                      <Link
-                        href='/posts'
-                        className='inline-block px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-200 rounded-lg hover:bg-gray-50'
-                      >
-                        返回列表
-                      </Link>
-                      {post.can_destroy && <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant='destructive' className='px-5 py-3'>删除</Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>您确定要删除吗？</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              删除这篇文章后其他人无法查看。
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>取消</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => router.delete(`/posts/${post.id}`, {
-                              preserveScroll: true,
-                              preserveState: true,
-                              onSuccess: () => {
-                                router.reload({ only: ['posts'] })
-                                flash.notice = '分类删除成功'
-                              },
-                              onError: () => {
-                                flash.alert = '分类删除失败'
-                              }
-                            })}
-                            >确定
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>}
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
             </div>
-          </div>
-        </div>
 
-        {/* 评论区域 */}
-        <div className="w-full mt-8">
-          <div className="flex flex-col h-full p-6 bg-white rounded-lg shadow">
-            <h3 className="mb-4 text-xl font-semibold">评论 ({post.comments.length})</h3>
-            <div className="flex-1 pr-2 mb-4 overflow-y-auto">
-              <div className="space-y-4">
-                {post?.comments?.filter(comment => !comment.parent_id)?.map(comment => (
-                  <CommentItem
-                    key={comment.id}
-                    comment={comment}
-                    currentUser={currentUser}
+            {/* 评论区域 */}
+            <div className="w-full">
+              <div className="flex flex-col h-full p-6 bg-white rounded-lg shadow">
+                <h3 className="mb-4 text-xl font-semibold">评论 ({post.comments.length})</h3>
+                <div className="flex-1 pr-2 mb-4 overflow-y-auto">
+                  <div className="space-y-4">
+                    {post?.comments?.filter(comment => !comment.parent_id)?.map(comment => (
+                      <CommentItem
+                        key={comment.id}
+                        comment={comment}
+                        currentUser={currentUser}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* 评论输入框 */}
+                <div className="pt-4 border-t">
+                  <TextareaInput
+                    name=''
+                    id=''
+                    value={newComment}
+                    rows={3}
+                    maxLength={180}
+                    className='w-full mb-2'
+                    onChange={(e) => setNewComment?.(e.target.value)}
                   />
-                ))}
+                  <button
+                    onClick={() => handleCommentSubmit(newComment)}
+                    disabled={!newComment.trim()}
+                    className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:bg-gray-300"
+                  >
+                    提交评论
+                  </button>
+                </div>
               </div>
-            </div>
-
-            {/* 评论输入框 */}
-            <div className="pt-4 border-t">
-              <TextareaInput
-                name=''
-                id=''
-                value={newComment}
-                rows={3}
-                maxLength={180}
-                className='w-full mb-2'
-                onChange={(e) => setNewComment?.(e.target.value)}
-              />
-              <button
-                onClick={() => handleCommentSubmit(newComment)}
-                disabled={!newComment.trim()}
-                className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 disabled:bg-gray-300"
-              >
-                提交评论
-              </button>
             </div>
           </div>
         </div>
 
-        <div className="w-80">
-          {/* 作者信息卡片 */}
-          <div className="p-6 mb-4 bg-white rounded-lg shadow">
-            <div className="flex items-center gap-4">
-              <img
-                src={post.user.avatar_url}
-                alt={post.user.name}
-                className="w-12 h-12 rounded-full"
-              />
-              <div>
-                <h4 className="font-medium">{post.user.name}</h4>
-                <p className="text-sm text-gray-500">{post.user.profile_tagline}</p>
+        {/* 右侧卡片区域 */}
+        <div className="space-y-8 w-96">
+          {/* 用户信息卡片 */}
+          <div className="relative rounded-2.5xl border p-2 md:rounded-3xl md:p-3">
+            <GlowingEffect
+              blur={0}
+              borderWidth={3}
+              spread={80}
+              glow={true}
+              disabled={false}
+              proximity={64}
+              inactiveZone={0.01}
+            />
+            <div className="relative flex flex-col justify-between gap-6 overflow-hidden rounded-xl border-0.75 p-6 dark:shadow-[0px_0px_27px_0px_#2D2D2D]">
+              <div className="p-2 border border-gray-600 rounded-lg w-fit">
+                <div className="flex items-center gap-4">
+                  <Avatar>
+                    <AvatarImage src={post.user.avatar_url ?? NoProfilePicture} />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h4 className="font-medium">{post.user.name}</h4>
+                    <p className="text-sm text-gray-500">{post.user.profile_tagline}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="mt-4 text-sm text-gray-600">
-              <p>文章数: {post.user.posts_count}</p>
-              <p>粉丝数: {post.user.followers_count}</p>
+              <div className="space-y-3">
+                <h3 className="pt-0.5 text-xl/[1.375rem] font-semibold font-sans -tracking-4 md:text-2xl/[1.875rem] text-balance text-black dark:text-white">
+                  <div className="mt-4 text-sm text-gray-600">
+                    <p>文章数: {post.user.posts_count}</p>
+                    <p>粉丝数: {post.user.followers_count}</p>
+                  </div>
+                </h3>
+              </div>
+              <div className="space-y-3">
+                <RainbowButton onClick={() => handleFollow(post.user.id, post.user.is_followed)}>
+                  {post.user.is_followed ? '取消关注' : '关注'}
+                </RainbowButton>
+              </div>
             </div>
           </div>
 
-          {/* 其他内容卡片 */}
+          {/* 点赞用户卡片 */}
           <div className="p-6 bg-white rounded-lg shadow">
-            <h4 className="mb-4 font-medium">相关推荐</h4>
-            {/* 这里可以添加推荐内容 */}
+            <h3 className="mb-4 text-xl font-semibold">点赞用户</h3>
+            <AnimatedTooltip items={showProfile} avatarSize={32} />
           </div>
         </div>
       </div>
-
     </div>
   )
 }

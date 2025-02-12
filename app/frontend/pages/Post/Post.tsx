@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { TracingBeam } from '@/components/ui/tracing-beam'
+import ColourfulText from '@/components/ui/colourful-text'
 
 export default function Post ({ post }) {
-  console.log("🚀 ~ Post ~ post:", post)
   const [imageUrl, setImageUrl] = useState('')
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function Post ({ post }) {
           </h2>
 
           <p className="mb-4 text-xl">
-            {item.title}
+          <ColourfulText text={item.title} />
           </p>
 
           <div className="text-sm prose-sm prose dark:prose-invert">

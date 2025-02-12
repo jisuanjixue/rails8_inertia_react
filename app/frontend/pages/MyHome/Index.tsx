@@ -1,12 +1,21 @@
 
 import { Tabs } from '@/components/ui/motion-tabs'
 import DefaultLayout from '../DefaultLayout'
-import { usePage } from '@inertiajs/react'
+import { router, usePage } from '@inertiajs/react'
 import NoProfilePicture from '../../assets/user/no-profile-picture.svg'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import MyPosts from './MyPosts'
+import MyComments from './MyComments'
+import MyCollections from './MyCollections'
+import MyFollowing from './MyFollowing'
+import MyFollowers from './MyFollowers'
 
-const MyHome = ({ user, user_profile, stats }) => {
-    console.log("🚀 ~ MyHome ~ stats:", stats)
+
+const MyHome = ({ user, user_profile, stats,  posts, comments, collections, following, followers }) => {
+    console.log("🚀 ~ MyHome ~  posts, comments, collections, following, followers:",  posts, comments, collections, following, followers)
+    // const handleTabChange = (newTab: string) => {
+    //     router.get(`/my_tabs?tab=${newTab}`);
+    // };
     const {
         auth: { currentUser, profile_picture_url },
     } = usePage().props as any
@@ -17,7 +26,7 @@ const MyHome = ({ user, user_profile, stats }) => {
             content: (
                 <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
                     <p>你发表的文章</p>
-                    <></>
+                    <MyPosts posts={posts}></MyPosts>
                 </div>
             )
         },
@@ -28,7 +37,7 @@ const MyHome = ({ user, user_profile, stats }) => {
                 <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
                     <div className='h-full overflow-y-auto'>
                         <p>你发表的回复及你的文章回复</p>
-                        <></>
+                        <MyComments comments={comments}></MyComments>
                     </div>
                 </div>
             )
@@ -39,7 +48,7 @@ const MyHome = ({ user, user_profile, stats }) => {
             content: (
                 <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
                     <div className='h-full overflow-y-auto'>
-                        <></>
+                        <MyCollections collections={collections}></MyCollections>
                     </div>
                 </div>
             )
@@ -50,19 +59,18 @@ const MyHome = ({ user, user_profile, stats }) => {
             content: (
                 <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
                     <div className='h-full overflow-y-auto'>
-                        <p>你发表的回复及你的文章回复</p>
-                        <></>
+                        <MyFollowing following={following}></MyFollowing>
                     </div>
                 </div>
             )
         },
         {
             title: '关注者',
-            value: 'following_me',
+            value: 'my_followers',
             content: (
                 <div className='relative w-full h-full p-10 overflow-hidden text-xl font-bold text-white rounded-2xl md:text-4xl bg-gradient-to-br from-[#171717] to-[#171717]'>
                     <div className='h-full overflow-y-auto'>
-                        <></>
+                        <MyFollowers followers={followers}></MyFollowers>
                     </div>
                 </div>
             )

@@ -76,6 +76,7 @@ class PostsController < ApplicationController
           posts_count: @post.user.posts.count,
           followers_count: @post.user.followers.count,
           id: @post.user.id,
+          is_followed: Current.user.following?(@post.user),
           name: @post.user.profile&.name,
           avatar_url: @post.user.profile_picture&.attached? ? url_for(@post.user.profile_picture) : nil
         },
