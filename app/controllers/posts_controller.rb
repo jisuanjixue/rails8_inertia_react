@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  include Paginatable
   # before_action do
   #   Debugbar.msg('before_action', { params: params.permit!.to_h, callee: __callee__ })
   # end
@@ -9,31 +10,13 @@ class PostsController < ApplicationController
   inertia_share flash: -> { flash.to_hash }
 
   def all_posts
-    begin
-      @posts = Post.all.with_content.with_attachments.includes(user: [:profile, :profile_picture_attachment])
-      @q = @posts.ransack(params[:q])
-      @search_posts = @q.result(distinct: true).order(created_at: :desc)
-      pagy, paged_posts = pagy(@search_posts)
-    rescue Pagy::OverflowError
-      pagy = Pagy.new(count: @search_posts.count, page: params[:page], items: params[:limit])
-      paged_posts = @search_posts.offset(pagy.offset).limit(pagy.items)
-    end
+    @posts = Post.all.with_content.with_attachments.includes(user: [:profile, :profile_picture_attachment])
+    @q = @posts.ransack(params[:q])
+    @search_posts = @q.result(distinct: true).order(created_at: :desc)
+    pagy, paged_posts = paginate(@search_posts)
 
     render inertia: "Post/List", props: {
-      posts: InertiaRails.merge {
-        paged_posts.map do |post|
-          serialize_post(post).merge(
-            category_name: post.category.name,
-            post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil,
-            user: {
-              id: post.user.id,
-              name: post.user.profile&.name,
-              profile_tagline: post.user.profile&.profile_tagline,
-              avatar_url: post.user.profile_picture&.attached? ? url_for(post.user.profile_picture) : nil
-            }
-          )
-        end
-      },
+      posts: InertiaRails.merge { paged_posts.map { |post| post_props(post) } },
       meta: pagy_metadata(pagy),
       total: @search_posts.count
     }
@@ -43,18 +26,7 @@ class PostsController < ApplicationController
   def index
     @posts = Current.user.posts.with_current_user_posts.with_content.includes(user: [:profile, :profile_picture_attachment]).accessible_by(current_ability)
     render inertia: "Post/Index", props: {
-      posts: @posts.map do |post|
-        serialize_post(post).merge(
-          category_name: post.category.name,
-          post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil,
-          user: {
-            id: post.user.id,
-            name: post.user.profile&.name,
-            profile_tagline: post.user.profile&.profile_tagline,
-            avatar_url: post.user.profile_picture&.attached? ? url_for(post.user.profile_picture) : nil
-          }
-        )
-      end
+      posts: @posts.map { |post| post_props(post) }
     }
   end
 
@@ -80,33 +52,7 @@ class PostsController < ApplicationController
           name: @post.user.profile&.name,
           avatar_url: @post.user.profile_picture&.attached? ? url_for(@post.user.profile_picture) : nil
         },
-        comments: @post.comments.includes(:user).order(created_at: :desc).map do |comment|
-          {
-            id: comment.id,
-            content: comment.content,
-            created_at: comment.created_at,
-            current_user_like_id: comment.likes.find_by(user_id: Current.user.id)&.id,
-            user: {
-              id: comment.user.id,
-              name: comment.user.profile&.name,
-              avatar_url: comment.user.profile_picture&.attached? ? url_for(comment.user.profile_picture) : nil
-            },
-            replies: comment.replies.order(created_at: :asc).map do |reply|
-              {
-                id: reply.id,
-                content: reply.content,
-                created_at: reply.created_at,
-                depth: reply.depth,
-                current_user_like_id: reply.likes.find_by(user_id: Current.user.id)&.id,
-                user: {
-                  id: reply.user.id,
-                  name: reply.user.profile&.name,
-                  avatar_url: reply.user.profile_picture&.attached? ? url_for(reply.user.profile_picture) : nil
-                }
-              }
-            end
-          }
-        end
+        comments: @post.comments.includes(:user).order(created_at: :desc).map { |comment| comment_props(comment).merge(depth: comment.depth) }
       )
     }
   end
@@ -165,25 +111,14 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1
   def destroy
-    @post.destroy!
+    @post.destroy
     redirect_to posts_url, notice: "Post was successfully destroyed."
   end
 
   def collections
     @posts = Current.user.bookmarked_posts.includes(:user).order(created_at: :desc)
     render inertia: "User/Collections", props: {
-      posts: @posts.map do |post|
-        serialize_post(post).merge(
-          category_name: post.category.name,
-          post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil,
-          user: {
-            id: post.user.id,
-            name: post.user.profile&.name,
-            profile_tagline: post.user.profile&.profile_tagline,
-            avatar_url: post.user.profile_picture&.attached? ? url_for(post.user.profile_picture) : nil
-          }
-        )
-      end
+      posts: @posts.map { |post| post_props(post) }
     }
   end
 
@@ -201,6 +136,34 @@ class PostsController < ApplicationController
 
   def set_categories
     @categories = Category.all
+  end
+
+  def post_props(post)
+    serialize_post(post).merge(
+      category_name: post.category.name,
+      post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil,
+      user: {
+        id: post.user.id,
+        name: post.user.profile&.name,
+        profile_tagline: post.user.profile&.profile_tagline,
+        avatar_url: post.user.profile_picture&.attached? ? url_for(post.user.profile_picture) : nil
+      }
+    )
+  end
+
+  def comment_props(comment)
+    {
+      id: comment.id,
+      content: comment.content,
+      created_at: comment.created_at,
+      current_user_like_id: comment.likes.find_by(user_id: Current.user.id)&.id,
+      user: {
+        id: comment.user.id,
+        name: comment.user.profile&.name,
+        avatar_url: comment.user.profile_picture&.attached? ? url_for(comment.user.profile_picture) : nil
+      },
+      replies: comment.replies.order(created_at: :asc).map { |reply| comment_props(reply) }
+    }
   end
 
   def serialize_post(post)

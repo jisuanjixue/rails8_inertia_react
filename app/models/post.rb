@@ -5,6 +5,7 @@
 #  id          :integer          not null, primary key
 #  body        :text
 #  content     :text
+#  deleted_at  :datetime
 #  status      :integer          default("draft")
 #  sub_title   :string(100)      default("")
 #  title       :string
@@ -16,13 +17,16 @@
 # Indexes
 #
 #  index_posts_on_category_id  (category_id)
+#  index_posts_on_deleted_at   (deleted_at)
 #  index_posts_on_user_id      (user_id)
 #
 # Foreign Keys
 #
 #  category_id  (category_id => categories.id)
 #
-class Post < ApplicationRecord
+class Post < ApplicationRecord 
+  acts_as_paranoid
+
   include Post::PostCover
 
   include Ransackable

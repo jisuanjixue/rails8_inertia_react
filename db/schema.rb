@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_10_085958) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_19_024825) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -73,6 +73,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_10_085958) do
     t.datetime "updated_at", null: false
     t.integer "parent_id"
     t.integer "depth"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_comments_on_deleted_at"
     t.index ["parent_id"], name: "index_comments_on_parent_id"
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -114,7 +116,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_10_085958) do
     t.integer "category_id", null: false
     t.string "sub_title", limit: 100, default: ""
     t.integer "status", default: 0
+    t.datetime "deleted_at"
     t.index ["category_id"], name: "index_posts_on_category_id"
+    t.index ["deleted_at"], name: "index_posts_on_deleted_at"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 

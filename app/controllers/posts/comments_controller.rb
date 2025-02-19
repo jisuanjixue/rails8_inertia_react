@@ -24,7 +24,7 @@ module Posts
     end
 
     def destroy
-      @comment.destroy!
+      @comment.destroy
       redirect_to @post, notice: "评论删除成功!"
     end
 

@@ -16,44 +16,42 @@
 #
 class User < ApplicationRecord
   include User::ProfilePicture
-  has_secure_password
-  # has_many :likes, dependent: :destroy
-  has_many :liked_posts, through: :likes, source: :likeable, source_type: "Post"
-  has_many :liked_comments, through: :likes, source: :likeable, source_type: "Comment"
+  has_secure_password #进行密码加密
+
+  # 点赞系统（多态关联）
+  has_many :likes, as: :likeable, dependent: :destroy # 用户可以被点赞
+  has_many :liked_posts, through: :likes, source: :likeable, source_type: "Post" # 用户点赞的帖子
+  has_many :liked_comments, through: :likes, source: :likeable, source_type: "Comment" # 用户点赞的评论
   # alias association for user who submitted the like
   # has_many :submitted_likes, class_name: "Like", foreign_key: :user_id
   # association for user, instrument_post and comment that has the review
-  has_many :likes, as: :likeable, dependent: :destroy
-  has_one :profile, dependent: :destroy
+  has_one :profile, dependent: :destroy # 用户与个人资料的一对一关系
 
-  has_many :bookmarks, dependent: :destroy
-  has_many :comments, dependent: :destroy
-  has_many :bookmarked_posts, through: :bookmarks, source: :post
-  # 我关注的用户
-  has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
-  has_many :following, through: :active_relationships, source: :followed
+# 收藏系统
+  has_many :bookmarks, dependent: :destroy # 用户可以收藏的帖子
+  has_many :comments, dependent: :destroy # 用户可以收藏的评论
+  has_many :bookmarked_posts, through: :bookmarks, source: :post # 用户收藏的帖子
 
-  # 关注我的人
-  has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
-  has_many :followers, through: :passive_relationships, source: :follower
+# 关注系统
+  has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy # 用户主动关注的关系
+  has_many :following, through: :active_relationships, source: :followed # 用户正在关注的人
+  has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy # 用户被关注的关系
+  has_many :followers, through: :passive_relationships, source: :follower  # 用户的粉丝
 
-  # has_many :followers
-  # has_many :following
-
+  # 安全相关
   generates_token_for :email_verification, expires_in: 2.days do
     email
   end
-
   generates_token_for :password_reset, expires_in: 20.minutes do
     password_salt.last(10)
   end
-
   has_many :sessions, dependent: :destroy
-
   has_many :connected_accounts, dependent: :destroy
+  encrypts :email, deterministic: true
+
+
   has_many :posts, dependent: :destroy
 
-  encrypts :email, deterministic: true
 
   validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
   validates :password, allow_nil: true, length: {minimum: 6}
