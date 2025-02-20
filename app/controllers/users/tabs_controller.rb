@@ -3,73 +3,18 @@ class Users::TabsController < ApplicationController
   before_action :set_user
 
   def index
-    @posts = Current.user.posts.with_current_user_posts.with_content.includes(:category, user: [:profile, :profile_picture_attachment]).preload(:likes).accessible_by(current_ability)
-
-    # comments_lists = @user.comments.includes(:user, :likes, replies: [:user, :likes]).order(created_at: :desc).map do |comment|
-    #   {
-    #     id: comment.id,
-    #     content: comment.content,
-    #     created_at: comment.created_at,
-    #     current_user_like_id: comment.likes.find_by(user_id: Current.user.id)&.id,
-    #     user: {
-    #       id: comment.user.id,
-    #       name: comment.user.profile&.name,
-    #       avatar_url: comment.user.profile_picture&.attached? ? url_for(comment.user.profile_picture) : nil
-    #     },
-    #     replies: comment.replies.order(created_at: :asc).map do |reply|
-    #       {
-    #         id: reply.id,
-    #         content: reply.content,
-    #         created_at: reply.created_at,
-    #         depth: reply.depth,
-    #         current_user_like_id: reply.likes.find_by(user_id: Current.user.id)&.id,
-    #         user: {
-    #           id: reply.user.id,
-    #           name: reply.user.profile&.name,
-    #           avatar_url: reply.user.profile_picture&.attached? ? url_for(reply.user.profile_picture) : nil
-    #         }
-    #       }
-    #     end
-    #   }
-    # end
-
-    # collections_lists = @user.bookmarked_posts.includes(:user, :likes).order(created_at: :desc).map do |collection|
-    #   {
-    #     id: collection.id,
-    #     content: collection.content,
-    #     created_at: collection.created_at,
-    #     current_user_like_id: collection.likes.find_by(user_id: Current.user.id)&.id,
-    #     user: {
-    #       id: collection.user.id,
-    #       name: collection.user.profile&.name,
-    #       avatar_url: collection.user.profile_picture&.attached? ? url_for(collection.user.profile_picture) : nil
-    #     }
-    #   }
-    # end
-
-    # following_lists = @user.following.includes(:profile, :profile_picture_attachment).map do |following|
-    #   {
-    #     id: following.id,  # 直接使用 following.id
-    #     name: following.profile&.name,  # 直接使用 following
-    #     avatar_url: following.profile_picture&.attached? ? url_for(following.profile_picture) : nil
-    #   }
-    # end
-
-    # followers_lists = @user.followers.includes(:profile, :profile_picture_attachment).map do |follower|
-    #   {
-    #     id: follower.id,
-    #     name: follower.profile&.name,
-    #     avatar_url: follower.profile_picture&.attached? ? url_for(follower.profile_picture) : nil
-    #   }
-    # end
+    @posts = Current.user.posts
+      .with_content
+      .includes(user: [:profile, :profile_picture_attachment])
+      .accessible_by(current_ability)
 
     # 使用ActiveRecord的批量查询代替多次数据库查询
     comments = @user.comments
-      .includes(:user, :likes, replies: [:user, :likes])
+      .includes(:likes, replies: [:likes])
       .order(created_at: :desc)
 
     collections = @user.bookmarked_posts
-      .includes(:user, :likes)
+      .preload(:likes)
       .order(created_at: :desc)
 
     following = @user.following
@@ -96,7 +41,7 @@ class Users::TabsController < ApplicationController
         )
       },
       comments: InertiaRails.defer { comments.map { |c| serialize_comment(c) } },
-      collections: InertiaRails.defer { collections.map { |c| serialize_comment(c) } },
+      collections: InertiaRails.defer { collections.map { |c| serialize_post(c) } },
       following: InertiaRails.defer { following.map { |f| serialize_user(f) } },
       followers: InertiaRails.defer { followers.map { |f| serialize_user(f) } }
     }

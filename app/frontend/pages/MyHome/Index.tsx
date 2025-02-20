@@ -122,7 +122,7 @@ const MyHome = ({ user, user_profile, stats,  posts, comments, collections, foll
             </div>
 
             {/* 右侧内容 */}
-            <div className='h-[20rem] md:h-[40rem] [perspective:1000px] relative flex flex-col max-w-6xl mx-auto w-full items-start justify-start my-20'>
+            <div className='w-3/4 h-[40rem] [perspective:1000px] relative flex flex-col'>
                 <Tabs tabs={tabs} />
             </div>
         </div>

@@ -16,7 +16,7 @@
 #
 class User < ApplicationRecord
   include User::ProfilePicture
-  has_secure_password #进行密码加密
+  has_secure_password # 进行密码加密
 
   # 点赞系统（多态关联）
   has_many :likes, as: :likeable, dependent: :destroy # 用户可以被点赞
@@ -27,12 +27,12 @@ class User < ApplicationRecord
   # association for user, instrument_post and comment that has the review
   has_one :profile, dependent: :destroy # 用户与个人资料的一对一关系
 
-# 收藏系统
+  # 收藏系统
   has_many :bookmarks, dependent: :destroy # 用户可以收藏的帖子
   has_many :comments, dependent: :destroy # 用户可以收藏的评论
   has_many :bookmarked_posts, through: :bookmarks, source: :post # 用户收藏的帖子
 
-# 关注系统
+  # 关注系统
   has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy # 用户主动关注的关系
   has_many :following, through: :active_relationships, source: :followed # 用户正在关注的人
   has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy # 用户被关注的关系
@@ -49,9 +49,7 @@ class User < ApplicationRecord
   has_many :connected_accounts, dependent: :destroy
   encrypts :email, deterministic: true
 
-
   has_many :posts, dependent: :destroy
-
 
   validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
   validates :password, allow_nil: true, length: {minimum: 6}
@@ -64,6 +62,10 @@ class User < ApplicationRecord
 
   after_update if: :password_digest_previously_changed? do
     sessions.where.not(id: Current.session).delete_all
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[email created_at] # 添加需要搜索的属性
   end
 
   # 关注另一个用户

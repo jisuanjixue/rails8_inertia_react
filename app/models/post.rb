@@ -24,7 +24,7 @@
 #
 #  category_id  (category_id => categories.id)
 #
-class Post < ApplicationRecord 
+class Post < ApplicationRecord
   acts_as_paranoid
 
   include Post::PostCover
@@ -43,9 +43,9 @@ class Post < ApplicationRecord
     filterable_attributes [:category_id]
   end
 
-  scope :with_content, -> { includes(:rich_text_content) }
-  scope :with_attachments, -> { includes(%i[category post_cover_attachment user]) }
-  scope :with_current_user_posts, -> { includes(%i[category post_cover_attachment]) }
+  scope :with_content, -> { preload(:rich_text_content, :category) }
+  scope :with_attachments, -> { preload(:post_cover_attachment, :category) }
+  scope :with_current_user_posts, -> { preload(:post_cover_attachment) }
 
   RANSACK_ATTRIBUTES = %w[body content title created_at updated_at].freeze
 
