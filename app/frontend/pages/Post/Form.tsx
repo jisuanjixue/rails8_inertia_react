@@ -1,5 +1,5 @@
 // import { router, useForm } from '@inertiajs/react'
-import { ReactTrixRTEInput } from 'react-trix-rte'
+// import { ReactTrixRTEInput } from 'react-trix-rte'
 import PostType from '../../types/serializers/Post'
 import { Input } from '@/components/forms/motion-input'
 import { Label } from '@/components/forms/motion-label'
@@ -17,15 +17,15 @@ import QuickActionsFloatingPanel from './components/QuickActionsFloatingPanel'
 import PostCoverShow from '@/components/pages/post/PostCoverShow'
 import { Deferred } from '@inertiajs/react'
 import TailwindAdvancedEditor from '@/components/editor/advanced-editor'
-import { JSONContent } from 'novel'
+// import { JSONContent } from 'novel'
 
 export default function Form({ post, categories = [], submitText, post_cover_url, postUrl, patchUrl }: { post: PostType, submitText: string, categories?: CategoryType[], post_cover_url?: string, postUrl?: string, patchUrl?: string, }) {
-  const factory = useCreation(
-    () => ({
-      content: ''
-    }),
-    []
-  )
+  // const factory = useCreation(
+  //   () => ({
+  //     content: ''
+  //   }),
+  //   []
+  // )
   const {
     data,
     processing,
@@ -56,7 +56,7 @@ export default function Form({ post, categories = [], submitText, post_cover_url
   const [showSubTitle, setShowSubTitle] = useSafeState(false)
 
   const handleSubmit = (e) => {
-    transform((data: PostType) => ({ ...data, category_id: item?.value, content: factory.content, status: data.status === 'draft' ? 0 : 1 }))
+    transform((data: PostType) => ({ ...data, category_id: item?.value, status: data.status === 'draft' ? 0 : 1 }))
     submit(e)
   }
 
@@ -86,8 +86,8 @@ export default function Form({ post, categories = [], submitText, post_cover_url
     )
   }
 
-  const [value, setValue] = useSafeState<JSONContent>([]);
-  console.log(value);
+  // const [value, setValue] = useSafeState<JSONContent>([]);
+  // console.log(value);
 
   return (
     <>
@@ -146,7 +146,7 @@ export default function Form({ post, categories = [], submitText, post_cover_url
           )}
         </div>
 
-        <div className='my-5'>
+        {/* <div className='my-5'>
           <label htmlFor='body'>正文</label>
           <ReactTrixRTEInput
             name='content'
@@ -157,11 +157,27 @@ export default function Form({ post, categories = [], submitText, post_cover_url
               factory.content = newValue
             }}
           />
-        </div>
+        </div> */}
         <div className='my-5'>
           <label htmlFor='body'>正文</label>
-          <TailwindAdvancedEditor initialValue={value} onChange={setValue} />
-
+          <TailwindAdvancedEditor
+            initialValue={
+              post?.content
+                ? typeof post.content === 'string'
+                  ? JSON.parse(post.content)
+                  : post.content
+                : {
+                  type: 'doc',
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [{ type: 'text', text: '' }]
+                    }
+                  ]
+                }
+            }
+            onChange={setData}
+          />
         </div>
 
         <div className='inline'>

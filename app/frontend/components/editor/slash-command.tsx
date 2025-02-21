@@ -106,7 +106,7 @@ export const suggestionItems = createSuggestionItems([
     command: ({ editor, range }) => editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
   },
   {
-    title: "Image",
+    title: "图片",
     description: "Upload an image from your computer.",
     searchTerms: ["photo", "picture", "media"],
     icon: <ImageIcon size={18} />,

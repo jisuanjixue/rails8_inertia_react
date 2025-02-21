@@ -23,7 +23,7 @@ const HomeIndex = () => {
       className: 'text-white'
     },
     {
-      text: '的',
+      text: '的11',
       className: 'text-white'
     },
     {

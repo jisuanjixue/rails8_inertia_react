@@ -17,8 +17,8 @@
 // Example: Import a stylesheet in app/frontend/index.css
 // import '~/index.css'
 
-import 'trix'
-import '@rails/actiontext'
+// import 'trix'
+// import '@rails/actiontext'
 
 
 

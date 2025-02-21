@@ -19,19 +19,23 @@ export default defineConfig({
       }
     }),
     mkcert(),
-    reloadOnChange(["config/routes.rb", "app/views/**/*", "app/resources/**/*.rb", "app/frontend/**/**/.tsx"], { delay: 200 }),
+    reloadOnChange(["config/routes.rb", "app/views/**/*", "app/resources/**/*.rb", "app/frontend/**/**/.tsx"], { delay: 1000 }),
   ],
   server: {
     cors: {
       origin: '*'
     },
     watch: {
-      usePolling: true
+      usePolling: true,
+      interval: 100,    // 降低轮询间隔
+  ignored: ['!**/node_modules/**']
     },
     hmr: {
+      protocol: 'wss', // 添加这行
       host: 'localhost',
       overlay: true,
-      clientPort: 443
+      clientPort: 443,
+      timeout: 30000, // 增加超时时间
     }
   },
   build: {

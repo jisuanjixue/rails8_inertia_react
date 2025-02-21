@@ -31,11 +31,12 @@ const extensions = [...defaultExtensions, slashCommand];
 
 interface EditorProp {
   initialValue?: JSONContent;
-  onChange: (value: JSONContent) => void;
+  onChange: (key: string, value: string) => void | undefined;
 }
 
 const TailwindAdvancedEditor = ({ initialValue, onChange }: EditorProp) => {
   const [initialContent, setInitialContent] = useSafeState<null | JSONContent>(null);
+  console.log("🚀 ~ TailwindAdvancedEditor ~ initialContent:", initialContent)
   const [saveStatus, setSaveStatus] = useSafeState("Saved");
   const [charsCount, setCharsCount] = useSafeState();
 
@@ -69,6 +70,10 @@ const TailwindAdvancedEditor = ({ initialValue, onChange }: EditorProp) => {
     if (content) setInitialContent(JSON.parse(content));
     else setInitialContent(defaultEditorContent);
   }, []);
+
+  useEffect(() => {
+    onChange?.('content', JSON.stringify(initialContent));
+  }, [initialContent]);
 
   if (!initialContent) return null;
 

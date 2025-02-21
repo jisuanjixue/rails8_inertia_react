@@ -59,13 +59,13 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Current.user.posts.with_content.new(status: :draft) # 默认创建为草稿
+    @post = Current.user.posts.with_content.new(status: :draft)
     @drafts = Current.user.posts.draft.order(created_at: :desc) # 获取用户的草稿列表
     render inertia: "Post/New", props: {
       post: serialize_post(@post),
+      post_cover_url: nil,
       categories: InertiaRails.defer { @categories },
-      drafts: InertiaRails.defer { @drafts.map { |draft| serialize_post(draft) } },
-      post_cover_url: nil
+      drafts: InertiaRails.defer { @drafts.map { |draft| serialize_post(draft) } }
     }
   end
 

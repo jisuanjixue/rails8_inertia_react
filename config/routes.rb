@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   mount Apicraft::Web::App, at: "/apicraft"
   mount SolidErrors::Engine, at: "/solid_errors"
-  # mount Debugbar::Engine => Debugbar.config.prefix if defined? Debugbar
+  mount Debugbar::Engine => Debugbar.config.prefix if defined? Debugbar
   # authentication
   get "/auth/failure", to: "sessions/omniauth#failure"
   get "/auth/:provider/callback", to: "sessions/omniauth#create"
@@ -38,6 +38,7 @@ Rails.application.routes.draw do
 
     resources :likes, only: [:create, :destroy], controller: "posts/likes"
     resource :post_cover, only: [:update, :destroy], module: :posts
+    # resource :post_images, only: [:update, :destroy], module: :posts
     member do
       post "publish"
     end
@@ -46,6 +47,7 @@ Rails.application.routes.draw do
   get "my_collections", to: "posts#collections"
 
   post "upload_cover", to: "posts/post_covers#create"
+  # post "upload_post_image", to: "posts/post_images#create"
   get "all_posts", to: "posts#all_posts"
 
   # my home

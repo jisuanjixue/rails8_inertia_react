@@ -4,7 +4,8 @@ import CategoryType from '../../types/serializers/Category'
 import PostType from '../../types/serializers/Post'
 import DefaultLayout from '../DefaultLayout'
 
-const PostNew = ({ post, categories, post_cover_url }: { post: PostType, categories: CategoryType[], post_cover_url?: string }) => {
+const PostNew = ({ post, categories, post_cover_url, post_images_url }: { post: PostType, categories: CategoryType[], post_cover_url?: string, post_images_url?: string }) => {
+  console.log("🚀 ~ PostNew ~ post_images_url:", post_images_url, post_cover_url)
   
   return (
     <>

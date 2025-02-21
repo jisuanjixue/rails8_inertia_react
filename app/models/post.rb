@@ -28,6 +28,7 @@ class Post < ApplicationRecord
   acts_as_paranoid
 
   include Post::PostCover
+  include Post::PostImages
 
   include Ransackable
 
