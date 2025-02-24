@@ -10,13 +10,14 @@ class PostsController < ApplicationController
   inertia_share flash: -> { flash.to_hash }
 
   def all_posts
-    @posts = Post.all.with_content.with_attachments.includes(user: [:profile, :profile_picture_attachment])
+    @posts = Post.all.with_content.with_attachments
+      .includes(user: [:profile, :profile_picture_attachment])
     @q = @posts.ransack(params[:q])
     @search_posts = @q.result(distinct: true).order(created_at: :desc)
     pagy, paged_posts = paginate(@search_posts)
 
     render inertia: "Post/List", props: {
-      posts: InertiaRails.merge { paged_posts.map { |post| post_props(post) } },
+      posts: paged_posts.map { |post| PostResource.new(post).serializable_hash },
       meta: pagy_metadata(pagy),
       total: @search_posts.count
     }
@@ -24,16 +25,20 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Current.user.posts.with_current_user_posts.with_content.includes(user: [:profile, :profile_picture_attachment]).accessible_by(current_ability)
+    @posts = Current.user.posts.with_current_user_posts
+      .with_content
+      .includes(user: [:profile, :profile_picture_attachment])
+      .accessible_by(current_ability)
+
     render inertia: "Post/Index", props: {
-      posts: @posts.map { |post| post_props(post) }
+      posts: @posts.map { |post| PostResource.new(post).serializable_hash }
     }
   end
 
   # GET /posts/1
   def show
     render inertia: "Post/Show", props: {
-      post: serialize_post(@post).merge(
+      post: PostResource.new(@post).serializable_hash.merge(
         category_name: @post.category.name,
         post_cover_url: @post&.post_cover&.attached? ? url_for(@post&.post_cover) : nil,
         user_id: Current.user.id,
@@ -59,20 +64,29 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Current.user.posts.with_content.new(status: :draft)
+    # @post = Current.user.posts.with_content.new(status: :draft, category_id: @categories.first&.id)
+    # @post = Current.user.posts.with_content.order(created_at: :desc)
+    #   .first_or_initialize(
+    #     status: :draft,
+    #     category_id: @categories.first&.id
+    #   )
+    @post ||= Current.user.posts.with_content.new(
+      status: :draft,
+      category_id: @categories.first&.id
+    )
     @drafts = Current.user.posts.draft.order(created_at: :desc) # 获取用户的草稿列表
     render inertia: "Post/New", props: {
-      post: serialize_post(@post),
-      post_cover_url: nil,
+      post: PostResource.new(@post).serializable_hash,
+      post_cover_url: @post&.post_cover&.attached? ? url_for(@post&.post_cover) : nil,
       categories: InertiaRails.defer { @categories },
-      drafts: InertiaRails.defer { @drafts.map { |draft| serialize_post(draft) } }
+      drafts: InertiaRails.defer { @drafts.map { |draft| PostResource.new(draft).serializable_hash } }
     }
   end
 
   # GET /posts/1/edit
   def edit
     render inertia: "Post/Edit", props: {
-      post: serialize_post(@post),
+      post: PostResource.new(@post).serializable_hash,
       categories: InertiaRails.defer { @categories },
       post_cover_url: @post&.post_cover&.attached? ? url_for(@post&.post_cover) : nil
     }
@@ -124,6 +138,10 @@ class PostsController < ApplicationController
 
   private
 
+  def set_categories
+    @categories = Category.all
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_post
     @post = Post.find(params[:id])
@@ -132,23 +150,6 @@ class PostsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def post_params
     params.require(:post).permit(:title, :body, :content, :category_id, :sub_title, :status)
-  end
-
-  def set_categories
-    @categories = Category.all
-  end
-
-  def post_props(post)
-    serialize_post(post).merge(
-      category_name: post.category.name,
-      post_cover_url: post&.post_cover&.attached? ? url_for(post&.post_cover) : nil,
-      user: {
-        id: post.user.id,
-        name: post.user.profile&.name,
-        profile_tagline: post.user.profile&.profile_tagline,
-        avatar_url: post.user.profile_picture&.attached? ? url_for(post.user.profile_picture) : nil
-      }
-    )
   end
 
   def comment_props(comment)
@@ -164,14 +165,5 @@ class PostsController < ApplicationController
       },
       replies: comment.replies.order(created_at: :asc).map { |reply| comment_props(reply) }
     }
-  end
-
-  def serialize_post(post)
-    post.as_json(only: %i[
-      id title body content sub_title created_at updated_at category_id status likes_count
-    ]).merge(
-      user_id: post.user_id,
-      likers_info: post.likers_info.as_json
-    )
   end
 end

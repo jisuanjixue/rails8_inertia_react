@@ -7,7 +7,9 @@
     "lint": "ts-standard app/frontend --report",
     "lint:yml": "yarn prettier --check data/**/**/*.yml",
     "format": "standard --fix",
-    "format:yml": "yarn run lint:yml --write"
+    "format:yml": "yarn run lint:yml --write",
+    "types": "rails typelizer:generate",
+    "types:refresh": "rails typelizer:generate:refresh"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",

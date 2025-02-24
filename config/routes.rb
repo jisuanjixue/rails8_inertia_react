@@ -37,7 +37,7 @@ Rails.application.routes.draw do
     end
 
     resources :likes, only: [:create, :destroy], controller: "posts/likes"
-    resource :post_cover, only: [:update, :destroy], module: :posts
+    resource :post_cover, only: [:create, :update, :destroy], module: :posts
     # resource :post_images, only: [:update, :destroy], module: :posts
     member do
       post "publish"
@@ -46,7 +46,7 @@ Rails.application.routes.draw do
 
   get "my_collections", to: "posts#collections"
 
-  post "upload_cover", to: "posts/post_covers#create"
+  # post "upload_cover", to: "posts/post_covers#create"
   # post "upload_post_image", to: "posts/post_images#create"
   get "all_posts", to: "posts#all_posts"
 

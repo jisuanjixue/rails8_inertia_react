@@ -8,6 +8,8 @@ class Users::TabsController < ApplicationController
       .includes(user: [:profile, :profile_picture_attachment])
       .accessible_by(current_ability)
 
+    github_repos = GithubService.user_repos(@user.github_username) if @user.github_username.present?
+
     # 使用ActiveRecord的批量查询代替多次数据库查询
     comments = @user.comments
       .includes(:likes, replies: [:likes])
@@ -26,6 +28,7 @@ class Users::TabsController < ApplicationController
     render inertia: "MyHome/Index", props: {
       user: @user,
       user_profile: @profile,
+      github_repos: github_repos || [],
       stats: {
         posts_count: @user.posts.size,
         comments_count: @user.comments.size,

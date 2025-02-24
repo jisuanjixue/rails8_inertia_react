@@ -91,9 +91,9 @@ gem "vite_rails", "~> 3.0"
 
 gem "cancancan", "~> 3.6"
 
-gem "typelizer", "~> 0.1.5"
+gem "typelizer", "~> 0.2.0"
 
-gem "alba", "~> 3.3"
+gem "alba", "~> 3.5.0"
 
 # Use OmniAuth to support multi-provider authentication [https://github.com/omniauth/omniauth]
 gem "omniauth"

@@ -93,7 +93,7 @@ export default function PostCoverEdit({
         if (postId) {
           patch(`/posts/${postId}/post_cover`)
         } else {
-          post(`/upload_cover`, {
+          post(`/posts/${postId}/post_cover`, {
             onSuccess: () => {
               if (!hasErrors) {
               //  router.get(`/posts/${postId}/edit`)

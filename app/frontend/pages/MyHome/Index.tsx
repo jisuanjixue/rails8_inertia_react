@@ -9,10 +9,11 @@ import MyComments from './MyComments'
 import MyCollections from './MyCollections'
 import MyFollowing from './MyFollowing'
 import MyFollowers from './MyFollowers'
+import { GlowingEffect } from '@/components/ui/glowing-effect'
 
 
-const MyHome = ({ user, user_profile, stats,  posts, comments, collections, following, followers }) => {
-    console.log("🚀 ~ MyHome ~  posts, comments, collections, following, followers:",  posts, comments, collections, following, followers)
+const MyHome = ({ user, user_profile, github_repos, stats, posts, comments, collections, following, followers }) => {
+    console.log("🚀 ~ MyHome ~  posts, comments, collections, following, followers:", posts, comments, collections, following, followers)
     // const handleTabChange = (newTab: string) => {
     //     router.get(`/my_tabs?tab=${newTab}`);
     // };
@@ -83,40 +84,62 @@ const MyHome = ({ user, user_profile, stats,  posts, comments, collections, foll
             {/* 左侧栏 */}
             <div className="w-1/4 space-y-4">
                 {/* 个人信息卡片 */}
-                <div className="bg-[#171717] rounded-lg p-6">
-                    <div className="flex items-center space-x-4">
-                        <Avatar>
-                            <AvatarImage src={profile_picture_url ?? NoProfilePicture} />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <h2 className="text-xl font-bold text-white">{user_profile.name}</h2>
-                            <p className="text-gray-400">会员</p>
+                <div className="relative rounded-2.5xl border p-6 md:rounded-3xl md:p-3">
+                    <GlowingEffect
+                        blur={0}
+                        borderWidth={3}
+                        spread={80}
+                        glow={true}
+                        disabled={false}
+                        proximity={64}
+                        inactiveZone={0.01}
+                    />
+                    <div className="relative flex flex-col justify-between gap-6 overflow-hidden rounded-xl border-0.75 p-6 dark:shadow-[0px_0px_27px_0px_#2D2D2D]">
+                        <div className="p-2 border border-gray-600 rounded-lg w-fit">
+                            <div className="flex items-center gap-4">
+                                <Avatar>
+                                    <AvatarImage src={profile_picture_url ?? NoProfilePicture} />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <h2 className="text-xl font-bold text-white">{user_profile.name}</h2>
+                                    <p className="text-gray-400">会员</p>
+                                </div>
+                            </div>
+                            <div className="mt-4 space-y-2 text-gray-300">
+                                <p>{stats.posts_count} 篇帖子 / {stats.comments_count} 条回帖</p>
+                                <p>{stats.followers_count} 关注者 / {stats.following_count} 正在关注</p>
+                                <p>{stats.collections_count} 收藏</p>
+                            </div>
                         </div>
-                    </div>
-                    <div className="mt-4 space-y-2 text-gray-300">
-                        <p>{stats.posts_count} 篇帖子 / {stats.comments_count} 条回帖</p>
-                        <p>{stats.followers_count} 关注者 / {stats.following_count} 正在关注</p>
-                        <p>{stats.collections_count} 收藏</p>
                     </div>
                 </div>
 
                 {/* GitHub仓库卡片 */}
-                <div className="bg-[#171717] rounded-lg p-6">
-                    <h3 className="mb-4 text-lg font-bold text-white">GitHub 仓库</h3>
-                    <div className="space-y-2">
-                        {[
-                            'pingcrm_react',
-                            'Flowbite_rails_template',
-                            'react_on_rails-with-api'
-                        ].map((repo) => (
-                            <div key={repo} className="text-gray-300 hover:text-white">
-                                <a href="#" className="flex justify-between">
-                                    <span>{repo}</span>
-                                    <span>6</span>
-                                </a>
+                <div className="relative rounded-2.5xl border p-6 md:rounded-3xl md:p-3">
+                    <GlowingEffect
+                        blur={0}
+                        borderWidth={3}
+                        spread={80}
+                        glow={true}
+                        disabled={false}
+                        proximity={64}
+                        inactiveZone={0.01}
+                    />
+                    <div className="relative flex flex-col justify-between gap-6 overflow-hidden rounded-xl border-0.75 p-6 dark:shadow-[0px_0px_27px_0px_#2D2D2D]">
+                        <div className="p-2 border border-gray-600 rounded-lg w-fit">
+                            <h3 className="mb-4 text-lg font-bold text-white">GitHub 仓库</h3>
+                            <div className="space-y-2">
+                                {github_repos?.map((repo) => (
+                                    <div key={repo.name} className="text-gray-300 hover:text-white">
+                                        <a href={repo.url} className="flex justify-between" target="_blank">
+                                            <span>{repo.name}</span>
+                                            <span>{repo.stars}</span>
+                                        </a>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                        </div>
                     </div>
                 </div>
             </div>
