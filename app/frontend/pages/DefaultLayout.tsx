@@ -9,7 +9,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { useEffect } from 'react'
 import { toast } from '@/hooks/use-toast'
 import { ThemeProvider } from 'next-themes';
-
+import AiMessage from './AiMessage'
 interface Flash {
   alert: string | undefined
   notice: string | undefined
@@ -35,19 +35,20 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-    <div className='inset-0 z-auto flex flex-col w-full h-full min-h-screen overflow-hidden bg-black'>
+    <div className='flex overflow-hidden inset-0 z-auto flex-col w-full h-full min-h-screen bg-black'>
       <StarsBackground />
       <ShootingStars />
       <Header />
-      <main className='flex flex-col flex-grow mt-8 overflow-y-auto'>
-        <div className='container flex items-center justify-center flex-grow mx-auto'>
-          <div className='relative flex-grow w-full max-w-full px-4 py-8 mx-auto md:px-6 lg:px-8'>
+      <main className='flex overflow-y-auto flex-col flex-grow mt-8'>
+        <div className='container flex flex-grow justify-center items-center mx-auto'>
+          <div className='relative flex-grow px-4 py-8 mx-auto w-full max-w-full md:px-6 lg:px-8'>
             {children}
           </div>
         </div>
         <Toaster />
       </main>
       <Footer />
+      <AiMessage></AiMessage>
     </div>
     </ThemeProvider>
   )
