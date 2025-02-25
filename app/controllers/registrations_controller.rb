@@ -1,12 +1,11 @@
 class RegistrationsController < ApplicationController
   skip_before_action :authenticate
-  # before_action :only_for_guests
   before_action :verify_captcha, only: [:create]
 
   def new
     @user = User.new
     render inertia: "Registrations/New", props: {
-      user: serialize_post(@user)
+      user: sessionResource.new(@user)
     }
   end
 
@@ -15,12 +14,19 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       session_record = @user.sessions.create!
-      cookies.signed.permanent[:session_token] = {value: session_record.id, httponly: true}
+      cookies.signed.permanent[:session_token] = {
+        value: session_record.id,
+        httponly: true,
+        secure: Rails.env.production?,
+        same_site: :lax
+      }
 
       send_email_verification
-      redirect_to root_path, notice: "\u6CE8\u518C\u6210\u529F\uFF0C\u6B22\u8FCE\u60A8!"
+      redirect_to root_path, notice: "注册成功，欢迎您！"
     else
-      render :new, inertia: {errors: @user.errors}
+      render inertia: "Registrations/New",
+        props: {user: sessionResource.new(@user)},
+        status: :unprocessable_entity
     end
   end
 
@@ -29,7 +35,9 @@ class RegistrationsController < ApplicationController
   def verify_captcha
     captcha = Captcha.new(params.delete(:recaptcha_token))
     unless captcha.valid?
-      redirect_to new_registration_path, error: "Erreur de validation du CAPTCHA. Veuillez réessayer."
+      redirect_to new_registration_path,
+        alert: "验证码验证失败，请重试",
+        status: :unprocessable_entity
     end
   end
 
@@ -39,11 +47,5 @@ class RegistrationsController < ApplicationController
 
   def send_email_verification
     UserMailer.with(user: @user).email_verification.deliver_later
-  end
-
-  def serialize_post(user)
-    user.as_json(only: %i[
-      email password password_confirmation
-    ])
   end
 end
