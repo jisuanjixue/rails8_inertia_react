@@ -1,24 +1,46 @@
-# README
+# blog
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A demo application built use inertia with Ruby on Rails and  React & Typescript and shad shadcn UI, aceternity UI, use tailwind css to style,  With SQLite.
 
-Things you may want to cover:
+## Lighthouse performance audit
 
-* Ruby version
+![Lighthouse audit](lighthouse.png)
 
-* System dependencies
+## Installation
 
-* Configuration
+Clone the repo locally:
 
-* Database creation
+```
+git clone [https://github.com/rails8_inertia_react/pingcrm_react](https://github.com/jisuanjixue/rails8_inertia_react)
+```
 
-* Database initialization
+Setup (install dependencies, create and seed database):
 
-* How to run the test suite
+```
+cd rails8_inertia_react
+bin/setup
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Start it:
 
-* Deployment instructions
+```
+bin/dev
+```
+
+You're ready to go! Visit bolg_demo in your browser (http://localhost:3100), and login with:
+
+## Running tests
+
+To run the PingCRM tests, run:
+
+```
+rails test:system
+```
+
+## Requirements
+
+- Ruby 3.3.4
+- Ruby on Rails 8
+- SQLite
 
 * ...
