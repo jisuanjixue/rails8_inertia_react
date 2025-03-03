@@ -2,7 +2,7 @@
 import { defineConfig } from 'vite'
 import mkcert from 'vite-plugin-mkcert'
 import ViteRails from 'vite-plugin-rails'
-import reloadOnChange from "vite-plugin-full-reload";
+import FullReload from "vite-plugin-full-reload";
 
 export default defineConfig({
   optimizeDeps: {
@@ -19,7 +19,7 @@ export default defineConfig({
       }
     }),
     mkcert(),
-    reloadOnChange(["config/routes.rb", "app/views/**/*", "app/resources/**/*.rb", "app/frontend/**/**/.tsx"], { delay: 1000 }),
+    FullReload(["config/routes.rb", "app/views/**/*", "app/resources/**/*.rb", "app/frontend/**/**/.tsx"], { delay: 1000 }),
   ],
   server: {
     cors: {

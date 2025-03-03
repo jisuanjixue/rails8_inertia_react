@@ -1,11 +1,18 @@
-require 'active_support/concern'
+require "active_support/concern"
 
-# Make flash messages available as shared data
-#
-module InertiaFlash
+module InertiaShare::Flash
   extend ActiveSupport::Concern
 
   included do
-    inertia_share flash: -> { flash.to_hash }
+    add_flash_types :success, :error, :warning
+
+    inertia_share flash: -> {
+      {
+        success: flash[:success], # green
+        alert: flash[:alert], # red
+        info: flash[:notice], # blue
+        warning: flash[:warning] # yellow
+      }
+    }
   end
 end
