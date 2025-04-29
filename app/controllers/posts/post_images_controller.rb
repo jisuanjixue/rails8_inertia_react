@@ -1,5 +1,5 @@
 module Posts
-  class PostImagesController < ApplicationController
+  class PostImagesController < InertiaController
     before_action :set_post, only: %i[update destroy]
 
     def update

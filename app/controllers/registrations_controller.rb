@@ -1,4 +1,4 @@
-class RegistrationsController < ApplicationController
+class RegistrationsController < InertiaController
   skip_before_action :authenticate
   before_action :verify_captcha, only: [:create]
 

@@ -1,4 +1,4 @@
-class SearchController < ApplicationController
+class SearchController < InertiaController
   def index
     results = if params[:q].present?
       Post.search(params[:q], {

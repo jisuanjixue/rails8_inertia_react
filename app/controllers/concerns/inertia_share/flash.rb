@@ -1,9 +1,18 @@
-module InertiaShare
-  module Flash
-    extend ActiveSupport::Concern
+require "active_support/concern"
 
-    included do
-      inertia_share flash: -> { flash.to_hash }
-    end
+module InertiaShare::Flash
+  extend ActiveSupport::Concern
+
+  included do
+    add_flash_types :success, :error, :warning
+
+    inertia_share flash: -> {
+      {
+        success: flash[:success], # green
+        alert: flash[:alert], # red
+        info: flash[:notice], # blue
+        warning: flash[:warning] # yellow
+      }
+    }
   end
 end

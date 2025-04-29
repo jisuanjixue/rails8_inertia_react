@@ -1,6 +1,6 @@
 module Posts
   module Comments
-    class RepliesController < ApplicationController
+    class RepliesController < InertiaController
       before_action :set_post
       before_action :set_comment
 

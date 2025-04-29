@@ -1,4 +1,4 @@
-class Admin::UsersController < ApplicationController
+class Admin::UsersController < InertiaController
   include Paginatable
 
   before_action :set_user, only: %i[show edit update destroy]

@@ -1,5 +1,5 @@
 module Users
-  class RelationshipsController < ApplicationController
+  class RelationshipsController < InertiaController
     before_action :set_user
 
     def follow
@@ -8,7 +8,7 @@ module Users
         redirect_to request.referer || root_path, alert: "User not found"
         return
       end
-      
+
       if @user.follow(user)
         redirect_to request.referer || root_path, notice: "You are now following"
       else

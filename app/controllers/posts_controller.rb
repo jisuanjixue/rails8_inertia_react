@@ -1,4 +1,4 @@
-class PostsController < ApplicationController
+class PostsController < InertiaController
   include Paginatable
   # before_action do
   #   Debugbar.msg('before_action', { params: params.permit!.to_h, callee: __callee__ })

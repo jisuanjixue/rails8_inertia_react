@@ -1,8 +1,8 @@
-class Users::SettingController < ApplicationController
+class Users::SettingController < InertiaController
   before_action :set_user
 
   def index
-    render inertia: 'User/Index', props: {
+    render inertia: "User/Index", props: {
       user: @user,
       user_profile: @profile
     }

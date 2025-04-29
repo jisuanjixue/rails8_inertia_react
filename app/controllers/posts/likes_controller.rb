@@ -1,5 +1,5 @@
 module Posts
-  class LikesController < ApplicationController
+  class LikesController < InertiaController
     def create
       @likeable = find_likeable
       return redirect_to post_path(@likeable), alert: "Already liked" if @likeable.likes.exists?(user: Current.user)

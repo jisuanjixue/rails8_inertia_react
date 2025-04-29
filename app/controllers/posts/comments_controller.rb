@@ -1,5 +1,5 @@
 module Posts
-  class CommentsController < ApplicationController
+  class CommentsController < InertiaController
     before_action :set_post
     before_action :set_comment, only: [:destroy]
 

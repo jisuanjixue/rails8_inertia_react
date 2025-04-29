@@ -1,5 +1,5 @@
 module Users
-  class ProfilePicturesController < ApplicationController
+  class ProfilePicturesController < InertiaController
     before_action :set_user
 
     def update

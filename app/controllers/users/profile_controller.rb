@@ -1,4 +1,4 @@
-class Users::ProfileController < ApplicationController
+class Users::ProfileController < InertiaController
   before_action :set_profile, only: %i[update]
 
   def update

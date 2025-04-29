@@ -1,5 +1,5 @@
 module Posts
-  class PostCoversController < ApplicationController
+  class PostCoversController < InertiaController
     before_action :set_post, only: %i[update destroy]
 
     def update

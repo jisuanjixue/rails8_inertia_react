@@ -1,5 +1,5 @@
 module Posts
-  class BookMarksController < ApplicationController
+  class BookMarksController < InertiaController
     def create
       @post = Post.find(params[:post_id])
       return redirect_to post_path(@post), alert: "Already bookmarked" if @post.bookmarks.exists?(user: Current.user)

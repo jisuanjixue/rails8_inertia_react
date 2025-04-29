@@ -1,4 +1,4 @@
-class Admin::CategoriesController < ApplicationController
+class Admin::CategoriesController < InertiaController
   before_action :set_category, only: %i[show edit update destroy]
 
   inertia_share flash: -> { flash.to_hash }
