@@ -15,33 +15,45 @@ import {
 } from '@/components/ui/sidebar'
 import { usePage } from '@inertiajs/react'
 import { toast } from '@/hooks/use-toast'
-import { useEffect } from 'react'
+import { useEffect, memo, Suspense } from 'react'
 import { Toaster } from '@/components/ui/toaster'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
+// Define Flash interface for type safety
 interface Flash {
   alert: string | undefined
   notice: string | undefined
 }
 
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center w-full h-full min-h-[200px]">
+    <div className="w-12 h-12 border-4 border-t-4 rounded-full border-neutral-700 border-t-blue-500 animate-spin"></div>
+  </div>
+)
+
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   const { flash } = usePage().props as unknown as { flash: Flash }
+
+  // Handle flash messages with proper null checking
   useEffect(() => {
-    if (flash.alert) {
+    if (flash?.alert) {
       toast({
         variant: 'destructive',
         title: '错误消息',
         description: flash.alert
       })
     }
-    if (flash.notice) {
+    if (flash?.notice) {
       toast({
         title: '警告消息',
         description: flash.notice
       })
     }
   }, [flash])
+
   return (
-    <>
+    <ErrorBoundary>
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
@@ -53,12 +65,12 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
                 <BreadcrumbList>
                   <BreadcrumbItem className='hidden md:block'>
                     <BreadcrumbLink href='#'>
-                        Building Your Application
-                                        </BreadcrumbLink>
+                      管理后台
+                    </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className='hidden md:block' />
                   <BreadcrumbItem>
-                    <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                    <BreadcrumbPage>数据管理</BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
@@ -66,14 +78,17 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
           </header>
           <div className='flex flex-col flex-1 gap-4 p-4 pt-0'>
             <div className='min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min'>
-              {children}
+              <Suspense fallback={<LoadingFallback />}>
+                {children}
+              </Suspense>
             </div>
             <Toaster />
           </div>
         </SidebarInset>
       </SidebarProvider>
-    </>
+    </ErrorBoundary>
   )
 }
 
-export default DefaultLayout
+// Export memoized component to prevent unnecessary re-renders
+export default memo(DefaultLayout)
