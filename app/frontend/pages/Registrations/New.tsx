@@ -1,4 +1,4 @@
-'use client'
+''
 import React, { ReactElement, useRef } from 'react'
 import { Label } from '@/components/forms/motion-label'
 import { Input } from '@/components/forms/motion-input'
