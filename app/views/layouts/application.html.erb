@@ -8,6 +8,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <!-- 不再需要加载修复脚本，我们已经在 TypeScript 中实现了补丁 -->
+
     <%= yield :head %>
     <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script>
 
@@ -40,7 +42,7 @@
 
   <body>
     <%# <div id="__debugbar" data-turbo-permanent></div> %>
-   
+
     <%= yield %>
   </body>
 </html>

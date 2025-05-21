@@ -1,3 +1,4 @@
+
 import { createInertiaApp } from '@inertiajs/react'
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -22,7 +23,7 @@ createInertiaApp({
   },
 
   setup ({ el, App, props }) {
-   
+
     if (el !== null && el !== undefined) {
       if (el.dataset.serverRendered === 'true') {
         console.log('server rendered')

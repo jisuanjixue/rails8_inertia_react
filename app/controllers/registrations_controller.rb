@@ -5,7 +5,7 @@ class RegistrationsController < InertiaController
   def new
     @user = User.new
     render inertia: "Registrations/New", props: {
-      user: sessionResource.new(@user)
+      user: SessionResource.new(@user)
     }
   end
 
@@ -25,7 +25,7 @@ class RegistrationsController < InertiaController
       redirect_to root_path, notice: "注册成功，欢迎您！"
     else
       render inertia: "Registrations/New",
-        props: {user: sessionResource.new(@user)},
+        props: {user: SessionResource.new(@user)},
         status: :unprocessable_entity
     end
   end
